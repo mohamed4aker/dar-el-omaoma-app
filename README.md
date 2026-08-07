@@ -7,6 +7,7 @@ application for iOS and Android.
 |---|---|
 | [`PROMPT.md`](PROMPT.md) | The formal product & engineering build prompt. Hand this to a development team, a vendor, or an AI coding agent. Covers brand, personas, screen-by-screen requirements, architecture, data model, API, security & compliance, QA and delivery plan. |
 | [`docs/COMMERCIAL-ESTIMATE.md`](docs/COMMERCIAL-ESTIMATE.md) | Pricing guidance for the app and for the full Hospital Information System, with a modular price list, tiering strategy, payment terms and a risk register. |
+| [`docs/SALES-PLAYBOOK.md`](docs/SALES-PLAYBOOK.md) | How to price and sell the full hospital system: the headline number and how to adjust it, the ROI business case built from the hospital's own figures, meeting structure, stakeholder map, stage-funded payment plan, and objection handling. |
 | [`docs/SOURCE-COVERAGE.md`](docs/SOURCE-COVERAGE.md) | A screen-by-screen trace of what was extracted from the client's design deck and how it maps into `PROMPT.md`, plus what could not be processed. |
 
 ## Scope at a glance
