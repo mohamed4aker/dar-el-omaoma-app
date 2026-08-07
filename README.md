@@ -16,6 +16,16 @@ application for iOS and Android.
 medical file, clinics & appointment booking, radiology, laboratory & blood bank,
 home care, complaints, offers & events, medical tips, contact & emergency.
 
+**Phase 1 — added scope:** operating-theatre management with an admin-managed
+classification system (صغرى / متوسطة / كبرى / ذات مهارة), a live availability grid,
+**direct booking by doctors with no approval step**, patient surgery requests routed
+through an approval inbox with SLA escalation and WhatsApp alerts, a surgical safety
+pack (digital consent, WHO checklist, pre-op bundle, blood reservation, implant
+traceability, family status notifications), the **Dar El Omouma Surgery Centre** as the
+first instance of a generic specialty-centre framework (neurosurgery, urology,
+orthopaedics), the **visiting-experts programme**, a configurable permission model, and
+a full report catalogue.
+
 **Phase 2/3** (proposed extensions): payments, teleconsultation, e-prescriptions,
 pharmacy, insurance & corporate contracts, dependants, live queue, pregnancy
 companion, newborn & vaccination records, DICOM viewer, staff app, and HIS/LIS/PACS

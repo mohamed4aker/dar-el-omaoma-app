@@ -98,6 +98,30 @@ Arabic numerals: the app shall render Western Arabic numerals (0–9) by default
 - Minimum touch target: 44 × 44 pt.
 - Minimum contrast ratio: 4.5:1 for body text, 3:1 for large text and UI components (WCAG 2.2 AA).
 
+### 2.5 Developer Attribution
+
+The application shall carry a discreet credit to the development company. The objective is durable, professional attribution that neither intrudes on the patient experience nor embarrasses the hospital.
+
+**Where attribution appears:**
+
+| Placement | Treatment |
+|---|---|
+| **More → About** (patient app) | A dedicated block: *"Developed by <Company>"* with the company logo, website and a contact action. This is the primary placement. |
+| **Login screen footer** (patient app) | A single muted line at 11 pt in `neutral/muted`: *"Developed by <Company>"*, tappable to the About block. Nothing more. |
+| **Admin console footer** (every page) | *"<Company> — support: <phone> / <email>"*. Staff use this daily and it is the channel through which support requests arrive; here it is useful rather than decorative. |
+| **Generated PDF reports** (admin console exports) | A one-line footer alongside the page number. |
+
+**Where attribution shall never appear:**
+
+- The splash screen — it delays the patient and reads as an advertisement.
+- The home screen, or any clinical screen: results, medical file, booking flows, emergency actions.
+- Push notifications, SMS or WhatsApp messages.
+- Any modal, banner, interstitial or toast.
+
+**Contractual note.** The placements above shall be written into the contract as an agreed, permanent part of the product, so that neither party can unilaterally remove or expand them later. If the hospital requires a fully white-labelled product with no attribution, that is a legitimate request and shall be priced as a separate licence option — not conceded for free.
+
+**App store listings.** Where the applications are published under the hospital's developer account (as required by §18.2), the publisher shown by Apple and Google is the hospital. The in-app attribution above is therefore the only durable credit, which is precisely why its placement is specified here rather than left to implementation.
+
 ---
 
 ## 3. Users, Roles & Permissions
@@ -119,8 +143,41 @@ Arabic numerals: the app shall render Western Arabic numerals (0–9) by default
 | `guest` | Browse public content only: clinics list, prices, schedules, offers, medical tips, contact. Cannot book or view any medical data. |
 | `patient` | All `guest` rights, plus own medical file, bookings, results, invoices, complaints, home-care requests. |
 | `dependant_manager` | A `patient` who additionally manages linked dependant profiles (children, spouse, parents) under explicit consent. **[P2]** |
-| `staff_*` | Back-office roles in the admin console: `staff_reception`, `staff_lab`, `staff_radiology`, `staff_homecare`, `staff_marketing`, `staff_complaints`, `staff_finance`. |
-| `admin` | Full administrative control, including user management and audit-log review. |
+| `doctor` | A credentialed practitioner. Sees own schedule and patient list, **books operating-theatre sessions directly without approval** (§6.13), books clinic patients, and initiates visiting-expert cases (§6.15). |
+| `staff_*` | Back-office roles in the admin console: `staff_reception`, `staff_lab`, `staff_radiology`, `staff_homecare`, `staff_marketing`, `staff_complaints`, `staff_finance`, `staff_or_scheduler`. |
+| `surgery_approver` | Approves or rejects **patient-initiated** surgery requests (§6.13.6). Held by the medical director, department heads, and any staff member the admin grants it to. Multiple holders; any one may act. |
+| `center_manager` | Manages a specialty centre (§6.14): its procedures, clinics, doctors, pricing and content. Scoped to one centre only. |
+| `visiting_program_coordinator` | Creates and runs visiting-expert campaigns (§6.15). |
+| `admin` | Full administrative control, including user management, permission assignment and audit-log review. |
+
+### 3.3 Permission Model
+
+Roles are **containers for permissions, not hard-coded behaviour.** The admin console shall allow an administrator to create custom roles and assign individual permissions to them. Shipping with fixed, non-editable roles is not acceptable — the hospital's org chart will not match the vendor's assumptions.
+
+| Permission | `patient` | `doctor` | `staff_or_scheduler` | `surgery_approver` | `center_manager` | `admin` |
+|---|:--:|:--:|:--:|:--:|:--:|:--:|
+| View theatre availability | summary only | ✔ full | ✔ full | ✔ full | ✔ own centre | ✔ |
+| **Book a theatre session directly (no approval)** | ✖ | **✔** | ✔ | ✔ | ✔ own centre | ✔ |
+| Request a surgery (requires approval) | ✔ | — | — | — | — | — |
+| Approve / reject a patient surgery request | ✖ | ✖ | ✖ | **✔** | ✔ own centre | ✔ |
+| Override a booking conflict (with mandatory reason) | ✖ | ✖ | ✔ | ✔ | ✖ | ✔ |
+| Cancel / postpone another user's booking | own only | own only | ✔ | ✔ | ✔ own centre | ✔ |
+| Book a clinic appointment for a patient | own only | ✔ | ✔ | ✔ | ✔ own centre | ✔ |
+| Manage operation classifications | ✖ | ✖ | ✖ | ✖ | ✖ | **✔** |
+| Manage centre catalogue, clinics & pricing | ✖ | ✖ | ✖ | ✖ | ✔ own centre | ✔ |
+| Create / run a visiting-expert campaign | ✖ | propose | ✖ | ✔ | ✔ own centre | ✔ |
+| View clinical reports | own data | own patients | operational only | ✔ | ✔ own centre | ✔ |
+| View financial reports | own invoices | own revenue | ✖ | ✖ | ✔ own centre | ✔ |
+| Manage users, roles & permissions | ✖ | ✖ | ✖ | ✖ | ✖ | ✔ |
+| View audit log | own access history | ✖ | ✖ | ✖ | ✖ | ✔ |
+
+**Rules that apply to the whole permission model:**
+
+1. Every permission is enforced **server-side on every request**. The matrix above describes the UI; it does not implement security.
+2. Permission changes are themselves audited: who granted what, to whom, when.
+3. **Every approval permission shall have at least two holders and a named escalation target.** A single approver who is on leave must never be able to stall patient requests — see the escalation rule in §6.13.6.
+4. `center_manager` and any centre-scoped role are constrained by **row-level** authorisation, not by hiding menu items.
+5. A user may hold several roles; permissions are the union, and the most permissive scope wins.
 
 **Rule:** Authorisation shall be enforced server-side on every request. Client-side role checks are for user experience only and shall never be the sole gate on any medical or financial data.
 
@@ -190,7 +247,10 @@ Splash
                 │   ├── Clinics ── Clinic detail ── Doctor ── Booking ── Confirmation
                 │   ├── Radiology ── Type ── Prices / Schedules ── Booking
                 │   ├── Laboratory ── Tests / Prices / Offers ── Booking ── Results
-                │   └── Blood Bank ── Services ── Donate / Request
+                │   ├── Blood Bank ── Services ── Donate / Request
+                │   ├── Surgery ── Procedure catalogue ── Estimate ── Request ── Status
+                │   ├── Centres ── Surgery Centre ── Specialties ── Clinics / Procedures
+                │   └── Visiting Experts ── Campaign ── Expert profile ── Screening booking
                 ├── Medical File
                 │   ├── Profile & vitals
                 │   ├── Visits & appointments
@@ -209,6 +269,8 @@ Splash
                     ├── Privacy & consent
                     └── About / Terms
 ```
+
+**Doctor mode.** A user who signs in with the `doctor` role sees an additional tab — **My Practice** — containing the theatre availability grid (§6.13.4), direct theatre booking, their own clinic schedule and patient list, their visiting-expert cohorts (§6.15), and their pending items. This is the same binary as the patient app, not a separate application; the tab is revealed by the server-issued role and never by a client-side flag.
 
 A persistent, always-reachable **emergency action** (call `01013009936` / request ambulance) shall be available from the home screen header on every screen of the Home tab.
 
@@ -371,6 +433,194 @@ Requirements:
 
 ---
 
+### 6.13 Operating Theatre & Surgery Booking (حجز العمليات) **[P1]**
+
+This is the largest module in the system and the one with the greatest operational and clinical risk. It is specified in full.
+
+#### 6.13.1 Operating Theatres
+
+The admin console maintains the theatre register: code, display name, type (general, obstetric, minor-procedures, endoscopy), floor and location, fixed equipment, default turnover time, and an active/inactive state. Theatres may be taken out of service for maintenance for a defined window; a theatre out of service shall not be bookable and any existing booking inside that window shall be surfaced for rescheduling rather than silently invalidated.
+
+#### 6.13.2 Operation Classifications (التصنيفات) — Admin-Managed
+
+Classifications are **data, not code.** The system ships seeded with the client's four:
+
+| Code | Arabic | English |
+|---|---|---|
+| `minor` | صغرى | Minor |
+| `intermediate` | متوسطة | Intermediate |
+| `major` | كبرى | Major |
+| `specialised` | ذات مهارة | Specialised / high-skill |
+
+The administrator shall be able to **create, rename, reorder, deactivate and recolour classifications at any time, without a code change or an app release.** Each classification carries configurable defaults that pre-fill a booking and reduce scheduling error:
+
+| Attribute | Purpose |
+|---|---|
+| Default duration | Pre-fills the theatre slot length |
+| Default turnover time | Cleaning and preparation before the next case |
+| Price band (min–max) | Drives the patient-facing estimate in §6.13.7 |
+| Required surgeon seniority | Warns when the booked surgeon is below it |
+| Default anaesthesia type | General, spinal, local, sedation |
+| Blood units to reserve by default | Triggers the blood-bank hold in §6.13.9 |
+| Default pre-operative investigation set | Auto-orders labs and radiology in §6.13.9 |
+| Colour | Used consistently in the availability grid and all reports |
+
+Deactivating a classification shall never alter historical bookings. Records keep the classification they were created with.
+
+#### 6.13.3 Procedure Catalogue
+
+Each procedure: Arabic and English name, internal code, **classification**, owning department or centre, typical duration, required theatre type, required equipment and instrument sets, required team composition, default surgeon list, cash price or price range, and whether it is available to patients for request in the app.
+
+#### 6.13.4 Theatre Availability View (الفاضي والمحجوز)
+
+The core screen of the module, available to doctors in the mobile app and to schedulers in the admin console.
+
+- A **grid: theatres down one axis, time across the other**, with day and week views, honouring RTL.
+- Each block is colour-coded by state — `available`, `booked`, `provisional` (awaiting approval), `turnover`, `blocked` (maintenance), `emergency reserve` — and by operation classification, using the colours in §6.13.2. Colour shall never be the only signal: every block carries a text label and, where applicable, an icon (§12.2).
+- Filters: theatre, date range, surgeon, department, centre, classification, status.
+- A booked block shows the procedure, the surgeon and the classification. **It shall not show the patient's name to a doctor who is not part of that case's team** — this is a privacy boundary, not a UI preference.
+- Available capacity per theatre per day shall be shown as a summary figure so a surgeon can find a free day at a glance without scanning the grid.
+- The grid shall update in near-real time (server-sent events or polling ≤ 30 s). Two surgeons viewing the same slot must not both believe it is free.
+
+#### 6.13.5 Doctor-Initiated Booking — Direct, No Approval
+
+**A credentialed doctor books a theatre session directly. The booking is confirmed immediately. No approval step, no waiting for anyone.** This is an explicit client requirement and shall not be diluted into a "fast-track approval".
+
+Flow: open availability → select theatre and slot → select procedure (classification and duration pre-fill from §6.13.2) → select or search the patient → set anaesthesia type, team, required equipment, and blood reservation → add notes → confirm.
+
+**"No approval" does not mean "no rules."** The server shall reject, and the client shall prevent, any booking that:
+
+| Conflict | Behaviour |
+|---|---|
+| Theatre already booked, or inside another case's turnover window | **Hard block** |
+| The surgeon is already booked elsewhere at that time — including in a clinic | **Hard block** |
+| The patient is already scheduled for another procedure or appointment at that time | **Hard block** |
+| Required equipment or instrument set is committed to another case | **Hard block** |
+| Theatre is blocked for maintenance | **Hard block** |
+| The procedure's required theatre type does not match | Warning, may proceed with a reason |
+| Surgeon seniority is below the classification's requirement | Warning, may proceed with a reason; notifies the department head |
+| The booking is outside the theatre's normal operating hours | Warning, may proceed with a reason |
+
+Hard blocks are overridable **only** by a user holding the override permission (§3.3), and only with a mandatory free-text reason that is written to the audit log and notified to the medical director. Every override is a report line (§14.1).
+
+Concurrency: slot booking shall be enforced with a database-level constraint or a transactional lock, not an application-level check. Two doctors tapping "confirm" on the same slot within the same second is an expected event, not an edge case; exactly one shall succeed and the other shall receive a clear, immediate "this slot was just taken" message with the refreshed grid.
+
+#### 6.13.6 Patient-Initiated Request — Approval Required
+
+A patient may **request** a surgery from the app. The request is never a confirmed booking.
+
+Flow: select procedure from the patient-visible catalogue → preferred surgeon (optional) → preferred date range → upload supporting documents and prior reports → see the price estimate (§6.13.7) → acknowledge that this is a request subject to medical review → submit.
+
+- Status lifecycle: `submitted` → `under_review` → `approved` → `scheduled` → … , or `rejected` / `more_info_required` / `cancelled_by_patient`.
+- On submission the system **immediately notifies every holder of the `surgery_approver` permission** by push, by WhatsApp (§12.4), and in the admin console inbox.
+- **Escalation is mandatory.** If no approver acts within a configurable window (default 4 working hours), the request escalates to the medical director and the escalation is recorded. If it is still unactioned after a second window (default 24 hours), it appears on the daily management report. Patient requests shall never be able to sit unanswered.
+- The approver sees the patient's medical file, the uploaded documents, the requested procedure and its classification, and theatre availability — in one screen, with **approve**, **approve and schedule now**, **request more information**, and **reject with reason** as the available actions.
+- A rejection requires a reason from an admin-managed list plus free text. The patient sees a courteous message and a route to book a consultation clinic instead. **A rejected surgery request shall never be a dead end.**
+- Once approved and scheduled, the case joins the same theatre schedule as a doctor-initiated booking and is indistinguishable from it thereafter.
+
+**Clinic appointments remain immediate for patients** (§6.7) — no approval, live availability. Only theatre bookings require approval. The app shall make this distinction obvious so that a patient is never confused about what they have and have not secured.
+
+#### 6.13.7 Price Estimate
+
+Before submitting a request, the patient sees an estimate: the procedure's price or the classification's price band, plus the expected additions (theatre, anaesthesia, stay, implants where applicable), the contracted price and co-payment if an insurance or corporate contract applies **[P2]**, and a clear, prominent statement that the figure is an estimate subject to clinical assessment. The estimate as shown shall be stored with the request so that any later dispute can be resolved against what the patient actually saw.
+
+#### 6.13.8 Case Lifecycle & Theatre Day
+
+`scheduled` → `pre_op_ready` → `patient_in_theatre` → `procedure_started` → `procedure_finished` → `in_recovery` → `completed`, with `postponed` and `cancelled` available at any point before completion.
+
+- **Cancellation and postponement require a coded reason** from an admin-managed list (patient unfit, patient did not attend, equipment unavailable, surgeon unavailable, emergency case took priority, theatre overrun, financial, other). This list is the single most valuable data source the module produces — it is what §14.1 turns into an improvement programme.
+- **Cancellation waiting list:** when a slot is released, the system shall automatically identify waiting patients who match the theatre type, classification and surgeon, and notify them of the opening in priority order.
+- **Emergency bumping:** an emergency case may displace a scheduled elective case. The displaced patient and surgeon shall be notified immediately, automatically, with an apology and a rescheduling action — never left to discover it on arrival.
+- **Actual versus estimated duration** shall be captured on every case. The system shall surface, per procedure and per surgeon, where the estimate is consistently wrong, so that scheduling improves over time.
+
+#### 6.13.9 Clinical Safety & Integration — Added By The Vendor
+
+These are not in the client's brief. They are what separates a booking calendar from a theatre system, and they are strongly recommended for Phase 1.
+
+| Capability | Description |
+|---|---|
+| **Digital informed consent** | Procedure-specific consent text in Arabic, captured with an on-screen signature from the patient (and guardian where applicable), timestamped, versioned, and stored in the medical file. In a surgical hospital this is the single highest-value medico-legal artefact the system can produce. |
+| **WHO Surgical Safety Checklist** | The three-phase checklist — sign in, time out, sign out — completed in the theatre and stored against the case. It is an international standard and a requirement for GAHAR and JCI accreditation. |
+| **Pre-operative bundle** | On booking, automatically raise the classification's default investigation set (§6.13.2) as laboratory and radiology orders (§6.8, §6.9), and show the case as `pre_op_ready` only when all results are back. Missing pre-op investigations are a leading cause of same-day cancellation. |
+| **Anaesthesia assessment** | An assessment appointment booked automatically for classifications that require it, with ASA grading recorded against the case. |
+| **Blood reservation** | The classification's default blood units automatically raise a cross-match and hold request in the blood bank (§6.9). A case requiring blood shall not reach `pre_op_ready` until the hold is confirmed. This makes the existing blood-bank module operationally essential rather than informational. |
+| **Equipment & instrument-set reservation** | Sets are reserved with the theatre slot and released on cancellation. Double-committed equipment is a hard block (§6.13.5). |
+| **Implant & prosthesis traceability** | For orthopaedic and neurosurgical cases: manufacturer, model, lot and serial recorded against the patient. Required for recall response and for accreditation. |
+| **Theatre team roster** | Anaesthetist, scrub nurse, circulating nurse and technician assigned per case, with their own availability conflicts checked. |
+| **Family status notifications** | With the patient's explicit consent, one nominated family member receives *"in theatre"* and *"out of theatre, in recovery"* notifications. **No clinical detail whatsoever.** For families waiting outside, this is the most appreciated feature in the entire application, and it costs almost nothing to build. |
+| **Operative note** | The surgeon records findings, procedure performed, implants used and post-operative instructions; it is filed to the medical file and drives the follow-up appointment. |
+| **Automatic follow-up** | A post-operative follow-up appointment is created on completion, per the procedure's configured interval, and offered to the patient for confirmation. |
+
+---
+
+### 6.14 Specialty Centres — Programme-Within-A-Programme **[P1]**
+
+The client requires the **Dar El Omouma Surgery Centre** (مركز جراحات دار الأمومة) to exist as a distinct programme inside the same application. The correct implementation is **not** a hard-coded second app. It is a generic, admin-configurable **Specialty Centre** entity of which the Surgery Centre is the first instance — so that the hospital can launch a second, third and fourth centre later without any development work.
+
+#### 6.14.1 The Centre Entity
+
+Each centre is created in the admin console and carries: name (AR/EN), slug, hero image and logo, description, optional accent colour within the hospital's palette, its own **specialties**, **procedure catalogue**, **clinics**, **doctors**, **price list**, **offers**, **medical tips**, **operating-theatre allocation**, and its own `center_manager`.
+
+In the patient app a centre appears as a distinct destination with its own landing screen and its own booking flows, while remaining unmistakably part of Dar El Omouma. It shall be **deep-linkable** so the centre can be marketed on its own.
+
+#### 6.14.2 Dar El Omouma Surgery Centre — The First Instance
+
+Seeded with the specialties the client named:
+
+| Specialty | Arabic |
+|---|---|
+| Neurosurgery | جراحة المخ والأعصاب |
+| Urology | جراحة المسالك البولية |
+| Orthopaedic surgery | جراحة العظام |
+
+The administrator adds the centre's procedures and clinics. Doctors book the centre's theatre sessions directly under exactly the rules in §6.13.5 — the booking engine is shared, not duplicated. Patients request the centre's surgeries under §6.13.6 and book its clinics immediately under §6.7.
+
+**Theatre allocation.** A centre may be granted dedicated theatre sessions (for example, "Theatre 2, Tuesdays 08:00–14:00, Surgery Centre"). Within its own allocation the centre's doctors book freely; outside it they compete with the rest of the hospital on the shared grid. Allocation is configured by the administrator and is visible in the availability view.
+
+**Reporting.** Every report in §14.1 shall be filterable by centre, and each centre shall have its own contribution view — cases, case mix by classification, theatre utilisation, revenue. An owner who can see a centre's performance in isolation will fund the next one.
+
+---
+
+### 6.15 Visiting Experts Programme (برنامج الخبراء الزائرين) **[P1]**
+
+A visiting consultant — typically from outside Egypt — attends for a defined window and operates on a cohort of patients assembled in advance by a host doctor at Dar El Omouma. This is a recurring, high-value, logistically demanding business line, and it is currently run on phone calls and notebooks.
+
+#### 6.15.1 The Campaign
+
+A `visiting_program_coordinator`, a `center_manager` or an admin creates a **campaign**:
+
+- **Expert:** name, photo, country, institution, specialty and sub-specialty, qualifications, languages, biography. Both Arabic and English.
+- **Host doctor:** the Dar El Omouma consultant who screens patients and assists.
+- **Window:** arrival and departure dates; the screening period that precedes them.
+- **Scope:** which procedures the expert will perform, and their classification.
+- **Capacity:** maximum number of cases, and theatre sessions reserved for the visit.
+- **Minimum viable cohort:** the number of confirmed cases below which the visit does not proceed. This is a real commercial constraint of these programmes and the system shall track it explicitly, showing the coordinator a live count against the threshold and flagging the campaign when the decision date approaches.
+- **Pricing:** package price per procedure, deposit amount and deposit policy.
+- **Publication window:** when the campaign becomes visible in the app.
+
+#### 6.15.2 Patient Journey
+
+`interest_registered` → `screening_booked` → `screened` → `shortlisted` → `deposit_paid` → `surgery_scheduled` → `completed`, with `not_eligible`, `waitlisted` and `withdrawn` as terminal or holding states.
+
+- A patient discovers the campaign in the app (or via a shared deep link), reads the expert's profile, and **registers interest or books a screening clinic slot with the host doctor directly** — no approval needed for the screening clinic.
+- **The host doctor may also register and book patients directly**, exactly as the client described: the doctor gathers a cohort from their own practice. Doctor-added patients enter the same pipeline at the same stage; there is one list, not two.
+- The host doctor screens each patient and marks them shortlisted, not eligible, or waitlisted with a reason.
+- Shortlisted patients are notified, shown the package price and deposit, and confirmed onto a surgery date inside the expert's window. Confirmation creates a normal theatre booking (§6.13) against the campaign's reserved sessions, so the visiting cases appear on the same availability grid as everything else.
+- Every stage transition notifies the patient and the coordinator (§12.3).
+- **Waitlist promotion is automatic**: when a shortlisted patient withdraws, the next waitlisted patient is offered the place.
+
+#### 6.15.3 Coordinator View
+
+A single pipeline board for each campaign — counts and patients at every stage, the live cohort count against the minimum viable threshold, the theatre sessions reserved and consumed, deposits collected against deposits due, and days remaining before the decision date and before arrival. Conversion from registered interest to completed surgery is the campaign's headline metric and shall be visible without running a report.
+
+#### 6.15.4 Compliance — Raise This Before Building
+
+**A visiting foreign practitioner requires authorisation to practise in Egypt.** Temporary licensing or permission via the Egyptian Medical Syndicate and the Ministry of Health is a legal precondition, and the requirements and lead times must be confirmed with the hospital's legal adviser before the first campaign runs. The system shall support this operationally: each expert profile holds their credential documents, licence or permission reference, and its validity dates, and **a campaign shall not be publishable to patients while the expert's authorisation is missing or expired.** Building the feature without this gate would let the hospital advertise a surgeon who is not cleared to operate. Flagged as open question 19.14.
+
+Deposits taken for a visit that is subsequently cancelled — because the expert cannot travel or the minimum cohort is not reached — require a written refund policy, shown to the patient before payment and enforced by the system.
+
+---
+
 ## 7. Phase 2 & Phase 3 — Recommended Extensions
 
 These are the vendor's additions. They are not in the client's deck. They are listed with a recommended phase and are individually priced in the accompanying commercial estimate.
@@ -432,6 +682,68 @@ Order (patient_id, type: lab|radiology, items[], status, ordered_by, ordered_at)
                       acknowledged_by, acknowledged_at)
         └─< ResultAnalyte (code, name, value, unit, ref_low, ref_high, flag)
 
+SpecialtyCentre (slug, name_ar, name_en, logo, hero, description, accent_colour,
+                 manager_user_id, is_published)
+  ├─< CentreSpecialty (name_ar, name_en)
+  └─< TheatreAllocation (centre_id, theatre_id, weekday, start, end, valid_from, valid_to)
+
+OperationClassification (code, name_ar, name_en, sort_order, colour, is_active,
+                         default_duration_min, default_turnover_min,
+                         price_min, price_max, required_seniority,
+                         default_anaesthesia, default_blood_units,
+                         default_preop_investigation_set_id)
+
+OperatingTheatre (code, name, type, floor, fixed_equipment[], default_turnover_min,
+                  is_active)
+  └─< TheatreBlock (theatre_id, start_at, end_at, reason)      -- maintenance
+
+Procedure (code, name_ar, name_en, classification_id, department_id?, centre_id?,
+           typical_duration_min, required_theatre_type, required_equipment[],
+           required_team[], price, price_is_range, patient_requestable,
+           followup_interval_days)
+
+SurgeryCase (patient_id, procedure_id, classification_id, theatre_id,
+             start_at, end_at, turnover_end_at,
+             surgeon_id, anaesthetist_id, team[], centre_id?, campaign_id?,
+             origin: doctor_direct | patient_request | staff,
+             status, anaesthesia_type, blood_units_reserved,
+             estimated_price_snapshot, actual_duration_min,
+             cancel_reason_code?, cancel_reason_text?,
+             created_by, created_at)
+  ├─< SurgeryApproval (case_id, requested_at, approver_user_id?, decision,
+  │                    reason_code?, reason_text?, decided_at,
+  │                    escalated_at?, escalated_to?)
+  ├─< BookingOverride (case_id, conflict_type, reason_text, overridden_by, at)
+  ├─< ConsentRecord (case_id, template_version, signature_image, signed_by,
+  │                  relationship, signed_at)
+  ├─< SafetyChecklist (case_id, phase: sign_in|time_out|sign_out, items[],
+  │                    completed_by, completed_at)
+  ├─< ImplantRecord (case_id, manufacturer, model, lot_no, serial_no, site)
+  ├─< OperativeNote (case_id, findings, procedure_performed, instructions, author_id)
+  └─< FamilyStatusSubscription (case_id, contact_phone, consent_id)
+
+EquipmentSet (name, items[], quantity_available)
+  └─< EquipmentReservation (set_id, case_id, from_at, to_at)
+
+VisitingCampaign (centre_id?, expert_id, host_doctor_id, arrival_at, departure_at,
+                  screening_from, screening_to, procedures[], capacity,
+                  min_viable_cohort, decision_date, package_price, deposit_amount,
+                  refund_policy_text, publish_from, publish_to, status)
+  ├─< VisitingExpert (name_ar, name_en, photo, country, institution, specialty,
+  │                   qualifications, languages[], bio,
+  │                   licence_reference, licence_valid_from, licence_valid_to,
+  │                   credential_documents[])          -- publication gate: §6.15.4
+  └─< CampaignPatient (campaign_id, patient_id, stage, added_by, added_by_role,
+                       screening_appointment_id?, eligibility_note?,
+                       deposit_payment_id?, surgery_case_id?, waitlist_rank?)
+
+Role (code, name, is_system)
+  └─< RolePermission (role_id, permission_code, scope: global|centre|own)
+UserRole (user_id, role_id, centre_id?, valid_from, valid_to)
+
+NotificationLog (recipient_user_id?, recipient_phone?, channel, template_code,
+                 entity, entity_id, sent_at, provider_ref, status, failure_reason)
+
 HomeCareRequest (patient_id, service_id, address_id, window_start, window_end,
                  status, assigned_staff_id, notes)
 
@@ -457,6 +769,9 @@ CorporateContract (company_name, tax_id, price_list_id, active_from, active_to) 
 2. All timestamps shall be stored in UTC and rendered in `Africa/Cairo`.
 3. Clinical records shall be **append-only**. Corrections create a new version; nothing is destructively updated.
 4. Every read of another person's medical data (staff or dependant manager) shall write an audit-log entry.
+5. **Theatre slot exclusivity shall be enforced by a database constraint** — an exclusion constraint over `(theatre_id, tstzrange(start_at, turnover_end_at))` in PostgreSQL, or an equivalent — not by an application-level availability check. The same applies to surgeon, patient and equipment overlap. An application check under concurrency is a double-booked theatre waiting to happen (§6.13.5).
+6. `OperationClassification` and every reason-code list are **seeded data that the administrator owns**, not enumerations in code. A classification may be deactivated but never deleted, and historical records retain the classification they were created with.
+7. `SurgeryCase.estimated_price_snapshot` stores the estimate exactly as the patient saw it at request time, and is immutable thereafter.
 
 ---
 
@@ -471,7 +786,12 @@ CorporateContract (company_name, tax_id, price_list_id, active_from, active_to) 
 - **Rate limiting:** per IP and per account, with stricter limits on OTP, login and search endpoints.
 - **Localisation:** the client shall send `Accept-Language: ar-EG` or `en`; the server returns localised content and error messages accordingly.
 
-Indicative endpoint groups: `/auth`, `/patients/me`, `/dependants`, `/departments`, `/clinics`, `/doctors`, `/slots`, `/appointments`, `/orders`, `/results`, `/home-care`, `/complaints`, `/offers`, `/tips`, `/blood-bank`, `/invoices`, `/payments`, `/devices`, `/content`.
+Indicative endpoint groups: `/auth`, `/patients/me`, `/dependants`, `/departments`, `/clinics`, `/doctors`, `/slots`, `/appointments`, `/orders`, `/results`, `/home-care`, `/complaints`, `/offers`, `/tips`, `/blood-bank`, `/invoices`, `/payments`, `/devices`, `/content`, `/theatres`, `/theatres/availability`, `/classifications`, `/procedures`, `/surgery-cases`, `/surgery-requests`, `/surgery-requests/{id}/decision`, `/centres`, `/visiting-campaigns`, `/visiting-campaigns/{id}/patients`, `/roles`, `/permissions`, `/reports`.
+
+**Two contract requirements specific to theatre booking:**
+
+- `POST /surgery-cases` shall be **idempotent** and shall return `409 Conflict` with a machine-readable `code` naming the exact clash (`theatre_busy`, `surgeon_busy`, `patient_busy`, `equipment_busy`, `theatre_blocked`) and the conflicting window. The client renders a specific message and a refreshed grid from that response — never a generic failure.
+- `GET /theatres/availability` shall support a real-time subscription (SSE or WebSocket). Polling is the documented fallback, not the design.
 
 ---
 
@@ -553,9 +873,49 @@ Notification types (each independently toggleable by the patient):
 | Complaint response | Staff response | On |
 | Offers & campaigns | Marketing schedule | **Off — explicit opt-in required** |
 | Blood-bank urgent appeal | Targeted broadcast | Off — donor opt-in required |
+| **Surgery request submitted** | Patient submits (§6.13.6) | **To every `surgery_approver` — push + WhatsApp + console inbox** |
+| **Surgery request unactioned** | Approval SLA breached | To the medical director; then to the daily management report |
+| Surgery request decided | Approver acts | To the patient (transactional) |
+| Surgery scheduled / rescheduled / cancelled | Case status change | To patient, surgeon and theatre team (transactional) |
+| Theatre booking conflict override | Override used (§6.13.5) | To the medical director |
+| Emergency bumping | Elective case displaced | To the displaced patient and surgeon, immediately |
+| Cancellation slot available | Slot released, waiting list matched | To matched patients in priority order |
+| Pre-operative step outstanding | T-48 h with investigations or consent missing | To patient and surgeon |
+| **Family theatre status** | `patient_in_theatre` / `in_recovery` | To the nominated contact, with consent, **no clinical detail** |
+| Visiting-expert campaign published | Campaign goes live | To opted-in patients matching the specialty |
+| Visiting-expert stage change | Pipeline transition (§6.15.2) | To patient and coordinator |
+| Visiting-expert cohort at risk | Below minimum viable cohort near the decision date | To the coordinator and host doctor |
 
-- Notification payloads shall contain **no clinical detail** — "Your laboratory result is ready" is acceptable; the analyte and value are not.
-- Universal Links (iOS) and App Links (Android) shall be configured for every shareable entity: offer, tip, clinic, doctor, appointment, result.
+- Notification payloads shall contain **no clinical detail** — "Your laboratory result is ready" is acceptable; the analyte and value are not. This applies with particular force to family theatre-status messages and to every WhatsApp message.
+- Transactional notifications (marked above) are not disableable, but shall still be delivered courteously and never duplicated across channels within a short window.
+- Universal Links (iOS) and App Links (Android) shall be configured for every shareable entity: offer, tip, clinic, doctor, appointment, result, **surgery request, centre, and visiting-expert campaign**.
+- Every send shall be written to `NotificationLog` with its channel, template, provider reference and delivery status, so that "the doctor says he was never told" is an answerable question.
+
+### 12.4 WhatsApp Notifications To Staff **[P1 for staff, P2 for patients]**
+
+The client requires that a patient's surgery request reach the approvers on WhatsApp. This is achievable, with constraints that shape the design and must be understood before it is promised.
+
+**Implementation:** WhatsApp Business Cloud API (Meta), with a verified business account and a registered sender number.
+
+**The constraint that governs everything:** outside a 24-hour window opened by the recipient's own message, WhatsApp permits only **pre-approved message templates**. A staff alert is by definition unsolicited, so **every staff notification must be a template submitted to Meta and approved in advance.** Templates take days to approve and cannot be composed at runtime; only their variables change. Template drafting is therefore an M2 activity, not an M5 one, and the approved template set is a project deliverable.
+
+**Required templates (Arabic, with variables):**
+
+| Template | Variables |
+|---|---|
+| New surgery request awaiting approval | patient reference, procedure, classification, requested date range, deep link |
+| Surgery request escalated — SLA breached | request reference, hours elapsed, deep link |
+| Theatre booking cancelled or postponed | case reference, theatre, date, reason code |
+| Emergency case displaced an elective booking | case reference, new proposed date, deep link |
+| Visiting-expert cohort below threshold | campaign name, current count, threshold, decision date |
+
+**Rules:**
+
+1. **No protected health information in any WhatsApp message.** Send a patient reference number and a deep link — never a name, a diagnosis, a result or a clinical note. WhatsApp is a consumer messaging platform on a personal device; treat it as an alerting channel that says *"something needs you, open the app"*, never as a channel that carries the content itself. This rule is not negotiable and shall be stated in the Data Protection Impact Assessment.
+2. **WhatsApp is never the only channel.** The delivery chain for any approval alert is: in-app push → WhatsApp → SMS after a configurable delay if still unactioned → escalation per §6.13.6. A patient's surgery request must not depend on one messaging platform being up.
+3. Staff opt in to WhatsApp alerts individually, with their consent recorded, and may switch to SMS.
+4. Message costs are per-conversation and are billed to the hospital. Volume shall be estimated during discovery and the recurring cost stated in the proposal (see `docs/COMMERCIAL-ESTIMATE.md` §3.4).
+5. **Patient-facing WhatsApp** (booking confirmations, result-ready alerts) is Phase 2 and requires its own opt-in, its own templates, and a marketing-consent boundary that transactional templates must not cross.
 
 ---
 
@@ -574,7 +934,73 @@ A responsive web application, delivered as part of the same programme. Without i
 
 Modules: patients & MRN search · departments, clinics, doctors, schedules & slots · appointments (create, reschedule, cancel, no-show marking) · lab test catalogue & pricing · lab orders and **result upload with the critical-result acknowledgement gate** · radiology catalogue, schedules, report upload · home-care service catalogue, request queue, staff assignment · complaints inbox with SLA timers and response composer · offers & events authoring with scheduling and targeting · medical tips authoring with the medical-review gate · blood-bank requests, donor registry and appeal broadcasting · push-notification composer with audience segments and a mandatory test-send step · corporate contracts and price lists **[P2]** · invoices and payments **[P2]** · user, role and permission management · audit-log viewer · dashboards.
 
+**Additional modules required by §6.13–6.15:**
+
+- **Operating theatres** — theatre register, maintenance blocks, turnover defaults, centre allocations.
+- **Operation classifications** — create, rename, reorder, recolour, deactivate, and edit every default in §6.13.2. **No code change, no app release.**
+- **Procedure catalogue** — including which procedures patients may request.
+- **Theatre schedule** — the availability grid with drag-to-reschedule, conflict warnings, override with mandatory reason, and the day-of-surgery board.
+- **Surgery approvals inbox** — patient requests with SLA timers, the approver's one-screen decision view (§6.13.6), escalation state, and a decided-requests archive.
+- **Cancellation & postponement reason codes** — admin-managed list, and the cancellation waiting list.
+- **Specialty centres** — create and configure centres, their specialties, catalogues, clinics, doctors, pricing, content and theatre allocations; assign `center_manager`.
+- **Visiting-expert campaigns** — expert profiles with credential documents and the **licence-validity publication gate** (§6.15.4), campaign setup, the pipeline board, cohort tracking against the minimum viable threshold, waitlist management, and deposit reconciliation.
+- **Consent templates** — versioned, procedure-specific consent text; superseding a template shall never alter consents already signed.
+- **Safety checklist templates**, equipment and instrument sets, theatre team roster.
+- **WhatsApp template registry** — the approved Meta templates, their variables, and their delivery statistics.
+- **Reports** — §14.1.
+
 Every destructive or clinical action in the console shall require a confirmation step and shall be recorded in the audit log with the acting user.
+
+### 14.1 Reports
+
+Every report shall be filterable by date range, department, **centre**, doctor, **classification** and status; viewable on screen; exportable to CSV, XLSX and PDF; and schedulable for automatic email delivery to a named recipient list. Report access obeys the permission matrix in §3.3 — a `center_manager` sees their own centre and nothing else, and financial reports are separately permissioned from clinical ones.
+
+**Operating theatre**
+
+| Report | Why it matters |
+|---|---|
+| Theatre utilisation — booked, used and idle hours per theatre per day, week and month | The hospital's most expensive asset; utilisation is the number the owner will ask for first |
+| Case mix by classification (صغرى / متوسطة / كبرى / ذات مهارة) | Drives staffing, pricing and capacity planning |
+| Surgeon volume and case mix, by classification and centre | Doctor productivity and credentialing evidence |
+| First-case on-time start rate | The single best predictor of whether a theatre day will overrun |
+| Turnover time — actual against configured | Recovers hidden capacity without buying a theatre |
+| **Cancellations and postponements by reason code** | The improvement programme writes itself from this one report |
+| Estimated against actual duration, by procedure and by surgeon | Feeds back into §6.13.2 defaults and makes scheduling progressively more accurate |
+| Same-day cancellations attributable to missing pre-op investigations or consent | Directly actionable; usually the largest single cause |
+| Conflict overrides — who, what, why | Governance; a rising count is an early warning |
+| Emergency bumping — frequency and displaced cases | Justifies reserving emergency capacity |
+| Implant and prosthesis register by lot and serial | Recall response and accreditation |
+
+**Surgery demand & approvals**
+
+| Report | Why it matters |
+|---|---|
+| Patient request funnel — submitted → reviewed → approved → scheduled → performed | Shows where surgical demand is being lost |
+| Approval turnaround and SLA breaches, by approver | Makes the escalation rule in §6.13.6 enforceable |
+| Rejection reasons | Distinguishes clinical from operational and financial rejection |
+| Request-to-surgery lead time | The waiting time the hospital actually offers |
+
+**Specialty centres**
+
+Cases, case mix, theatre utilisation, clinic volume, revenue and contribution per centre, with centre-against-centre comparison and period-on-period trend.
+
+**Visiting experts**
+
+Per campaign: interest registered → screened → shortlisted → deposit paid → operated, with conversion at each stage; cohort against minimum viable threshold; theatre sessions reserved against consumed; deposits collected, refunded and outstanding; cost against revenue. Across campaigns: which experts, specialties and seasons convert best — this is the report that decides which visit to run next year.
+
+**Clinical & operational**
+
+Clinic volume and no-show rate by clinic and doctor · appointment lead time · laboratory turnaround against target · radiology report turnaround · **critical results and time to clinician acknowledgement** (§6.9) · home-care requests by service, status and coverage area · complaint volume and SLA compliance by category and department · blood-bank stock movement, requests and donor conversion.
+
+**Financial [P2 where payments are in scope]**
+
+Revenue by service line, centre, doctor and payer · cash against insurance against corporate · estimate against final invoice variance · outstanding balances · deposits held · refunds · daily settlement reconciliation.
+
+**Engagement & product**
+
+Registration funnel · active users · booking completion rate by channel · result-view rate · offer click-through · push, WhatsApp and SMS delivery and failure rates by template · app crash rate and API latency (§15).
+
+**Management dashboard.** A single screen for the owner and medical director: today's theatre schedule and utilisation, cases in progress, surgery requests awaiting approval with the oldest highlighted, today's clinic load, revenue month-to-date against last month, complaints breaching SLA, and any active visiting campaign at risk. It shall be readable on a phone.
 
 ---
 
@@ -612,6 +1038,16 @@ Every destructive or clinical action in the console shall require a confirmation
 6. Submit a home-care request and follow it to `completed`.
 7. Submit a complaint and receive a reference number and a response.
 8. Switch language to English and back, and complete journey 3 in each direction.
+9. **As a doctor, book a theatre slot directly** — confirmed immediately, with no approval step — and confirm it appears on the availability grid for every other user within 30 seconds.
+10. **Attempt a double-booking under concurrency**: two clients confirm the same theatre slot simultaneously; exactly one succeeds and the other receives a clear message and a refreshed grid. Repeat for surgeon overlap, patient overlap and equipment overlap.
+11. **As a patient, request a surgery**; confirm every `surgery_approver` receives the push and the WhatsApp template within 60 seconds; approve it; confirm it becomes a scheduled case indistinguishable from a doctor-booked one.
+12. **Leave a surgery request unactioned past the SLA** and confirm it escalates to the medical director and appears on the management report.
+13. **As an administrator, create a new operation classification**, set its defaults, and confirm it is immediately selectable in booking and appears in the reports — with no app release.
+14. Open the Surgery Centre, browse its three specialties, book one of its clinics immediately as a patient, and request one of its procedures.
+15. Run a visiting-expert campaign end to end: publish it, register interest as a patient, have the host doctor add a second patient directly, screen and shortlist both, schedule the surgeries into the reserved sessions, and confirm the cohort count tracks against the minimum viable threshold.
+16. Confirm a campaign **cannot be published** while the expert's licence reference is missing or expired.
+17. Cancel a scheduled case with a reason code and confirm the waiting list is notified and the reason reaches the cancellation report.
+18. Verify that **no WhatsApp, SMS or push message anywhere in the system contains a patient name, diagnosis or clinical value.**
 
 ### 16.3 Acceptance Criteria
 
@@ -628,11 +1064,17 @@ Phase 1 is accepted when: all Section 16.2 journeys pass on both platforms; the 
 | **M2 — Foundation** | Backend scaffold, database, auth + OTP, admin console shell, CI/CD, environments | 3 weeks |
 | **M3 — Core patient app** | Registration, home, clinics, booking, medical file | 4 weeks |
 | **M4 — Clinical services** | Radiology, laboratory, results, blood bank | 3 weeks |
-| **M5 — Engagement** | Home care, complaints, offers, medical tips, notifications | 3 weeks |
-| **M6 — Hardening** | QA, accessibility, localisation review, penetration test and remediation, performance tuning | 3 weeks |
+| **M5 — Engagement** | Home care, complaints, offers, medical tips, notifications, WhatsApp templates submitted for Meta approval | 3 weeks |
+| **M5a — Operating theatre** | Theatres, admin-managed classifications, procedure catalogue, availability grid, **direct doctor booking with concurrency-safe conflict enforcement**, patient request and approval workflow with escalation, cancellation reasons and waiting list, day-of-surgery board | 5 weeks |
+| **M5b — Surgical safety & integration** | Digital consent, WHO safety checklist, pre-operative bundle auto-ordering, blood reservation, equipment reservation, implant traceability, operative note, family status notifications | 3 weeks |
+| **M5c — Centres & visiting experts** | Specialty-centre framework, Surgery Centre instance, theatre allocation, visiting-expert campaigns with the licence publication gate, pipeline board, waitlist and deposits | 4 weeks |
+| **M5d — Permissions & reports** | Configurable roles and permissions, centre-scoped authorisation, the full report catalogue (§14.1), scheduled exports, management dashboard | 3 weeks |
+| **M6 — Hardening** | QA, accessibility, localisation review, penetration test and remediation, performance tuning, **theatre concurrency load testing** | 4 weeks |
 | **M7 — Launch** | Store submission, pilot with a limited patient group, production monitoring, staff training | 2 weeks |
 
-**Indicative Phase 1 total: 21 weeks**, assuming the hospital meets its obligations in Section 18.2 on schedule.
+**Indicative total with §6.13–6.15 included: 36 weeks**, assuming the hospital meets its obligations in Section 18.2 on schedule.
+
+> **Scope note.** The operating-theatre, specialty-centre and visiting-expert modules are not an increment on the original brief — they are roughly **70% again on top of it**, and they carry the programme's highest clinical and concurrency risk. M2 (Foundation) must be extended by one week to accommodate the permission framework and the WhatsApp template submission, both of which have external lead times. Do not fold this scope into the original schedule or the original price; see `docs/COMMERCIAL-ESTIMATE.md` §3.3a.
 
 ---
 
@@ -685,12 +1127,23 @@ These are the points this document could not resolve from the supplied material.
 11. **Content ownership:** who authors and clinically approves medical tips on an ongoing basis?
 12. **Hosting:** cloud provider, region, and whether data must remain within Egypt.
 13. **Support model:** required post-launch support hours, response times, and whether the vendor or the hospital operates the admin console day to day.
+14. **Visiting-expert licensing (§6.15.4):** what authorisation does a visiting foreign practitioner require from the Egyptian Medical Syndicate and the Ministry of Health, what is the lead time, and who at the hospital is accountable for holding it? **A campaign cannot be published without this answer.**
+15. **Theatres:** how many operating theatres, of what types, with what operating hours, and how much emergency capacity is held back?
+16. **Doctor credentialing:** who is authorised to book a theatre directly, and how is that list maintained as doctors join and leave? What defines "seniority" for the classification requirement in §6.13.2?
+17. **Override authority:** who may override a hard booking conflict (§6.13.5), and who must be notified when they do?
+18. **Approval coverage:** who holds `surgery_approver`, who covers them on leave and at night, and are the default 4-hour and 24-hour escalation windows correct?
+19. **Anaesthesia and theatre staffing:** are anaesthetists and theatre nurses to be scheduled by this system, or by an existing roster the system must respect?
+20. **Surgery pricing:** is surgical pricing per procedure, per classification band, or a package including theatre, anaesthesia and stay? Are implants billed separately?
+21. **Deposits and refunds:** what is the deposit and refund policy for visiting-expert campaigns, and who signs it off?
+22. **Centres:** is the Surgery Centre a separate legal entity, with separate pricing, invoicing or tax registration — or a service line within the hospital?
+23. **WhatsApp:** does the hospital hold a WhatsApp Business account and a verified business profile? If not, verification is on the critical path (§12.4).
+24. **Developer attribution (§2.5):** are the specified placements agreed, and is a white-label option required?
 
 ---
 
 ## 20. Explicitly Out Of Scope (Phase 1)
 
-Clinical decision support; ICD-10 or CPT coding; inpatient/ward management; pharmacy stock and inventory; HR, payroll and rostering; general accounting and the general ledger; medical-equipment maintenance; a public marketing website; any migration of historical paper records.
+Clinical decision support; ICD-10 or CPT coding; **inpatient admission, ward and bed management** (the theatre module in §6.13 schedules and records the operation itself — it does not admit, ward or discharge the patient); pharmacy stock and inventory; **hospital-wide staff rostering** (§6.13.9 assigns a theatre team to a case against their availability; it does not build the hospital's shift roster); HR, payroll; general accounting and the general ledger; medical-equipment maintenance scheduling (theatres may be blocked for maintenance, but the maintenance programme itself is out); a public marketing website; any migration of historical paper records.
 
 ---
 

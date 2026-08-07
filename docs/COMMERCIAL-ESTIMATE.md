@@ -172,6 +172,36 @@ Use this when the hospital wants to buy incrementally, or to price change reques
 | **Phase 2 — Pharmacy & e-prescriptions** | §7.1.3–7.1.4 | 100,000 – 170,000 |
 | **Phase 2 — DICOM viewer** | §7.1.10 | 70,000 – 130,000 |
 
+### 3.3a Operating Theatre, Centres & Visiting Experts — Added Scope
+
+These modules were added to the brief after the original estimate and are **not** covered by any tier in §3.2. They are approximately **70% again on top of the original Phase 1 scope**, add **15 weeks** to the schedule, and carry the programme's highest clinical and concurrency risk.
+
+| Module | Reference | Price (EGP) |
+|---|---|---|
+| Operating theatres, admin-managed classifications, procedure catalogue, availability grid | `PROMPT.md` §6.13.1–6.13.4 | 130,000 – 210,000 |
+| Direct doctor booking with concurrency-safe conflict enforcement and override governance | §6.13.5 | 110,000 – 180,000 |
+| Patient request, approval inbox, SLA escalation, price estimate | §6.13.6–6.13.7 | 90,000 – 150,000 |
+| Case lifecycle, coded cancellations, waiting list, emergency bumping, duration learning | §6.13.8 | 80,000 – 130,000 |
+| Surgical safety pack — digital consent, WHO checklist, pre-op bundle, blood reservation, equipment reservation, implant traceability, operative note, family status | §6.13.9 | 180,000 – 300,000 |
+| Specialty-centre framework + Surgery Centre instance + theatre allocation | §6.14 | 120,000 – 200,000 |
+| Visiting-experts programme — campaigns, licence gate, pipeline, waitlist, deposits | §6.15 | 130,000 – 220,000 |
+| Configurable roles & permissions with centre-scoped row-level authorisation | §3.3 | 70,000 – 120,000 |
+| Report catalogue, scheduled exports, management dashboard | §14.1 | 110,000 – 190,000 |
+| WhatsApp Business integration, template registry, multi-channel fallback chain | §12.4 | 55,000 – 95,000 |
+| Doctor mode in the mobile app | §5 | 60,000 – 100,000 |
+| Additional QA — theatre concurrency load testing, permission-matrix testing | §16 | 45,000 – 80,000 |
+| **Added scope total** | | **1,180,000 – 1,975,000** |
+
+**Revised programme price with this scope included: EGP 1,900,000 – 3,100,000.** Quote **EGP 2,300,000** as the single number.
+
+**Three things to protect on this scope:**
+
+1. **Do not absorb it.** This arrived as "just add surgery booking". It is a theatre management system. Re-quote formally, in writing, with the module table above — never as a verbal "it'll be a bit more".
+2. **The safety pack is where the margin is, and where the value is.** Consent, the WHO checklist and implant traceability are accreditation requirements (§4.4 of the sales playbook). Sell them as compliance, not as features, and they stop being negotiable.
+3. **Concurrency is a real engineering risk, not a checkbox.** Two surgeons booking the same theatre at the same second must be handled at the database level. Budget the load testing in §16 explicitly; a double-booked theatre on day one destroys trust in the whole system and no later fix recovers it.
+
+**Recurring impact:** annual maintenance is charged on the revised total, so the recurring line rises to **EGP 340,000 – 680,000/year**. WhatsApp conversations are billed per conversation by Meta and are additional — estimate the volume in discovery and pass it through at cost + 15%.
+
 ### 3.4 Recurring Revenue — Do Not Leave This Out
 
 | Item | Price |
