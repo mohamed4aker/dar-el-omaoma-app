@@ -259,6 +259,54 @@ Rehearse these until they are automatic. Arabic lines are given because that is 
 
 ---
 
+## 7b. Competing Against Established HIS Vendors
+
+The hospital will almost certainly be comparing you with an established Egyptian HIS product vendor. The best known in this segment is **CodeZone** (`codezone-eg.com`), whose hospital product is **MYELIN**, sold in editions segmented by facility size:
+
+| Edition | Positioning (per the vendor's own material) |
+|---|---|
+| **MYELIN Basic** | New or small hospitals — front-office workflow and patient billing |
+| **MYELIN Grow** | Medical centres of limited capacity — patient records, appointment scheduling, service tracking |
+| **MYELIN Pro** | Medium-sized hospitals — billing, claims, HR, purchasing and inventory |
+
+Stated core components include the hospital management base, patient records and diagnosis, CRM, SMS, and BI/decision support. Named public references include Dawi Clinics and I-Care Hospital.
+
+**CodeZone does not publish prices.** Neither does any comparable vendor in this market — HIS pricing is quotation-based and varies by bed count, sites, concurrent users, modules and implementation scope. Treat any specific annual figure you hear second-hand as unverified until you see the quotation.
+
+### How to find out what they actually charge
+
+In order of usefulness:
+
+1. **Ask the hospital.** If they are evaluating vendors, they already hold the quotation. "Have you had a quote from anyone else? Can I see the scope so I compare like for like?" is a normal, professional question and it is the fastest route to the number. It also tells you what stage the decision is at.
+2. **Ask peers.** Administrators at hospitals of similar size talk to each other. One phone call to a friendly hospital that has been through a HIS purchase is worth more than any amount of searching.
+3. **Approach CodeZone as an implementation partner, not a competitor.** Product vendors need local partners for configuration, integration, training and support. This is a legitimate and often better business than building a custom HIS: you sell the licence, keep the implementation and support revenue, and carry none of the product risk. Worth one email before you commit to building your own.
+
+Do not request a quotation while posing as a hospital. You would get a number and lose the ability to ever partner with them, in a market where the vendors all know each other.
+
+### The comparison trap — and how to break it
+
+A product licence quote and a custom-build quote are not comparable, and the hospital will compare them anyway. Break it by insisting on a like-for-like scope table:
+
+| Line | Product vendor | Custom build |
+|---|---|---|
+| Software licence or subscription | ✔ quoted | n/a — you own it |
+| Implementation, configuration, department setup | **often quoted separately** | included |
+| Data migration | usually extra | quoted |
+| Integration with labs, analysers, PACS, the mobile app | usually extra | quoted |
+| Customisation to the hospital's own workflow | limited, billed per change | included by definition |
+| Training and go-live support | often extra | included |
+| **Annual support, from year two** | **18–22%, recurring forever** | 18–22% |
+| Ownership of code and data | licensed — stops when you stop paying | owned outright |
+| Total cost over five years | **the only fair comparison** | **the only fair comparison** |
+
+**The question that reframes the whole conversation:**
+
+> *"السعر ده شامل التركيب وتهجير البيانات والربط والتدريب — ولا اللايسنس بس؟ وإيه تكلفة الدعم السنوي من السنة التانية؟ خلينا نقارن التكلفة على خمس سنين، مش سعر اليوم."*
+>
+> "Does that price include implementation, migration, integration and training — or just the licence? And what is annual support from year two? Let us compare five-year total cost, not day-one price."
+
+Your honest advantages against a product: workflow fits the hospital instead of the reverse, they own the code and data, the mobile app is native to the system rather than a bolt-on, and you are local and responsive. Your honest disadvantages: a proven product carries less delivery risk, has existing reference sites, and is available sooner. **Say both.** A vendor who names the competitor's genuine strengths is believed about everything else.
+
 ## 8. What Kills These Deals
 
 | Mistake | Do instead |
