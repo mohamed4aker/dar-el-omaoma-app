@@ -71,6 +71,75 @@ Always present **three** options. A single price invites a haggle; three prices 
 
 If the hospital insists on a single number, quote **Tier B at EGP 850,000** and hold it.
 
+### 3.2b Tier S — Starter at EGP 200,000
+
+If EGP 200,000 is the number you want to open with, it **can** work — but only for the
+**mobile application with a hard-cut scope**, and only if the exclusions below are written
+into the contract. It cannot buy a hospital information system (Section 4); at that price
+an HIS engagement is a guaranteed loss, not a thin margin.
+
+**What the number affords.** EGP 200,000 across a 14-week delivery is ≈ EGP 57,000 per
+month for the entire team. That is approximately **one full-time engineer**. Plan the
+scope for one person, not for a team, or the margin is gone before you start.
+
+| | Tier S — Starter |
+|---|---|
+| **Price** | EGP 200,000 |
+| **Duration** | 14 weeks |
+| **Team** | 1 full-stack engineer + part-time design and QA |
+| **Platforms** | iOS + Android (single React Native / Flutter codebase) |
+
+**Included — the deck's public and transactional core:**
+
+| Module | Reference |
+|---|---|
+| Splash, onboarding, login/register with OTP and National-ID validation | `PROMPT.md` §6.1–6.2 |
+| Home screen with the client's four tiles | §6.3 |
+| Clinics, doctors, schedules and appointment booking (pay at reception) | §6.7 |
+| Radiology and laboratory **catalogues, prices and schedules** — browse and book only | §6.8–6.9 |
+| Offers & events, medical tips — CMS-driven | §6.11–6.12 |
+| Complaints with reference number and status | §6.5 |
+| Contact & emergency call | §6.10 |
+| Push notifications: booking confirmation and reminders | §12.3 |
+| **Basic admin console** — content, catalogues, schedules, bookings, complaints inbox | §14, reduced |
+| Store submission on both platforms | §17 M7 |
+
+**Excluded — state each of these explicitly in the proposal:**
+
+| Excluded | Sell later at |
+|---|---|
+| Lab/radiology **results delivery** and the critical-result gate (§6.9) | EGP 80,000 – 130,000 |
+| **Medical file** with vitals, visit history and documents (§6.6) | EGP 55,000 – 90,000 |
+| **Home care** request and dispatch workflow (§6.4) | EGP 60,000 – 95,000 |
+| **Blood bank** (§6.9) | EGP 40,000 – 65,000 |
+| In-app payment (§13) | EGP 90,000 – 160,000 |
+| Full admin console, dashboards and role management (§14) | EGP 100,000 – 180,000 |
+| Penetration test (§11.3) | EGP 45,000 – 90,000 |
+| Any Phase 2 module (§7.1) | Per §3.3 |
+| Dedicated tablet layouts, dark theme | EGP 40,000 – 70,000 |
+
+**Conditions to attach to a EGP 200,000 price — non-negotiable:**
+
+1. **Annual maintenance is a separate, signed line: EGP 45,000 – 60,000/year, starting at
+   launch.** At this build price the retainer is where the engagement becomes profitable.
+   Do not sign the build without it.
+2. **Hosting, SMS, maps and store fees are billed to the hospital directly**, not absorbed.
+   SMS in particular is usage-based and will grow with the user base.
+3. **The exclusion table above is in the contract**, item by item, with its later price.
+   Every excluded item is a booked future sale, not a gap.
+4. **Two rounds of revision per screen.** Beyond that, billable.
+5. The hospital's obligations in `PROMPT.md` §18.2 (catalogues, prices, brand assets, legal
+   texts, developer accounts, SMS sender ID) are prerequisites with a billable delay clause.
+6. **Results and clinical data are out**, so the app carries no protected health information
+   in Tier S. Say this plainly — it is what makes the reduced compliance surface honest, and
+   it is the strongest argument for funding the next phase.
+
+**Why this is a defensible opening move.** Tier S is a real, shippable product in the
+hospital's own brand, in both stores, with a working booking engine. It builds the patient
+identity layer, which makes every later module naturally yours (§5). The exclusion table
+turns the discount into a roadmap rather than a loss. What you must not do is quote
+EGP 200,000 for **Tier B scope** — that is the same mistake as EGP 15,000, just less severe.
+
 ### 3.3 Modular Price List
 
 Use this when the hospital wants to buy incrementally, or to price change requests. Prices assume the Tier B foundation already exists.
@@ -178,7 +247,80 @@ If the hospital asks you today, *"and how much for the whole system?"*, the answ
 
 **Never quote an HIS without a paid assessment first.** The single largest cost driver — whether they already run an HIS, LIS or PACS, and whether it exposes an API (`PROMPT.md` §19, question 4) — is unknown to you right now. Quoting blind on that question is how software houses go bankrupt.
 
-### 4.4 What Moves The HIS Price Most
+### 4.4 The EGP 200,000 Question — Answered Directly
+
+**EGP 200,000 for a full hospital information system is not a low price. It is not a price
+at all.** Quoting it would not win you a thin-margin project; it would commit you to
+18–30 months of work funded at roughly 2–3% of its cost, and it would end in an
+abandoned system, an unpaid balance, and a damaged reputation in a market where hospital
+procurement runs almost entirely on reference calls.
+
+The arithmetic, so you can see it rather than take it on faith:
+
+| | Value |
+|---|---|
+| HIS core effort (ADT + scheduling + basic EMR + billing) | 80 – 120 person-months |
+| What EGP 200,000 funds at Egyptian loaded cost | ≈ 4 person-months |
+| Coverage | **≈ 3 – 5% of the core** |
+| Cheapest single HIS module (§4.5) | EGP 250,000 |
+
+EGP 200,000 does not buy the smallest module in the system. That is the whole answer.
+
+**But the instinct behind the number is right.** You are trying to find an entry point you
+can actually deliver and get paid for. That entry point exists — it is just not "the whole
+system at a discount". It is **one module, sold at its real price**, with the rest booked as
+a roadmap. Section 4.5 gives you the module prices to do exactly that.
+
+**The three moves that work, in order:**
+
+1. **Sell the paid assessment first — EGP 60,000 – 120,000, two to three weeks.** You cannot
+   price an HIS before you know whether they already run one, how many beds and sites,
+   which departments, and what has an API (`PROMPT.md` §19, question 4). Credit it against
+   the project. This is the single highest-value thing you can sell this month.
+2. **Sell the mobile app as the first module — Tier S at EGP 200,000 (§3.2b), or Tier B at
+   EGP 850,000 if they have the budget.** It is real, shippable, and it builds the patient
+   identity layer that makes every later module naturally yours.
+3. **Then sell HIS modules one at a time, at the prices in §4.5**, each one funding the next.
+
+If the hospital's total budget genuinely is EGP 200,000, they are not buying an HIS this
+year and no vendor on earth will sell them one. Say so plainly and sell them move 1 and
+move 2. That is an honest EGP 260,000 – 320,000 of work you can deliver well, and it puts
+you in position for the real programme.
+
+### 4.5 HIS Module Price List — Sell One Module At A Time
+
+Custom-build prices. Use this to convert a small budget into a sequenced programme instead
+of an impossible discount. Each module is independently deliverable and independently
+useful to the hospital.
+
+| # | Module | Price (EGP) | Typical order |
+|---|---|---|---|
+| 1 | Patient registration, master patient index & ADT | 350,000 – 600,000 | First — everything depends on it |
+| 2 | Outpatient scheduling & clinic workflow | 300,000 – 500,000 | Second |
+| 3 | Cashier, price lists, receipts & basic billing | 350,000 – 600,000 | Third — starts paying for itself |
+| 4 | Insurance, corporate contracts, pre-authorisation & claims | 400,000 – 700,000 | Fourth |
+| 5 | EMR core — encounters, notes, orders (CPOE), vitals, allergies | 700,000 – 1,200,000 | Fifth — the largest single module |
+| 6 | Laboratory information system (LIS) + analyser interfacing | 600,000 – 1,000,000 | |
+| 7 | Radiology (RIS) + PACS/DICOM integration | 500,000 – 900,000 | |
+| 8 | Pharmacy, formulary & dispensing | 450,000 – 800,000 | |
+| 9 | Inventory, stores & purchasing | 350,000 – 600,000 | |
+| 10 | Inpatient, bed management, operating theatre, maternity & NICU records | 500,000 – 900,000 | |
+| 11 | Finance — GL, AP, AR, fixed assets, cost centres | 500,000 – 900,000 | |
+| 12 | HR, rostering, attendance & payroll | 450,000 – 800,000 | |
+| 13 | Quality, incidents, infection control & accreditation evidence | 250,000 – 450,000 | Cheapest entry module |
+| 14 | Management dashboards & BI | 250,000 – 500,000 | |
+| 15 | Integration engine — HL7 v2 / FHIR R4 / DICOM | 400,000 – 800,000 | Required from module 6 onward |
+
+Module sum: **EGP 6.35M – 11.25M**. The full-suite figure in §4.2 (EGP 9M – 18M) is higher
+because it additionally carries programme management, data migration, training across all
+departments, parallel-run support, and contingency — all of which are real and all of which
+must be priced when the modules are bought as one programme rather than one at a time.
+
+**Add to every module:** annual maintenance at 18–22% of that module's price, from the date
+that module goes live. By module 5 the recurring line alone should exceed a junior
+engineer's salary.
+
+### 4.6 What Moves The HIS Price Most
 
 | Driver | Effect |
 |---|---|
