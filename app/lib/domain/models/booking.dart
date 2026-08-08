@@ -1,0 +1,162 @@
+import 'enums.dart';
+import 'time_range.dart';
+
+class Appointment {
+  const Appointment({
+    required this.id,
+    required this.patientId,
+    required this.doctorId,
+    required this.clinicId,
+    required this.range,
+    this.status = AppointmentStatus.confirmed,
+  });
+
+  final String id;
+  final String patientId;
+  final String doctorId;
+  final String clinicId;
+  final TimeRange range;
+  final AppointmentStatus status;
+
+  bool get blocksTime => status == AppointmentStatus.confirmed;
+}
+
+/// A scheduled operation.
+///
+/// [occupiesTheatre] is the range the theatre is actually unavailable for: the
+/// procedure itself plus the turnover (cleaning and preparation) that follows
+/// it. Scheduling against [range] alone is the classic way to produce a
+/// schedule that cannot physically be delivered.
+class SurgeryCase {
+  const SurgeryCase({
+    required this.id,
+    required this.patientId,
+    required this.patientDisplayName,
+    required this.procedureId,
+    required this.classificationId,
+    required this.theatreId,
+    required this.surgeonId,
+    required this.range,
+    required this.turnover,
+    required this.origin,
+    this.status = CaseStatus.scheduled,
+    this.centreId,
+    this.campaignId,
+    this.equipment = const [],
+    this.overrideReason,
+  });
+
+  final String id;
+  final String patientId;
+  final String patientDisplayName;
+  final String procedureId;
+  final String classificationId;
+  final String theatreId;
+  final String surgeonId;
+  final TimeRange range;
+  final Duration turnover;
+  final BookingOrigin origin;
+  final CaseStatus status;
+  final String? centreId;
+  final String? campaignId;
+  final List<String> equipment;
+  final String? overrideReason;
+
+  TimeRange get occupiesTheatre => range.extendedBy(turnover);
+
+  bool get blocksTime =>
+      status != CaseStatus.cancelled && status != CaseStatus.postponed;
+}
+
+/// Maintenance or administrative block on a theatre.
+class TheatreBlock {
+  const TheatreBlock({
+    required this.theatreId,
+    required this.range,
+    required this.reason,
+  });
+
+  final String theatreId;
+  final TimeRange range;
+  final String reason;
+}
+
+/// A patient-initiated surgery request. Never a confirmed booking
+/// (PROMPT.md section 6.13.6).
+class SurgeryRequest {
+  const SurgeryRequest({
+    required this.id,
+    required this.reference,
+    required this.patientId,
+    required this.procedureId,
+    required this.classificationId,
+    required this.submittedAt,
+    required this.estimatePriceSnapshot,
+    this.preferredSurgeonId,
+    this.preferredFrom,
+    this.preferredTo,
+    this.status = SurgeryRequestStatus.submitted,
+    this.decidedAt,
+    this.decisionReason,
+    this.escalatedAt,
+    this.scheduledCaseId,
+  });
+
+  final String id;
+  final String reference;
+  final String patientId;
+  final String procedureId;
+  final String classificationId;
+  final DateTime submittedAt;
+
+  /// The estimate exactly as the patient saw it, immutable thereafter
+  /// (PROMPT.md section 6.13.7).
+  final String estimatePriceSnapshot;
+  final String? preferredSurgeonId;
+  final DateTime? preferredFrom;
+  final DateTime? preferredTo;
+  final SurgeryRequestStatus status;
+  final DateTime? decidedAt;
+  final String? decisionReason;
+  final DateTime? escalatedAt;
+  final String? scheduledCaseId;
+
+  /// Approval service-level target (PROMPT.md section 6.13.6): first
+  /// escalation after four working hours.
+  static const Duration escalationWindow = Duration(hours: 4);
+
+  DateTime get escalationDueAt => submittedAt.add(escalationWindow);
+
+  bool isAwaitingDecisionAt(DateTime now) =>
+      status == SurgeryRequestStatus.submitted ||
+      status == SurgeryRequestStatus.underReview;
+
+  bool isEscalationOverdueAt(DateTime now) =>
+      isAwaitingDecisionAt(now) && now.isAfter(escalationDueAt);
+
+  SurgeryRequest copyWith({
+    SurgeryRequestStatus? status,
+    DateTime? decidedAt,
+    String? decisionReason,
+    DateTime? escalatedAt,
+    String? scheduledCaseId,
+  }) {
+    return SurgeryRequest(
+      id: id,
+      reference: reference,
+      patientId: patientId,
+      procedureId: procedureId,
+      classificationId: classificationId,
+      submittedAt: submittedAt,
+      estimatePriceSnapshot: estimatePriceSnapshot,
+      preferredSurgeonId: preferredSurgeonId,
+      preferredFrom: preferredFrom,
+      preferredTo: preferredTo,
+      status: status ?? this.status,
+      decidedAt: decidedAt ?? this.decidedAt,
+      decisionReason: decisionReason ?? this.decisionReason,
+      escalatedAt: escalatedAt ?? this.escalatedAt,
+      scheduledCaseId: scheduledCaseId ?? this.scheduledCaseId,
+    );
+  }
+}
