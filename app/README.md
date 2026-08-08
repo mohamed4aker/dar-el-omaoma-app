@@ -7,7 +7,7 @@ supported secondary language.
 ```bash
 flutter pub get
 flutter run              # Android / iOS
-flutter test             # 47 tests
+flutter test             # 68 tests
 flutter analyze          # clean
 ```
 
@@ -45,6 +45,10 @@ test/              national ID + theatre scheduling
 | **Centres** | Generic specialty-centre framework; Surgery Centre is its first instance |
 | **Visiting experts** | Campaign list gated on the expert's practising licence |
 | Content | Offers and awareness events (slide 10), medical tips (slide 11), complaints, home care |
+| **Approvals** | Approver inbox with the SLA clock, approve / reject with a coded reason / request more information, and manual escalation |
+| **Notifications** | Outbound log tagged by channel (push, WhatsApp, SMS) with the template code, showing that external messages carry no clinical detail |
+| Home care | Service catalogue, request with address and time window, and the status ladder to completion |
+| Blood bank | Unit request and donor registration with eligibility calculation and appeal opt-in |
 | More | Language, theme, contact, and the About screen carrying developer attribution |
 
 ## Notes for the next developer
@@ -67,5 +71,13 @@ test/              national ID + theatre scheduling
 - **National-ID checksum is opt-in and off by default.** See the library comment
   in `core/validation/national_id.dart` for why, and validate the algorithm
   against real IDs before enabling `strictChecksum`.
-- The doctor role is selectable on the login screen **for demonstration only**.
-  In production the role arrives in the server-issued session token.
+- The doctor and approver roles are selectable on the login screen **for
+  demonstration only**. In production the role arrives in the server-issued
+  session token.
+- **`AppNotification.staffAlert` is the only way to build an external message**,
+  and it composes the body from a reference plus a short context — never a
+  patient name. `workflow_test.dart` asserts this against every WhatsApp and
+  SMS message the app produces; keep that test green.
+- **WhatsApp templates must be approved by Meta before launch** and cannot be
+  composed at runtime (`PROMPT.md` §12.4). The `templateCode` on each
+  notification is the registry key; submit that set during M2, not M5.

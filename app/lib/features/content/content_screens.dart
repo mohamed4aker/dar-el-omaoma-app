@@ -175,68 +175,6 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 }
 
-/// Deck slide 3 tile: الرعاية المنزلية.
-class HomeCareScreen extends StatelessWidget {
-  const HomeCareScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final s = context.s;
-    return Scaffold(
-      appBar: AppBar(title: Text(s.homeCareTitle)),
-      body: ListView(
-        padding: const EdgeInsets.all(Gap.lg),
-        children: [
-          for (final service in Seed.homeCareServices)
-            Padding(
-              padding: const EdgeInsets.only(bottom: Gap.md),
-              child: AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(service.name(s.localeName),
-                              style:
-                                  Theme.of(context).textTheme.titleMedium),
-                        ),
-                        PriceText(service.price, currency: s.commonEgp),
-                      ],
-                    ),
-                    const SizedBox(height: Gap.sm),
-                    Text(service.description(s.localeName),
-                        style: Theme.of(context).textTheme.bodySmall),
-                    const SizedBox(height: Gap.md),
-                    Row(
-                      children: [
-                        const Icon(Icons.schedule,
-                            size: 14, color: AppColors.muted),
-                        const SizedBox(width: Gap.xs),
-                        Text(service.duration(s.localeName),
-                            style: Theme.of(context).textTheme.bodySmall),
-                        const Spacer(),
-                        FilledButton(
-                          onPressed: () {},
-                          style: FilledButton.styleFrom(
-                            minimumSize: const Size(0, kMinTouchTarget),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Gap.xl),
-                          ),
-                          child: Text(s.homeCareRequest),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
 /// Deck slide 3 tile: الشكاوى.
 class ComplaintsScreen extends StatefulWidget {
   const ComplaintsScreen({super.key});

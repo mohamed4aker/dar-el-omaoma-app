@@ -37,7 +37,19 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: const [EmergencyAction(), SizedBox(width: Gap.sm)],
+        actions: [
+          Badge(
+            isLabelVisible: state.notifications.isNotEmpty,
+            label: Text('${state.notifications.length}'),
+            child: IconButton(
+              tooltip: s.moreNotifications,
+              onPressed: () => context.push('/notifications'),
+              icon: const Icon(Icons.notifications_none),
+            ),
+          ),
+          const EmergencyAction(),
+          const SizedBox(width: Gap.sm),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.lg, Gap.lg, Gap.xxl),

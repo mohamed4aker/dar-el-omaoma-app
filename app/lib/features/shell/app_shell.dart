@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../data/app_state.dart';
+import '../../domain/models/enums.dart';
 
 /// Bottom-tab shell.
 ///
@@ -17,7 +18,10 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = context.s;
-    final isDoctor = context.watch<AppState>().session.isDoctor;
+    final session = context.watch<AppState>().session;
+    final isDoctor = session.isDoctor;
+    final isApprover = session.role == UserRole.surgeryApprover ||
+        session.role == UserRole.admin;
 
     final destinations = <NavigationDestination>[
       NavigationDestination(
@@ -35,6 +39,12 @@ class AppShell extends StatelessWidget {
           icon: const Icon(Icons.event_available_outlined),
           selectedIcon: const Icon(Icons.event_available),
           label: s.tabPractice,
+        )
+      else if (isApprover)
+        NavigationDestination(
+          icon: const Icon(Icons.fact_check_outlined),
+          selectedIcon: const Icon(Icons.fact_check),
+          label: s.approvalsTitle,
         )
       else
         NavigationDestination(

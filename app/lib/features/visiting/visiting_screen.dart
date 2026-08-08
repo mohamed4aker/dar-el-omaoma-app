@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/l10n/app_strings.dart';
@@ -9,6 +10,9 @@ import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../../domain/models/content.dart';
+import '../../domain/models/enums.dart';
+import '../../domain/models/operations.dart';
+import '../../domain/models/patient.dart';
 
 /// Visiting-experts programme (PROMPT.md 6.15).
 ///
@@ -114,15 +118,17 @@ class _CampaignCard extends StatelessWidget {
           ),
           const SizedBox(height: Gap.md),
           // Minimum viable cohort: the visit does not proceed below it, and
-          // the coordinator tracks it live (PROMPT.md 6.15.1).
-          if (!campaign.meetsMinimumCohort)
-            InfoNote(
-              s.localeName == 'en'
-                  ? 'Confirmed places: ${campaign.registered} of ${campaign.minimumViableCohort} needed for the visit to proceed.'
-                  : 'المسجّلون ${campaign.registered} من ${campaign.minimumViableCohort} المطلوبين لتأكيد الزيارة.',
-              icon: Icons.groups_outlined,
-              color: AppColors.warning,
-            ),
+          // the coordinator watches the count live (PROMPT.md 6.15.1).
+          Builder(builder: (context) {
+            final confirmed = state.confirmedCohort(campaign);
+            final met = confirmed >= campaign.minimumViableCohort;
+            return InfoNote(
+              '${s.visitingCohortLive}: $confirmed / '
+              '${campaign.minimumViableCohort}',
+              icon: met ? Icons.groups : Icons.groups_outlined,
+              color: met ? AppColors.success : AppColors.warning,
+            );
+          }),
           const SizedBox(height: Gap.lg),
           if (registered)
             InfoNote(
@@ -135,16 +141,197 @@ class _CampaignCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: FilledButton(
-                    onPressed: () =>
-                        context.read<AppState>().registerCampaignInterest(
-                              campaign.id,
-                            ),
+                    onPressed: () => _register(context, addedByDoctor: false),
                     child: Text(s.visitingRegisterInterest),
+                  ),
+                ),
+                const SizedBox(width: Gap.sm),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => _register(
+                      context,
+                      addedByDoctor: false,
+                      withScreening: true,
+                    ),
+                    child: Text(s.visitingBookScreening),
                   ),
                 ),
               ],
             ),
+
+          // The host doctor gathers a cohort from their own practice. Same
+          // pipeline, same list — only the origin differs (PROMPT.md 6.15.2).
+          if (state.session.isDoctor &&
+              state.session.doctorId == campaign.hostDoctorId) ...[
+            const SizedBox(height: Gap.md),
+            OutlinedButton.icon(
+              onPressed: () => _addPatientAsDoctor(context),
+              icon: const Icon(Icons.person_add_alt),
+              label: Text(s.visitingAddPatient),
+            ),
+          ],
+
+          Builder(builder: (context) {
+            final pipeline = state.campaignPipeline(campaign.id);
+            if (pipeline.isEmpty) return const SizedBox.shrink();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: Gap.lg),
+                Text(s.visitingPipeline,
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: Gap.sm),
+                for (final entry in pipeline)
+                  _PipelineRow(entry: entry),
+              ],
+            );
+          }),
         ],
+      ),
+    );
+  }
+
+  void _register(
+    BuildContext context, {
+    required bool addedByDoctor,
+    bool withScreening = false,
+  }) {
+    final state = context.read<AppState>();
+    final patient = state.session.patient;
+    if (patient == null) {
+      context.push('/login');
+      return;
+    }
+    state.addToCampaign(
+      campaignId: campaign.id,
+      patient: patient,
+      addedByDoctor: addedByDoctor,
+      stage: withScreening
+          ? VisitingStage.screeningBooked
+          : VisitingStage.interestRegistered,
+      screeningAt: withScreening
+          ? DateTime.now().add(const Duration(days: 3))
+          : null,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppColors.success,
+        content: Text(withScreening
+            ? context.s.visitingScreeningBooked
+            : context.s.visitingInterestDone),
+      ),
+    );
+  }
+
+  Future<void> _addPatientAsDoctor(BuildContext context) async {
+    final s = context.s;
+    final state = context.read<AppState>();
+    final picked = await showModalBottomSheet<Patient>(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(Gap.lg),
+              child: Text(s.theatreSelectPatient,
+                  style: Theme.of(context).textTheme.titleLarge),
+            ),
+            for (final patient in Seed.theatrePatients)
+              ListTile(
+                leading: const Icon(Icons.person_outline),
+                title: Text(patient.fullName),
+                subtitle: Text(patient.mrn),
+                onTap: () => Navigator.of(context).pop(patient),
+              ),
+            const SizedBox(height: Gap.lg),
+          ],
+        ),
+      ),
+    );
+    if (picked == null) return;
+    state.addToCampaign(
+      campaignId: campaign.id,
+      patient: picked,
+      addedByDoctor: true,
+      stage: VisitingStage.screeningBooked,
+      screeningAt: DateTime.now().add(const Duration(days: 2)),
+    );
+  }
+}
+
+class _PipelineRow extends StatelessWidget {
+  const _PipelineRow({required this.entry});
+
+  final CampaignPatient entry;
+
+  static const _ladder = [
+    VisitingStage.interestRegistered,
+    VisitingStage.screeningBooked,
+    VisitingStage.screened,
+    VisitingStage.shortlisted,
+    VisitingStage.surgeryScheduled,
+    VisitingStage.completed,
+  ];
+
+  String _stageLabel(VisitingStage stage, AppStrings s) => switch (stage) {
+        VisitingStage.interestRegistered => s.visitingStageInterest,
+        VisitingStage.screeningBooked => s.visitingStageScreening,
+        VisitingStage.screened =>
+          s.localeName == 'en' ? 'Screened' : 'تم الفرز',
+        VisitingStage.shortlisted => s.visitingStageShortlisted,
+        VisitingStage.surgeryScheduled => s.visitingStageScheduled,
+        VisitingStage.waitlisted => s.visitingStageWaitlisted,
+        VisitingStage.notEligible =>
+          s.localeName == 'en' ? 'Not eligible' : 'غير مؤهل',
+        VisitingStage.completed => s.statusCompleted,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.s;
+    final state = context.read<AppState>();
+    final index = _ladder.indexOf(entry.stage);
+    final next =
+        index >= 0 && index < _ladder.length - 1 ? _ladder[index + 1] : null;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: Gap.sm),
+      child: AppCard(
+        padding: const EdgeInsets.all(Gap.md),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(entry.patientDisplayName,
+                      style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    entry.addedByDoctor
+                        ? s.visitingAddedByDoctor
+                        : s.visitingSelfRegistered,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ],
+              ),
+            ),
+            StatusChip(
+              _stageLabel(entry.stage, s),
+              color: entry.countsTowardsCohort
+                  ? AppColors.success
+                  : AppColors.navy,
+            ),
+            if (next != null)
+              IconButton(
+                tooltip: s.visitingAdvance,
+                onPressed: () =>
+                    state.advanceCampaignPatient(entry.id, next),
+                icon: const Icon(Icons.arrow_forward),
+              ),
+          ],
+        ),
       ),
     );
   }

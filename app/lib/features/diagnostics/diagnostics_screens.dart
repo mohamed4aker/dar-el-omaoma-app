@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_colors.dart';
@@ -192,22 +193,24 @@ class LabScreen extends StatelessWidget {
               padding: const EdgeInsets.all(Gap.lg),
               children: [
                 AppCard(
-                  onTap: () {},
+                  onTap: () => context.push('/blood-bank'),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.bloodtype_outlined,
                         color: AppColors.danger),
                     title: Text(s.bloodBankRequest),
+                    trailing: const Icon(Icons.chevron_right),
                   ),
                 ),
                 const SizedBox(height: Gap.md),
                 AppCard(
-                  onTap: () {},
+                  onTap: () => context.push('/blood-bank'),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.volunteer_activism_outlined,
                         color: AppColors.pink),
                     title: Text(s.bloodBankDonate),
+                    trailing: const Icon(Icons.chevron_right),
                   ),
                 ),
               ],

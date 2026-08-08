@@ -3,17 +3,22 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/app_state.dart';
+import '../../domain/models/enums.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/auth/welcome_screen.dart';
+import '../../features/approvals/approvals_screen.dart';
+import '../../features/bloodbank/blood_bank_screen.dart';
 import '../../features/centres/centres_screen.dart';
 import '../../features/clinics/clinics_screen.dart';
 import '../../features/contact/contact_screen.dart';
 import '../../features/content/content_screens.dart';
+import '../../features/content/home_care_screen.dart';
 import '../../features/diagnostics/diagnostics_screens.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/medical_file/medical_file_screen.dart';
 import '../../features/more/more_screen.dart';
+import '../../features/notifications/notifications_screen.dart';
 import '../../features/services/services_screen.dart';
 import '../../features/shell/app_shell.dart';
 import '../../features/surgery/surgery_request_screen.dart';
@@ -80,6 +85,11 @@ GoRouter buildRouter() {
       GoRoute(path: '/complaints', builder: (_, _) => const ComplaintsScreen()),
       GoRoute(path: '/offers', builder: (_, _) => const OffersScreen()),
       GoRoute(path: '/tips', builder: (_, _) => const TipsScreen()),
+      GoRoute(path: '/blood-bank', builder: (_, _) => const BloodBankScreen()),
+      GoRoute(path: '/approvals', builder: (_, _) => const ApprovalsScreen()),
+      GoRoute(
+          path: '/notifications',
+          builder: (_, _) => const NotificationsScreen()),
 
       StatefulShellRoute.indexedStack(
         builder: (_, _, shell) => AppShell(navigationShell: shell),
@@ -110,9 +120,11 @@ class _FileOrPractice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDoctor = context.watch<AppState>().session.isDoctor;
-    return isDoctor
-        ? const TheatreAvailabilityScreen()
-        : const MedicalFileScreen();
+    final session = context.watch<AppState>().session;
+    return switch (session.role) {
+      UserRole.doctor => const TheatreAvailabilityScreen(),
+      UserRole.surgeryApprover || UserRole.admin => const ApprovalsScreen(),
+      _ => const MedicalFileScreen(),
+    };
   }
 }

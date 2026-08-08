@@ -146,6 +146,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Text(doctor.name(s.localeName)),
                     ),
+                  OutlinedButton(
+                    onPressed: () {
+                      context.read<AppState>().signInAsApprover();
+                      context.go('/home');
+                    },
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, kMinTouchTarget),
+                      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+                    ),
+                    child: Text(s.approvalsTitle),
+                  ),
                 ],
               ),
             ],

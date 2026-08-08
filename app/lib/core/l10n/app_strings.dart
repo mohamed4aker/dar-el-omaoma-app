@@ -248,6 +248,54 @@ class AppStrings {
     required this.guestBannerTitle,
     required this.guestBannerBody,
     required this.guestBannerAction,
+    required this.approvalsTitle,
+    required this.approvalsPending,
+    required this.approvalsDecided,
+    required this.approvalsEmpty,
+    required this.approvalsApprove,
+    required this.approvalsReject,
+    required this.approvalsMoreInfo,
+    required this.approvalsRejectReason,
+    required this.approvalsDueIn,
+    required this.approvalsOverdue,
+    required this.approvalsRunEscalation,
+    required this.approvalsEscalated,
+    required this.approvalsApprovedNote,
+    required this.approvalsMoreInfoNote,
+    required this.notificationsEmpty,
+    required this.notificationsNoPhi,
+    required this.channelPush,
+    required this.channelWhatsapp,
+    required this.channelSms,
+    required this.channelInApp,
+    required this.channelTemplateApproved,
+    required this.homeCareAddress,
+    required this.homeCareWindow,
+    required this.homeCareNotes,
+    required this.homeCareSubmitted,
+    required this.homeCareMyRequests,
+    required this.homeCareFreeCancel,
+    required this.bloodGroup,
+    required this.bloodComponent,
+    required this.bloodUnits,
+    required this.bloodRequiredBy,
+    required this.bloodSubmitted,
+    required this.bloodLastDonation,
+    required this.bloodNextEligible,
+    required this.bloodEligibleNow,
+    required this.bloodAcceptAppeals,
+    required this.bloodRegistered,
+    required this.visitingPipeline,
+    required this.visitingAddPatient,
+    required this.visitingAddedByDoctor,
+    required this.visitingSelfRegistered,
+    required this.visitingCohortLive,
+    required this.visitingScreeningBooked,
+    required this.visitingAdvance,
+    required this.bookingsTitle,
+    required this.bookingsEmpty,
+    required this.bookingsUpcoming,
+    required this.bookingsPast,
   });
 
   final String localeName;
@@ -518,6 +566,55 @@ class AppStrings {
   final String guestBannerBody;
   final String guestBannerAction;
 
+  final String approvalsTitle;
+  final String approvalsPending;
+  final String approvalsDecided;
+  final String approvalsEmpty;
+  final String approvalsApprove;
+  final String approvalsReject;
+  final String approvalsMoreInfo;
+  final String approvalsRejectReason;
+  final String approvalsDueIn;
+  final String approvalsOverdue;
+  final String approvalsRunEscalation;
+  final String approvalsEscalated;
+  final String approvalsApprovedNote;
+  final String approvalsMoreInfoNote;
+  final String notificationsEmpty;
+  final String notificationsNoPhi;
+  final String channelPush;
+  final String channelWhatsapp;
+  final String channelSms;
+  final String channelInApp;
+  final String channelTemplateApproved;
+  final String homeCareAddress;
+  final String homeCareWindow;
+  final String homeCareNotes;
+  final String homeCareSubmitted;
+  final String homeCareMyRequests;
+  final String homeCareFreeCancel;
+  final String bloodGroup;
+  final String bloodComponent;
+  final String bloodUnits;
+  final String bloodRequiredBy;
+  final String bloodSubmitted;
+  final String bloodLastDonation;
+  final String bloodNextEligible;
+  final String bloodEligibleNow;
+  final String bloodAcceptAppeals;
+  final String bloodRegistered;
+  final String visitingPipeline;
+  final String visitingAddPatient;
+  final String visitingAddedByDoctor;
+  final String visitingSelfRegistered;
+  final String visitingCohortLive;
+  final String visitingScreeningBooked;
+  final String visitingAdvance;
+  final String bookingsTitle;
+  final String bookingsEmpty;
+  final String bookingsUpcoming;
+  final String bookingsPast;
+
   static const AppStrings ar = AppStrings(
     localeName: 'ar',
     appName: 'دار الأمومة',
@@ -761,6 +858,54 @@ class AppStrings {
     guestBannerTitle: 'أنت تتصفح كزائر',
     guestBannerBody: 'سجّل الدخول للحجز والاطلاع على ملفك الطبي ونتائجك.',
     guestBannerAction: 'تسجيل الدخول',
+    approvalsTitle: 'صندوق الموافقات',
+    approvalsPending: 'بانتظار القرار',
+    approvalsDecided: 'تم البت فيها',
+    approvalsEmpty: 'لا توجد طلبات بانتظار الموافقة',
+    approvalsApprove: 'موافقة',
+    approvalsReject: 'رفض',
+    approvalsMoreInfo: 'طلب بيانات إضافية',
+    approvalsRejectReason: 'سبب الرفض',
+    approvalsDueIn: 'متبقٍ للرد',
+    approvalsOverdue: 'تجاوز مهلة الرد — تم التصعيد للإدارة الطبية',
+    approvalsRunEscalation: 'تشغيل التصعيد',
+    approvalsEscalated: 'طلبات تم تصعيدها',
+    approvalsApprovedNote: 'تمت الموافقة، سيتم التواصل معك لتحديد الموعد.',
+    approvalsMoreInfoNote: 'برجاء رفع التقارير والفحوصات السابقة.',
+    notificationsEmpty: 'لا توجد إشعارات',
+    notificationsNoPhi: 'رسائل الواتساب والـ SMS تحمل رقمًا مرجعيًا ورابطًا فقط — بدون أي بيانات طبية.',
+    channelPush: 'إشعار',
+    channelWhatsapp: 'واتساب',
+    channelSms: 'رسالة نصية',
+    channelInApp: 'داخل التطبيق',
+    channelTemplateApproved: 'قالب معتمد',
+    homeCareAddress: 'العنوان',
+    homeCareWindow: 'الموعد المفضل',
+    homeCareNotes: 'ملاحظات',
+    homeCareSubmitted: 'تم استلام طلبك',
+    homeCareMyRequests: 'طلباتي',
+    homeCareFreeCancel: 'الإلغاء مجاني حتى تحرك الفريق إليك.',
+    bloodGroup: 'فصيلة الدم',
+    bloodComponent: 'المكوّن',
+    bloodUnits: 'عدد الوحدات',
+    bloodRequiredBy: 'مطلوب بحلول',
+    bloodSubmitted: 'تم إرسال الطلب لبنك الدم',
+    bloodLastDonation: 'آخر تبرع',
+    bloodNextEligible: 'موعد الأهلية القادم',
+    bloodEligibleNow: 'مؤهل للتبرع الآن',
+    bloodAcceptAppeals: 'أوافق على استقبال نداءات التبرع العاجلة',
+    bloodRegistered: 'تم تسجيلك كمتبرع',
+    visitingPipeline: 'مسار الحالات',
+    visitingAddPatient: 'إضافة مريض',
+    visitingAddedByDoctor: 'أضافه الطبيب',
+    visitingSelfRegistered: 'تسجيل ذاتي',
+    visitingCohortLive: 'الحالات المؤكدة',
+    visitingScreeningBooked: 'تم حجز موعد الفرز',
+    visitingAdvance: 'المرحلة التالية',
+    bookingsTitle: 'حجوزاتي',
+    bookingsEmpty: 'لا توجد حجوزات',
+    bookingsUpcoming: 'القادمة',
+    bookingsPast: 'السابقة',
   );
 
   static const AppStrings en = AppStrings(
@@ -1011,7 +1156,75 @@ class AppStrings {
     guestBannerBody:
         'Sign in to book appointments and view your medical file and results.',
     guestBannerAction: 'Sign in',
+    approvalsTitle: 'Approvals',
+    approvalsPending: 'Pending',
+    approvalsDecided: 'Decided',
+    approvalsEmpty: 'No requests awaiting approval',
+    approvalsApprove: 'Approve',
+    approvalsReject: 'Reject',
+    approvalsMoreInfo: 'Request more information',
+    approvalsRejectReason: 'Reason for rejection',
+    approvalsDueIn: 'Due in',
+    approvalsOverdue: 'Past the response deadline — escalated to the medical director',
+    approvalsRunEscalation: 'Run escalation',
+    approvalsEscalated: 'Requests escalated',
+    approvalsApprovedNote: 'Approved. We will contact you to arrange a date.',
+    approvalsMoreInfoNote: 'Please upload your previous reports and investigations.',
+    notificationsEmpty: 'No notifications',
+    notificationsNoPhi: 'WhatsApp and SMS messages carry a reference and a link only — never clinical data.',
+    channelPush: 'Push',
+    channelWhatsapp: 'WhatsApp',
+    channelSms: 'SMS',
+    channelInApp: 'In-app',
+    channelTemplateApproved: 'Approved template',
+    homeCareAddress: 'Address',
+    homeCareWindow: 'Preferred window',
+    homeCareNotes: 'Notes',
+    homeCareSubmitted: 'Request received',
+    homeCareMyRequests: 'My requests',
+    homeCareFreeCancel: 'Free cancellation until the team is dispatched.',
+    bloodGroup: 'Blood group',
+    bloodComponent: 'Component',
+    bloodUnits: 'Units',
+    bloodRequiredBy: 'Required by',
+    bloodSubmitted: 'Sent to the blood bank',
+    bloodLastDonation: 'Last donation',
+    bloodNextEligible: 'Next eligible',
+    bloodEligibleNow: 'Eligible to donate now',
+    bloodAcceptAppeals: 'I agree to receive urgent donation appeals',
+    bloodRegistered: 'You are registered as a donor',
+    visitingPipeline: 'Pipeline',
+    visitingAddPatient: 'Add a patient',
+    visitingAddedByDoctor: 'Added by doctor',
+    visitingSelfRegistered: 'Self-registered',
+    visitingCohortLive: 'Confirmed cases',
+    visitingScreeningBooked: 'Screening appointment booked',
+    visitingAdvance: 'Advance stage',
+    bookingsTitle: 'My bookings',
+    bookingsEmpty: 'No bookings yet',
+    bookingsUpcoming: 'Upcoming',
+    bookingsPast: 'Past',
   );
+
+  /// Rejection reasons for a surgery request.
+  ///
+  /// Admin-managed in production (PROMPT.md §6.13.6) — this list is a seed for
+  /// the demo, and the approver must always choose one, never a bare "no".
+  List<String> get approvalsRejectReasons => localeName == 'en'
+      ? const [
+          'Patient not clinically fit at present',
+          'Further investigations required first',
+          'Not indicated — a clinic consultation is advised',
+          'Capacity unavailable in the requested period',
+          'Financial or insurance approval outstanding',
+        ]
+      : const [
+          'الحالة غير مؤهلة طبيًا في الوقت الحالي',
+          'مطلوب استكمال فحوصات قبل اتخاذ القرار',
+          'العملية غير مستدعاة — يُنصح بحجز عيادة استشارة',
+          'لا توجد سعة متاحة في الفترة المطلوبة',
+          'بانتظار الموافقة المالية أو التأمينية',
+        ];
 
   static AppStrings of(BuildContext context) {
     final code = Localizations.localeOf(context).languageCode;
