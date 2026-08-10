@@ -7,7 +7,7 @@ supported secondary language.
 ```bash
 flutter pub get
 flutter run              # Android / iOS
-flutter test             # 68 tests
+flutter test             # 85 tests
 flutter analyze          # clean
 ```
 
@@ -29,6 +29,7 @@ lib/
     seed_data.dart in-memory catalogues (deck content marked as such)
     app_state.dart stands in for the API described in PROMPT.md §9
   features/        one folder per screen area
+    admin/         the admin console — catalogue and content maintenance
 test/              national ID + theatre scheduling
 ```
 
@@ -49,6 +50,7 @@ test/              national ID + theatre scheduling
 | **Notifications** | Outbound log tagged by channel (push, WhatsApp, SMS) with the template code, showing that external messages carry no clinical detail |
 | Home care | Service catalogue, request with address and time window, and the status ladder to completion |
 | Blood bank | Unit request and donor registration with eligibility calculation and appeal opt-in |
+| **Admin console** | Same app, same codebase, revealed by the `admin` role. Manage operation classifications, procedures, clinics, doctors, theatres, offers and medical tips. Adaptive layout: one column on a phone, a four-column grid in a desktop browser |
 | More | Language, theme, contact, and the About screen carrying developer attribution |
 
 ## Notes for the next developer
@@ -78,6 +80,14 @@ test/              national ID + theatre scheduling
   and it composes the body from a reference plus a short context — never a
   patient name. `workflow_test.dart` asserts this against every WhatsApp and
   SMS message the app produces; keep that test green.
+- **The admin console ships inside this app**, gated by role, and is built for
+  a wide screen because in practice it is used in a browser on a desk. Building
+  it as a separate web deployment (`flutter build web -t lib/main_admin.dart`
+  against a second entry point) would keep admin code out of the patient binary
+  and decouple its release cadence from store review — worth revisiting before
+  launch.
+- **Catalogue entries are deactivated, never deleted**, so a past case keeps the
+  classification, price and procedure it was created with.
 - **WhatsApp templates must be approved by Meta before launch** and cannot be
   composed at runtime (`PROMPT.md` §12.4). The `templateCode` on each
   notification is the registry key; submit that set during M2, not M5.

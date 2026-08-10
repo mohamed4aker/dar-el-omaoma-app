@@ -20,8 +20,8 @@ class AppShell extends StatelessWidget {
     final s = context.s;
     final session = context.watch<AppState>().session;
     final isDoctor = session.isDoctor;
-    final isApprover = session.role == UserRole.surgeryApprover ||
-        session.role == UserRole.admin;
+    final isApprover = session.role == UserRole.surgeryApprover;
+    final isAdmin = session.role == UserRole.admin;
 
     final destinations = <NavigationDestination>[
       NavigationDestination(
@@ -34,7 +34,13 @@ class AppShell extends StatelessWidget {
         selectedIcon: const Icon(Icons.medical_services),
         label: s.tabServices,
       ),
-      if (isDoctor)
+      if (isAdmin)
+        NavigationDestination(
+          icon: const Icon(Icons.admin_panel_settings_outlined),
+          selectedIcon: const Icon(Icons.admin_panel_settings),
+          label: s.adminConsole,
+        )
+      else if (isDoctor)
         NavigationDestination(
           icon: const Icon(Icons.event_available_outlined),
           selectedIcon: const Icon(Icons.event_available),

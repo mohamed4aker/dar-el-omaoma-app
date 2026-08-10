@@ -296,6 +296,72 @@ class AppStrings {
     required this.bookingsEmpty,
     required this.bookingsUpcoming,
     required this.bookingsPast,
+    required this.adminConsole,
+    required this.adminHomeNote,
+    required this.adminAdd,
+    required this.adminName,
+    required this.adminTitle,
+    required this.adminCode,
+    required this.adminDescription,
+    required this.adminCategory,
+    required this.adminPrice,
+    required this.adminPriceFrom,
+    required this.adminPriceTo,
+    required this.adminColour,
+    required this.adminInactive,
+    required this.adminDelete,
+    required this.adminDeleteConfirm,
+    required this.adminEnglishFallback,
+    required this.adminNoReleaseNeeded,
+    required this.adminClassifications,
+    required this.adminClassificationsNote,
+    required this.adminNewClassification,
+    required this.adminEditClassification,
+    required this.adminSchedulingDefaults,
+    required this.adminDefaultsNote,
+    required this.adminAnaesthesia,
+    required this.adminRequiredSeniority,
+    required this.adminSeniorityNote,
+    required this.adminBloodUnits,
+    required this.adminBloodNote,
+    required this.adminSeniority,
+    required this.adminProcedures,
+    required this.adminNewProcedure,
+    required this.adminEditProcedure,
+    required this.adminTheatreType,
+    required this.adminCentre,
+    required this.adminNoCentre,
+    required this.adminPatientRequestable,
+    required this.adminPatientRequestableNote,
+    required this.adminClinics,
+    required this.adminNewClinic,
+    required this.adminEditClinic,
+    required this.adminWorkingDays,
+    required this.adminDoctors,
+    required this.adminDoctorsCount,
+    required this.adminAddDoctorFirst,
+    required this.adminNewDoctor,
+    required this.adminEditDoctor,
+    required this.adminDoctorTitle,
+    required this.adminSpecialty,
+    required this.adminTheatres,
+    required this.adminNewTheatre,
+    required this.adminEditTheatre,
+    required this.adminOperatingHours,
+    required this.adminHoursInvalid,
+    required this.adminTheatreActive,
+    required this.adminTheatreActiveNote,
+    required this.adminOffers,
+    required this.adminNewOffer,
+    required this.adminEditOffer,
+    required this.adminIsEvent,
+    required this.adminIsEventNote,
+    required this.adminTips,
+    required this.adminNewTip,
+    required this.adminEditTip,
+    required this.adminTipBody,
+    required this.adminReviewerName,
+    required this.adminReviewerRequired,
   });
 
   final String localeName;
@@ -615,6 +681,73 @@ class AppStrings {
   final String bookingsUpcoming;
   final String bookingsPast;
 
+  final String adminConsole;
+  final String adminHomeNote;
+  final String adminAdd;
+  final String adminName;
+  final String adminTitle;
+  final String adminCode;
+  final String adminDescription;
+  final String adminCategory;
+  final String adminPrice;
+  final String adminPriceFrom;
+  final String adminPriceTo;
+  final String adminColour;
+  final String adminInactive;
+  final String adminDelete;
+  final String adminDeleteConfirm;
+  final String adminEnglishFallback;
+  final String adminNoReleaseNeeded;
+  final String adminClassifications;
+  final String adminClassificationsNote;
+  final String adminNewClassification;
+  final String adminEditClassification;
+  final String adminSchedulingDefaults;
+  final String adminDefaultsNote;
+  final String adminAnaesthesia;
+  final String adminRequiredSeniority;
+  final String adminSeniorityNote;
+  final String adminBloodUnits;
+  final String adminBloodNote;
+  final String adminSeniority;
+  final String adminProcedures;
+  final String adminNewProcedure;
+  final String adminEditProcedure;
+  final String adminTheatreType;
+  final String adminCentre;
+  final String adminNoCentre;
+  final String adminPatientRequestable;
+  final String adminPatientRequestableNote;
+  final String adminClinics;
+  final String adminNewClinic;
+  final String adminEditClinic;
+  final String adminWorkingDays;
+  final String adminDoctors;
+  final String adminDoctorsCount;
+  final String adminAddDoctorFirst;
+  final String adminNewDoctor;
+  final String adminEditDoctor;
+  final String adminDoctorTitle;
+  final String adminSpecialty;
+  final String adminTheatres;
+  final String adminNewTheatre;
+  final String adminEditTheatre;
+  final String adminOperatingHours;
+  final String adminHoursInvalid;
+  final String adminTheatreActive;
+  final String adminTheatreActiveNote;
+  final String adminOffers;
+  final String adminNewOffer;
+  final String adminEditOffer;
+  final String adminIsEvent;
+  final String adminIsEventNote;
+  final String adminTips;
+  final String adminNewTip;
+  final String adminEditTip;
+  final String adminTipBody;
+  final String adminReviewerName;
+  final String adminReviewerRequired;
+
   static const AppStrings ar = AppStrings(
     localeName: 'ar',
     appName: 'دار الأمومة',
@@ -906,6 +1039,72 @@ class AppStrings {
     bookingsEmpty: 'لا توجد حجوزات',
     bookingsUpcoming: 'القادمة',
     bookingsPast: 'السابقة',
+    adminConsole: 'لوحة التحكم',
+    adminHomeNote: 'التعديلات هنا تظهر للمرضى والأطباء فورًا بدون تحديث للتطبيق.',
+    adminAdd: 'إضافة',
+    adminName: 'الاسم',
+    adminTitle: 'العنوان',
+    adminCode: 'الكود',
+    adminDescription: 'الوصف',
+    adminCategory: 'التصنيف',
+    adminPrice: 'السعر',
+    adminPriceFrom: 'السعر من',
+    adminPriceTo: 'السعر إلى',
+    adminColour: 'اللون',
+    adminInactive: 'موقوف',
+    adminDelete: 'حذف',
+    adminDeleteConfirm: 'تأكيد الحذف',
+    adminEnglishFallback: 'لو سيبتها فاضية هيظهر النص العربي.',
+    adminNoReleaseNeeded: 'المحتوى ده بيتنشر من غير ما ترفع نسخة جديدة على الستور.',
+    adminClassifications: 'تصنيفات العمليات',
+    adminClassificationsNote: 'التصنيفات بيانات مش كود — تضيف وتعدّل وتوقف من هنا، والتغيير يظهر في شاشة الحجز والجريد فورًا.',
+    adminNewClassification: 'تصنيف جديد',
+    adminEditClassification: 'تعديل التصنيف',
+    adminSchedulingDefaults: 'الافتراضات',
+    adminDefaultsNote: 'القيم دي بتملّي شاشة حجز العملية لوحدها، والطبيب يقدر يعدّلها.',
+    adminAnaesthesia: 'نوع التخدير',
+    adminRequiredSeniority: 'درجة الجراح المطلوبة',
+    adminSeniorityNote: 'لو الجراح درجته أقل، الحجز بيتم مع تنبيه لرئيس القسم — مش بيتمنع.',
+    adminBloodUnits: 'وحدات الدم المحجوزة',
+    adminBloodNote: 'بيتحجزوا تلقائيًا في بنك الدم مع كل عملية بالتصنيف ده.',
+    adminSeniority: 'الدرجة',
+    adminProcedures: 'العمليات',
+    adminNewProcedure: 'عملية جديدة',
+    adminEditProcedure: 'تعديل العملية',
+    adminTheatreType: 'نوع غرفة العمليات',
+    adminCentre: 'المركز التخصصي',
+    adminNoCentre: 'بدون مركز',
+    adminPatientRequestable: 'المريض يقدر يطلبها من التطبيق',
+    adminPatientRequestableNote: 'لو قفلتها، العملية تفضل متاحة للأطباء بس.',
+    adminClinics: 'العيادات',
+    adminNewClinic: 'عيادة جديدة',
+    adminEditClinic: 'تعديل العيادة',
+    adminWorkingDays: 'أيام العمل',
+    adminDoctors: 'الأطباء',
+    adminDoctorsCount: 'طبيب',
+    adminAddDoctorFirst: 'ضيف طبيب الأول من قسم الأطباء.',
+    adminNewDoctor: 'طبيب جديد',
+    adminEditDoctor: 'تعديل الطبيب',
+    adminDoctorTitle: 'الدرجة العلمية',
+    adminSpecialty: 'التخصص',
+    adminTheatres: 'غرف العمليات',
+    adminNewTheatre: 'غرفة جديدة',
+    adminEditTheatre: 'تعديل الغرفة',
+    adminOperatingHours: 'ساعات العمل',
+    adminHoursInvalid: 'ساعة القفل لازم تكون بعد ساعة الفتح.',
+    adminTheatreActive: 'الغرفة في الخدمة',
+    adminTheatreActiveNote: 'لو قفلتها، مش هينفع الحجز فيها.',
+    adminOffers: 'العروض والفعاليات',
+    adminNewOffer: 'عرض جديد',
+    adminEditOffer: 'تعديل العرض',
+    adminIsEvent: 'فعالية توعية',
+    adminIsEventNote: 'الفعاليات بتظهر في قسم منفصل وبدون أسعار.',
+    adminTips: 'النصائح الطبية',
+    adminNewTip: 'نصيحة جديدة',
+    adminEditTip: 'تعديل النصيحة',
+    adminTipBody: 'نص النصيحة',
+    adminReviewerName: 'اسم المراجع الطبي',
+    adminReviewerRequired: 'ممنوع نشر نصيحة من غير مراجع طبي بالاسم.',
   );
 
   static const AppStrings en = AppStrings(
@@ -1204,6 +1403,72 @@ class AppStrings {
     bookingsEmpty: 'No bookings yet',
     bookingsUpcoming: 'Upcoming',
     bookingsPast: 'Past',
+    adminConsole: 'Admin console',
+    adminHomeNote: 'Changes here reach patients and doctors immediately, with no app update.',
+    adminAdd: 'Add',
+    adminName: 'Name',
+    adminTitle: 'Title',
+    adminCode: 'Code',
+    adminDescription: 'Description',
+    adminCategory: 'Category',
+    adminPrice: 'Price',
+    adminPriceFrom: 'Price from',
+    adminPriceTo: 'Price to',
+    adminColour: 'Colour',
+    adminInactive: 'Inactive',
+    adminDelete: 'Delete',
+    adminDeleteConfirm: 'Confirm deletion',
+    adminEnglishFallback: 'If left empty, the Arabic text is shown.',
+    adminNoReleaseNeeded: 'This content publishes without a new store release.',
+    adminClassifications: 'Operation classifications',
+    adminClassificationsNote: 'Classifications are data, not code — add, edit and deactivate here, and the booking sheet and grid pick it up immediately.',
+    adminNewClassification: 'New classification',
+    adminEditClassification: 'Edit classification',
+    adminSchedulingDefaults: 'Scheduling defaults',
+    adminDefaultsNote: 'These pre-fill the booking sheet; the surgeon can still change them.',
+    adminAnaesthesia: 'Anaesthesia',
+    adminRequiredSeniority: 'Required surgeon seniority',
+    adminSeniorityNote: 'A lower-graded surgeon may still book, with a warning to the department head — it is not blocked.',
+    adminBloodUnits: 'Blood units reserved',
+    adminBloodNote: 'Automatically held at the blood bank for every case in this classification.',
+    adminSeniority: 'Grade',
+    adminProcedures: 'Procedures',
+    adminNewProcedure: 'New procedure',
+    adminEditProcedure: 'Edit procedure',
+    adminTheatreType: 'Theatre type',
+    adminCentre: 'Specialty centre',
+    adminNoCentre: 'No centre',
+    adminPatientRequestable: 'Patients may request this',
+    adminPatientRequestableNote: 'If off, the procedure stays available to doctors only.',
+    adminClinics: 'Clinics',
+    adminNewClinic: 'New clinic',
+    adminEditClinic: 'Edit clinic',
+    adminWorkingDays: 'Working days',
+    adminDoctors: 'Doctors',
+    adminDoctorsCount: 'doctor(s)',
+    adminAddDoctorFirst: 'Add a doctor first, from the Doctors section.',
+    adminNewDoctor: 'New doctor',
+    adminEditDoctor: 'Edit doctor',
+    adminDoctorTitle: 'Title',
+    adminSpecialty: 'Specialty',
+    adminTheatres: 'Operating theatres',
+    adminNewTheatre: 'New theatre',
+    adminEditTheatre: 'Edit theatre',
+    adminOperatingHours: 'Operating hours',
+    adminHoursInvalid: 'Closing time must be after opening time.',
+    adminTheatreActive: 'Theatre in service',
+    adminTheatreActiveNote: 'If off, the theatre cannot be booked.',
+    adminOffers: 'Offers & events',
+    adminNewOffer: 'New offer',
+    adminEditOffer: 'Edit offer',
+    adminIsEvent: 'Awareness event',
+    adminIsEventNote: 'Events appear in their own section, with no prices.',
+    adminTips: 'Medical tips',
+    adminNewTip: 'New tip',
+    adminEditTip: 'Edit tip',
+    adminTipBody: 'Tip text',
+    adminReviewerName: 'Medical reviewer',
+    adminReviewerRequired: 'A tip cannot be published without a named medical reviewer.',
   );
 
   /// Rejection reasons for a surgery request.

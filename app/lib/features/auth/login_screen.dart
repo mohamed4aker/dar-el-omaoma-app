@@ -157,6 +157,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Text(s.approvalsTitle),
                   ),
+                  FilledButton(
+                    onPressed: () {
+                      context.read<AppState>().signInAsAdmin();
+                      context.go('/home');
+                    },
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(0, kMinTouchTarget),
+                      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+                    ),
+                    child: Text(s.adminConsole),
+                  ),
                 ],
               ),
             ],

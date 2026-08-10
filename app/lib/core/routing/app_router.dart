@@ -7,6 +7,9 @@ import '../../domain/models/enums.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/auth/welcome_screen.dart';
+import '../../features/admin/admin_catalog_screens.dart';
+import '../../features/admin/admin_content_screens.dart';
+import '../../features/admin/admin_home_screen.dart';
 import '../../features/approvals/approvals_screen.dart';
 import '../../features/bloodbank/blood_bank_screen.dart';
 import '../../features/centres/centres_screen.dart';
@@ -90,6 +93,37 @@ GoRouter buildRouter() {
       GoRoute(
           path: '/notifications',
           builder: (_, _) => const NotificationsScreen()),
+      GoRoute(
+          path: '/theatre',
+          builder: (_, _) => const TheatreAvailabilityScreen()),
+
+      // Admin console. Same app, same codebase, revealed by the role.
+      GoRoute(
+        path: '/admin',
+        builder: (_, _) => const AdminHomeScreen(),
+        routes: [
+          GoRoute(
+              path: 'classifications',
+              builder: (_, _) => const ClassificationsAdminScreen()),
+          GoRoute(
+              path: 'procedures',
+              builder: (_, _) => const ProceduresAdminScreen()),
+          GoRoute(
+              path: 'clinics',
+              builder: (_, _) => const ClinicsAdminScreen()),
+          GoRoute(
+              path: 'doctors',
+              builder: (_, _) => const DoctorsAdminScreen()),
+          GoRoute(
+              path: 'theatres',
+              builder: (_, _) => const TheatresAdminScreen()),
+          GoRoute(
+              path: 'offers',
+              builder: (_, _) => const OffersAdminScreen()),
+          GoRoute(
+              path: 'tips', builder: (_, _) => const TipsAdminScreen()),
+        ],
+      ),
 
       StatefulShellRoute.indexedStack(
         builder: (_, _, shell) => AppShell(navigationShell: shell),
@@ -122,8 +156,9 @@ class _FileOrPractice extends StatelessWidget {
   Widget build(BuildContext context) {
     final session = context.watch<AppState>().session;
     return switch (session.role) {
+      UserRole.admin => const AdminHomeScreen(),
       UserRole.doctor => const TheatreAvailabilityScreen(),
-      UserRole.surgeryApprover || UserRole.admin => const ApprovalsScreen(),
+      UserRole.surgeryApprover => const ApprovalsScreen(),
       _ => const MedicalFileScreen(),
     };
   }

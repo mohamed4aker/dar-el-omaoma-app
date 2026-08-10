@@ -89,6 +89,12 @@ class AppState extends ChangeNotifier {
   }
 
   /// Demo-only, as with [signInAsDoctor].
+  void signInAsAdmin() {
+    _session = Session(role: UserRole.admin, patient: Seed.demoPatient);
+    notifyListeners();
+  }
+
+  /// Demo-only, as with [signInAsDoctor].
   void signInAsApprover() {
     _session = Session(
       role: UserRole.surgeryApprover,
@@ -653,6 +659,314 @@ class AppState extends ChangeNotifier {
   List<VisitingCampaign> publishableCampaigns() {
     final now = DateTime.now();
     return Seed.campaigns.where((c) => c.isPublishableAt(now)).toList();
+  }
+
+  // ------------------------------------------------------------------ admin
+  //
+  // Catalogue maintenance. Each method here corresponds to an admin-console
+  // endpoint in PROMPT.md §14; the mutation lands in the seed lists because
+  // this build has no server. When the API arrives these become HTTP calls
+  // and nothing above them changes.
+  //
+  // Deliberate rule throughout: nothing is ever deleted. Catalogue entries are
+  // deactivated, so historical bookings keep the classification, price and
+  // procedure they were created with (PROMPT.md §8, rule 6).
+
+  int _idSeq = 0;
+  String _newId(String prefix) =>
+      '$prefix-${DateTime.now().microsecondsSinceEpoch}-${_idSeq++}';
+
+  // Classifications ----------------------------------------------------------
+
+  String upsertClassification({
+    String? id,
+    required String code,
+    required Label name,
+    required Color colour,
+    required Duration defaultDuration,
+    required Duration defaultTurnover,
+    required int priceMin,
+    required int priceMax,
+    required int requiredSeniority,
+    required Label defaultAnaesthesia,
+    required int defaultBloodUnits,
+    bool isActive = true,
+  }) {
+    final index =
+        id == null ? -1 : Seed.classifications.indexWhere((c) => c.id == id);
+    final resolvedId = id ?? _newId('cls');
+    final entry = OperationClassification(
+      id: resolvedId,
+      code: code,
+      name: name,
+      sortOrder: index >= 0
+          ? Seed.classifications[index].sortOrder
+          : Seed.classifications.length + 1,
+      colour: colour,
+      defaultDuration: defaultDuration,
+      defaultTurnover: defaultTurnover,
+      priceMin: priceMin,
+      priceMax: priceMax,
+      requiredSeniority: requiredSeniority,
+      defaultAnaesthesia: defaultAnaesthesia,
+      defaultBloodUnits: defaultBloodUnits,
+      isActive: isActive,
+    );
+    if (index >= 0) {
+      Seed.classifications[index] = entry;
+    } else {
+      Seed.classifications.add(entry);
+    }
+    notifyListeners();
+    return resolvedId;
+  }
+
+  /// Deactivation, never deletion: a classification in use by a past case must
+  /// remain resolvable.
+  void setClassificationActive(String id, bool isActive) {
+    final index = Seed.classifications.indexWhere((c) => c.id == id);
+    if (index < 0) return;
+    final c = Seed.classifications[index];
+    Seed.classifications[index] = OperationClassification(
+      id: c.id,
+      code: c.code,
+      name: c.name,
+      sortOrder: c.sortOrder,
+      colour: c.colour,
+      defaultDuration: c.defaultDuration,
+      defaultTurnover: c.defaultTurnover,
+      priceMin: c.priceMin,
+      priceMax: c.priceMax,
+      requiredSeniority: c.requiredSeniority,
+      defaultAnaesthesia: c.defaultAnaesthesia,
+      defaultBloodUnits: c.defaultBloodUnits,
+      isActive: isActive,
+    );
+    notifyListeners();
+  }
+
+  /// True when any scheduled case still references this classification.
+  bool classificationInUse(String id) =>
+      _cases.any((c) => c.classificationId == id);
+
+  // Procedures ---------------------------------------------------------------
+
+  String upsertProcedure({
+    String? id,
+    required String code,
+    required Label name,
+    required String classificationId,
+    required Duration typicalDuration,
+    required TheatreType requiredTheatreType,
+    required int price,
+    String? centreId,
+    List<String> requiredEquipment = const [],
+    bool patientRequestable = true,
+  }) {
+    final resolvedId = id ?? _newId('proc');
+    final entry = Procedure(
+      id: resolvedId,
+      code: code,
+      name: name,
+      classificationId: classificationId,
+      typicalDuration: typicalDuration,
+      requiredTheatreType: requiredTheatreType,
+      price: price,
+      centreId: centreId,
+      requiredEquipment: requiredEquipment,
+      patientRequestable: patientRequestable,
+    );
+    final index = Seed.procedures.indexWhere((p) => p.id == resolvedId);
+    if (index >= 0) {
+      Seed.procedures[index] = entry;
+    } else {
+      Seed.procedures.add(entry);
+    }
+    notifyListeners();
+    return resolvedId;
+  }
+
+  // Doctors ------------------------------------------------------------------
+
+  String upsertDoctor({
+    String? id,
+    required Label name,
+    required Label title,
+    required Label specialty,
+    required int seniority,
+    String? centreId,
+  }) {
+    final resolvedId = id ?? _newId('doc');
+    final entry = Doctor(
+      id: resolvedId,
+      name: name,
+      title: title,
+      specialty: specialty,
+      seniority: seniority,
+      centreId: centreId,
+    );
+    final index = Seed.doctors.indexWhere((d) => d.id == resolvedId);
+    if (index >= 0) {
+      Seed.doctors[index] = entry;
+    } else {
+      Seed.doctors.add(entry);
+    }
+    notifyListeners();
+    return resolvedId;
+  }
+
+  // Clinics ------------------------------------------------------------------
+
+  String upsertClinic({
+    String? id,
+    required Label name,
+    required int consultationFee,
+    required int followUpFee,
+    required List<String> doctorIds,
+    required List<int> workingDays,
+    String? centreId,
+  }) {
+    final resolvedId = id ?? _newId('clinic');
+    final entry = Clinic(
+      id: resolvedId,
+      name: name,
+      consultationFee: consultationFee,
+      followUpFee: followUpFee,
+      doctorIds: doctorIds,
+      workingDays: workingDays,
+      centreId: centreId,
+    );
+    final index = Seed.clinics.indexWhere((c) => c.id == resolvedId);
+    if (index >= 0) {
+      Seed.clinics[index] = entry;
+    } else {
+      Seed.clinics.add(entry);
+    }
+    notifyListeners();
+    return resolvedId;
+  }
+
+  // Theatres -----------------------------------------------------------------
+
+  String upsertTheatre({
+    String? id,
+    required String code,
+    required Label name,
+    required TheatreType type,
+    required int opensAt,
+    required int closesAt,
+    Duration defaultTurnover = const Duration(minutes: 30),
+    bool isActive = true,
+  }) {
+    final resolvedId = id ?? _newId('or');
+    final entry = OperatingTheatre(
+      id: resolvedId,
+      code: code,
+      name: name,
+      type: type,
+      opensAt: opensAt,
+      closesAt: closesAt,
+      defaultTurnover: defaultTurnover,
+      isActive: isActive,
+    );
+    final index = Seed.theatres.indexWhere((t) => t.id == resolvedId);
+    if (index >= 0) {
+      Seed.theatres[index] = entry;
+    } else {
+      Seed.theatres.add(entry);
+    }
+    notifyListeners();
+    return resolvedId;
+  }
+
+  /// Takes a theatre out of service for a window. Any booking already inside
+  /// that window is surfaced for rescheduling rather than silently invalidated
+  /// (PROMPT.md §6.13.1).
+  List<SurgeryCase> blockTheatre({
+    required String theatreId,
+    required TimeRange range,
+    required String reason,
+  }) {
+    _blocks = [
+      ..._blocks,
+      TheatreBlock(theatreId: theatreId, range: range, reason: reason),
+    ];
+    final affected = _cases
+        .where((c) =>
+            c.blocksTime &&
+            c.theatreId == theatreId &&
+            c.occupiesTheatre.overlaps(range))
+        .toList();
+    notifyListeners();
+    return affected;
+  }
+
+  // Content ------------------------------------------------------------------
+
+  void upsertOffer({
+    String? id,
+    required Label title,
+    required Label description,
+    required int priceBefore,
+    required int priceAfter,
+    required DateTime validUntil,
+    bool isEvent = false,
+  }) {
+    final resolvedId = id ?? _newId('off');
+    final entry = Offer(
+      id: resolvedId,
+      title: title,
+      description: description,
+      priceBefore: priceBefore,
+      priceAfter: priceAfter,
+      validUntil: validUntil,
+      isEvent: isEvent,
+    );
+    final index = Seed.offers.indexWhere((o) => o.id == resolvedId);
+    if (index >= 0) {
+      Seed.offers[index] = entry;
+    } else {
+      Seed.offers.add(entry);
+    }
+    notifyListeners();
+  }
+
+  void removeOffer(String id) {
+    Seed.offers.removeWhere((o) => o.id == id);
+    notifyListeners();
+  }
+
+  /// A tip without a named medical reviewer must never be publishable
+  /// (PROMPT.md §6.12) — the form enforces it, and so does this.
+  void upsertTip({
+    String? id,
+    required Label category,
+    required Label body,
+    required String reviewerName,
+  }) {
+    if (reviewerName.trim().isEmpty) {
+      throw ArgumentError('A medical tip requires a named reviewer');
+    }
+    final resolvedId = id ?? _newId('tip');
+    final entry = MedicalTip(
+      id: resolvedId,
+      category: category,
+      body: body,
+      reviewerName: reviewerName.trim(),
+      reviewedAt: DateTime.now(),
+    );
+    final index = Seed.tips.indexWhere((t) => t.id == resolvedId);
+    if (index >= 0) {
+      Seed.tips[index] = entry;
+    } else {
+      Seed.tips.add(entry);
+    }
+    notifyListeners();
+  }
+
+  void removeTip(String id) {
+    Seed.tips.removeWhere((t) => t.id == id);
+    notifyListeners();
   }
 
   /// Minimal timestamp rendering for notification bodies. The UI has its own
