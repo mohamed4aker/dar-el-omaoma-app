@@ -42,13 +42,38 @@ abstract final class Fmt {
   static String duration(Duration d, AppStrings s) {
     final hours = d.inHours;
     final minutes = d.inMinutes.remainder(60);
-    if (hours == 0) return '$minutes ${s.commonMinutes}';
-    if (minutes == 0) {
-      return s.localeName == 'en' ? '${hours}h' : '$hours ساعة';
+
+    if (s.localeName == 'en') {
+      if (hours == 0) return '$minutes ${s.commonMinutes}';
+      if (minutes == 0) return '${hours}h';
+      return '${hours}h ${minutes}m';
     }
-    return s.localeName == 'en'
-        ? '${hours}h ${minutes}m'
-        : '$hours س $minutes د';
+
+    if (hours == 0) return arabicUnit(minutes, _minuteForms);
+    if (minutes == 0) return arabicUnit(hours, _hourForms);
+    return '${arabicUnit(hours, _hourForms)} و${arabicUnit(minutes, _minuteForms)}';
+  }
+
+  static const _hourForms = ('ساعة', 'ساعتين', 'ساعات', 'ساعة');
+  static const _minuteForms = ('دقيقة', 'دقيقتين', 'دقائق', 'دقيقة');
+
+  /// Arabic counted-noun agreement.
+  ///
+  /// Arabic does not simply append a plural: 1 takes the singular with no
+  /// number, 2 takes the dual, 3–10 take the plural, and 11 upward return to
+  /// the singular. Writing "3 ساعة" reads as broken Arabic to a native
+  /// speaker, which is not something a hospital's app can afford.
+  ///
+  /// [forms] is (singular, dual, plural, singularAfterTen).
+  static String arabicUnit(
+    int count,
+    (String, String, String, String) forms,
+  ) {
+    final (singular, dual, plural, afterTen) = forms;
+    if (count == 1) return singular;
+    if (count == 2) return dual;
+    if (count >= 3 && count <= 10) return '$count $plural';
+    return '$count $afterTen';
   }
 
   static String money(int amount, AppStrings s) => '${group(amount)} ${s.commonEgp}';
