@@ -1,0 +1,37 @@
+# بناء نسخة الآيفون للتأكد إن الكود بيتبني على iOS.
+# من غير توقيع (No Code Sign) — النشر على App Store محتاج حساب مطوّر Apple
+# باسم المستشفى (PROMPT.md §18.2).
+name: بناء تطبيق iOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    name: iOS (بدون توقيع)
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: stable
+          cache: true
+
+      - name: تحميل المكتبات
+        run: flutter pub get
+
+      - name: بناء iOS
+        run: flutter build ios --release --no-codesign
+
+      - name: رفع نتيجة البناء
+        uses: actions/upload-artifact@v4
+        with:
+          name: dar-el-omouma-ios-app
+          path: app/build/ios/iphoneos/Runner.app
+          if-no-files-found: error

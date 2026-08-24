@@ -1,0 +1,115 @@
+# بيبني نسخة أندرويد جاهزة للتثبيت (APK) على سيرفرات GitHub،
+# فمش محتاج تثبّت Android SDK على جهازك عشان تجرّب التطبيق.
+name: بناء تطبيق أندرويد
+
+on:
+  push:
+    branches:
+      - claude/hospital-app-ios-android-ut0k79
+      - main
+    paths:
+      - 'app/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: stable
+          cache: true
+
+      - name: تحميل المكتبات
+        run: flutter pub get
+
+      - name: فحص الكود
+        run: flutter analyze
+
+      - name: الاختبارات
+        run: flutter test
+
+      - name: بناء APK (نسخة شاملة)
+        run: flutter build apk --release
+
+      - name: بناء APK لكل معمارية (ملفات أصغر)
+        run: flutter build apk --release --split-per-abi
+
+      - name: بناء App Bundle (لجوجل بلاي)
+        run: flutter build appbundle --release
+
+      - name: تجهيز اسم الملف
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk \
+             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-universal.apk
+          # ده اللي بيشتغل على ٩٩٪ من موبايلات النهاردة وحجمه أصغر بكتير
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
+             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm64.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk \
+             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm32.apk
+          cp build/app/outputs/bundle/release/app-release.aab \
+             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}.aab
+          ls -lh dist
+
+      - name: نشر نسخة للتنزيل المباشر
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: دار الأمومة — نسخة تجريبية ${{ github.run_number }}
+          prerelease: true
+          body: |
+            نسخة تجريبية من تطبيق **مستشفى دار الأمومة**.
+
+            نزّل ملف **arm64** من تحت (ده اللي بيشتغل على معظم
+            الموبايلات وحجمه أصغر)، ولو مااشتغلش جرّب **universal**.
+            ثبّته على الموبايل عادي
+            (هيطلبك تسمح بالتثبيت من مصدر غير معروف — ده طبيعي لأي
+            تطبيق مش نازل من Google Play).
+
+            **الدخول التجريبي**
+
+            من شاشة تسجيل الدخول:
+            - رقم الهاتف `01013009936` والكود `123456` → دخول كمريض
+            - أو انزل تحت واختار: **د. أحمد سليم** (جريد غرف العمليات)،
+              **صندوق الموافقات**، أو **لوحة التحكم** (إدارة العيادات
+              والعمليات والتصنيفات والأطباء والصلاحيات).
+
+            ⚠️ البيانات في الذاكرة، فأي حاجة تضيفها بتضيع لما تقفل
+            التطبيق — ده لحد ما الباك إند يتعمل.
+          files: |
+            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm64.apk
+            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm32.apk
+            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-universal.apk
+            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}.aab
+
+      - name: رفع ملف APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: dar-el-omouma-apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+
+      - name: رفع App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: dar-el-omouma-aab
+          path: app/build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
