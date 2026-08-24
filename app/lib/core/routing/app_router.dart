@@ -9,6 +9,7 @@ import '../../features/auth/register_screen.dart';
 import '../../features/auth/welcome_screen.dart';
 import '../../features/admin/admin_catalog_screens.dart';
 import '../../features/admin/admin_content_screens.dart';
+import '../../features/admin/admin_governance_screens.dart';
 import '../../features/admin/admin_home_screen.dart';
 import '../../features/approvals/approvals_screen.dart';
 import '../../features/bloodbank/blood_bank_screen.dart';
@@ -26,6 +27,7 @@ import '../../features/services/services_screen.dart';
 import '../../features/shell/app_shell.dart';
 import '../../features/surgery/surgery_request_screen.dart';
 import '../../features/surgery/surgery_screen.dart';
+import '../../features/theatre/doctor_request_screen.dart';
 import '../../features/theatre/theatre_availability_screen.dart';
 import '../../features/visiting/visiting_screen.dart';
 
@@ -96,6 +98,9 @@ GoRouter buildRouter() {
       GoRoute(
           path: '/theatre',
           builder: (_, _) => const TheatreAvailabilityScreen()),
+      GoRoute(
+          path: '/theatre-request',
+          builder: (_, _) => const DoctorRequestScreen()),
 
       // Admin console. Same app, same codebase, revealed by the role.
       GoRoute(
@@ -122,6 +127,12 @@ GoRouter buildRouter() {
               builder: (_, _) => const OffersAdminScreen()),
           GoRoute(
               path: 'tips', builder: (_, _) => const TipsAdminScreen()),
+          GoRoute(
+              path: 'policy', builder: (_, _) => const PolicyAdminScreen()),
+          GoRoute(
+              path: 'users', builder: (_, _) => const UsersAdminScreen()),
+          GoRoute(
+              path: 'audit', builder: (_, _) => const AuditAdminScreen()),
         ],
       ),
 

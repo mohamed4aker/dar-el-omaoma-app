@@ -10,6 +10,7 @@ import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../../domain/models/booking.dart';
 import '../../domain/models/enums.dart';
+import 'schedule_sheet.dart';
 
 /// Surgery approvals inbox (PROMPT.md §6.13.6).
 ///
@@ -125,6 +126,14 @@ class _ApprovalCard extends StatelessWidget {
                   color: classification.colour),
             ],
           ),
+          const SizedBox(height: Gap.xs),
+          StatusChip(
+            request.isFromDoctor ? s.requestFromDoctor : s.requestFromPatient,
+            color: request.isFromDoctor ? AppColors.navy : AppColors.pink,
+            icon: request.isFromDoctor
+                ? Icons.medical_services_outlined
+                : Icons.person_outline,
+          ),
           const SizedBox(height: Gap.sm),
           Text('${s.complaintsReference}: ${request.reference}',
               style: Theme.of(context).textTheme.bodySmall),
@@ -149,6 +158,19 @@ class _ApprovalCard extends StatelessWidget {
           ),
           const SizedBox(height: Gap.lg),
 
+          // A doctor request needs a slot, not a clinical verdict — so the
+          // primary action is to schedule it, not to approve it.
+          if (request.isFromDoctor)
+            FilledButton.icon(
+              onPressed: () => showScheduleSheet(context, request),
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.navy,
+                foregroundColor: Colors.white,
+              ),
+              icon: const Icon(Icons.event_available_outlined),
+              label: Text(s.scheduleAction),
+            )
+          else
           Row(
             children: [
               Expanded(

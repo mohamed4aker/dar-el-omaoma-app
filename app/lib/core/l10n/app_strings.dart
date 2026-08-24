@@ -362,6 +362,81 @@ class AppStrings {
     required this.adminTipBody,
     required this.adminReviewerName,
     required this.adminReviewerRequired,
+    required this.doctorRequestTitle,
+    required this.doctorRequestNew,
+    required this.doctorRequestNote,
+    required this.doctorRequestNoteLabel,
+    required this.doctorRequestNoteHelp,
+    required this.doctorRequestSend,
+    required this.doctorRequestSent,
+    required this.doctorRequestSentBody,
+    required this.scheduleTitle,
+    required this.scheduleRequestedBy,
+    required this.scheduleDate,
+    required this.scheduleTime,
+    required this.scheduleConfirmedPrice,
+    required this.scheduleConfirmedPriceHelp,
+    required this.scheduleConfirm,
+    required this.scheduleNotifiesDoctor,
+    required this.scheduleDone,
+    required this.scheduleAction,
+    required this.scheduleQueue,
+    required this.requestFromDoctor,
+    required this.requestFromPatient,
+    required this.adminPolicy,
+    required this.policyDirectBooking,
+    required this.policyDirectBookingOn,
+    required this.policyDirectBookingOff,
+    required this.policyNotifyOnChange,
+    required this.policyNotifyOnChangeNote,
+    required this.policyNotifyOffWarning,
+    required this.policyApprovalWindow,
+    required this.policyApprovalWindowNote,
+    required this.policyCancellationCutoff,
+    required this.policyCancellationNote,
+    required this.policyDefaultPayment,
+    required this.adminUsers,
+    required this.adminNewUser,
+    required this.adminEditUser,
+    required this.adminRoles,
+    required this.adminRolesNote,
+    required this.adminApprovalCoverageThin,
+    required this.adminLinkedDoctor,
+    required this.adminLinkedDoctorNote,
+    required this.adminAudit,
+    required this.adminAuditEmpty,
+    required this.adminAuditNote,
+    required this.permManageCatalogue,
+    required this.permManageUsers,
+    required this.permApprove,
+    required this.permSchedule,
+    required this.permBookDirect,
+    required this.permOverride,
+    required this.permAudit,
+    required this.adminShifts,
+    required this.adminShiftsNote,
+    required this.adminShiftFrom,
+    required this.adminShiftTo,
+    required this.adminMaxPatients,
+    required this.adminNoCap,
+    required this.adminWeeklyCapacity,
+    required this.adminSlotLength,
+    required this.adminNoShift,
+    required this.adminPaymentPolicy,
+    required this.adminDepositAmount,
+    required this.adminAffectedBookings,
+    required this.adminAffectedWarning,
+    required this.adminSaveAnyway,
+    required this.bookingPayNow,
+    required this.bookingPayLater,
+    required this.bookingDepositNote,
+    required this.bookingDepositPaid,
+    required this.bookingBalanceDue,
+    required this.bookingFreeNote,
+    required this.bookingCancelled,
+    required this.bookingRebook,
+    required this.capacityFull,
+    required this.capacityRemaining,
   });
 
   final String localeName;
@@ -748,6 +823,82 @@ class AppStrings {
   final String adminReviewerName;
   final String adminReviewerRequired;
 
+  final String doctorRequestTitle;
+  final String doctorRequestNew;
+  final String doctorRequestNote;
+  final String doctorRequestNoteLabel;
+  final String doctorRequestNoteHelp;
+  final String doctorRequestSend;
+  final String doctorRequestSent;
+  final String doctorRequestSentBody;
+  final String scheduleTitle;
+  final String scheduleRequestedBy;
+  final String scheduleDate;
+  final String scheduleTime;
+  final String scheduleConfirmedPrice;
+  final String scheduleConfirmedPriceHelp;
+  final String scheduleConfirm;
+  final String scheduleNotifiesDoctor;
+  final String scheduleDone;
+  final String scheduleAction;
+  final String scheduleQueue;
+  final String requestFromDoctor;
+  final String requestFromPatient;
+  final String adminPolicy;
+  final String policyDirectBooking;
+  final String policyDirectBookingOn;
+  final String policyDirectBookingOff;
+  final String policyNotifyOnChange;
+  final String policyNotifyOnChangeNote;
+  final String policyNotifyOffWarning;
+  final String policyApprovalWindow;
+  final String policyApprovalWindowNote;
+  final String policyCancellationCutoff;
+  final String policyCancellationNote;
+  final String policyDefaultPayment;
+  final String adminUsers;
+  final String adminNewUser;
+  final String adminEditUser;
+  final String adminRoles;
+  final String adminRolesNote;
+  final String adminApprovalCoverageThin;
+  final String adminLinkedDoctor;
+  final String adminLinkedDoctorNote;
+  final String adminAudit;
+  final String adminAuditEmpty;
+  final String adminAuditNote;
+  final String permManageCatalogue;
+  final String permManageUsers;
+  final String permApprove;
+  final String permSchedule;
+  final String permBookDirect;
+  final String permOverride;
+  final String permAudit;
+  final String adminShifts;
+  final String adminShiftsNote;
+  final String adminShiftFrom;
+  final String adminShiftTo;
+  final String adminMaxPatients;
+  final String adminNoCap;
+  final String adminWeeklyCapacity;
+  final String adminSlotLength;
+  final String adminNoShift;
+  final String adminPaymentPolicy;
+  final String adminDepositAmount;
+  final String adminAffectedBookings;
+  final String adminAffectedWarning;
+  final String adminSaveAnyway;
+  final String bookingPayNow;
+  final String bookingPayLater;
+  final String bookingDepositNote;
+  final String bookingDepositPaid;
+  final String bookingBalanceDue;
+  final String bookingFreeNote;
+  final String bookingCancelled;
+  final String bookingRebook;
+  final String capacityFull;
+  final String capacityRemaining;
+
   static const AppStrings ar = AppStrings(
     localeName: 'ar',
     appName: 'دار الأمومة',
@@ -1105,6 +1256,81 @@ class AppStrings {
     adminTipBody: 'نص النصيحة',
     adminReviewerName: 'اسم المراجع الطبي',
     adminReviewerRequired: 'ممنوع نشر نصيحة من غير مراجع طبي بالاسم.',
+    doctorRequestTitle: 'طلب غرفة عمليات',
+    doctorRequestNew: 'طلب جديد',
+    doctorRequestNote: 'الإدارة هي اللي هتحدد الغرفة والموعد والسعر، وهيوصلك إشعار بالتفاصيل بعد التأكيد.',
+    doctorRequestNoteLabel: 'ملاحظات للإدارة',
+    doctorRequestNoteHelp: 'درجة الاستعجال، أجهزة مطلوبة، أي قيود على الموعد.',
+    doctorRequestSend: 'إرسال الطلب',
+    doctorRequestSent: 'تم إرسال الطلب',
+    doctorRequestSentBody: 'تم إخطار الإدارة، وهيوصلك إشعار أول ما يتحدد الموعد.',
+    scheduleTitle: 'تحديد موعد العملية',
+    scheduleRequestedBy: 'مقدّم الطلب',
+    scheduleDate: 'التاريخ',
+    scheduleTime: 'الساعة',
+    scheduleConfirmedPrice: 'السعر النهائي',
+    scheduleConfirmedPriceHelp: 'ده السعر اللي المستشفى بتلتزم بيه، مش التقدير المبدئي.',
+    scheduleConfirm: 'تأكيد الحجز',
+    scheduleNotifiesDoctor: 'هيتبعت إشعار للطبيب وللمريض بتفاصيل الحجز.',
+    scheduleDone: 'تم تأكيد الحجز وإخطار الطبيب',
+    scheduleAction: 'تحديد الموعد',
+    scheduleQueue: 'بانتظار تحديد موعد',
+    requestFromDoctor: 'طلب طبيب',
+    requestFromPatient: 'طلب مريض',
+    adminPolicy: 'السياسات والإعدادات',
+    policyDirectBooking: 'الأطباء يحجزوا غرف العمليات مباشرة',
+    policyDirectBookingOn: 'الطبيب بيحجز بنفسه فورًا، مع تطبيق قواعد التعارض. أسرع، بس التحكم في الجدول لامركزي.',
+    policyDirectBookingOff: 'الطبيب بيبعت طلب، والإدارة بتحدد الغرفة والموعد والسعر وتأكد. تحكم أعلى، بس أبطأ.',
+    policyNotifyOnChange: 'إخطار المرضى عند تعديل المواعيد',
+    policyNotifyOnChangeNote: 'لما تتغير أيام العيادة أو مواعيد الطبيب، الحجوزات المتأثرة تتلغي والمريض يتبلّغ ويقدر يحجز من جديد.',
+    policyNotifyOffWarning: 'إيقافها معناه إن المريض هيكتشف الإلغاء لما ييجي المستشفى. مش منصوح بيه.',
+    policyApprovalWindow: 'مهلة الرد على الطلبات',
+    policyApprovalWindowNote: 'بعد المهلة دي الطلب بيتصعّد للإدارة الطبية.',
+    policyCancellationCutoff: 'آخر ميعاد لإلغاء الحجز',
+    policyCancellationNote: 'قبل الموعد بالمدة دي المريض يقدر يلغي بنفسه.',
+    policyDefaultPayment: 'سياسة الدفع الافتراضية',
+    adminUsers: 'المستخدمون والصلاحيات',
+    adminNewUser: 'مستخدم جديد',
+    adminEditUser: 'تعديل المستخدم',
+    adminRoles: 'الأدوار',
+    adminRolesNote: 'الشخص الواحد ممكن ياخد أكتر من دور، والصلاحيات بتتجمع.',
+    adminApprovalCoverageThin: 'فيه شخص واحد بس يقدر يوافق على العمليات. لو غاب، طلبات المرضى هتتعطل — ضيف تاني.',
+    adminLinkedDoctor: 'ربط بملف الطبيب',
+    adminLinkedDoctorNote: 'الربط بيخلي الحساب يشوف جدوله وقائمة عملياته.',
+    adminAudit: 'سجل التغييرات',
+    adminAuditEmpty: 'مفيش تغييرات مسجّلة',
+    adminAuditNote: 'السجل بيتكتب ومابيتعدلش ولا بيتمسح.',
+    permManageCatalogue: 'إدارة الكتالوج',
+    permManageUsers: 'إدارة المستخدمين',
+    permApprove: 'الموافقة على العمليات',
+    permSchedule: 'تحديد المواعيد',
+    permBookDirect: 'حجز مباشر',
+    permOverride: 'تجاوز التعارض',
+    permAudit: 'عرض السجل',
+    adminShifts: 'مواعيد العمل والسعة',
+    adminShiftsNote: 'حدد الطبيب بيشتغل إيه أيام ومن كام لكام، وكام مريض أقصى عدد. المواعيد المتاحة للمريض بتتولد من ده.',
+    adminShiftFrom: 'من',
+    adminShiftTo: 'إلى',
+    adminMaxPatients: 'أقصى عدد مرضى',
+    adminNoCap: 'بدون حد',
+    adminWeeklyCapacity: 'السعة الأسبوعية',
+    adminSlotLength: 'مدة الكشف',
+    adminNoShift: 'مش شغال',
+    adminPaymentPolicy: 'سياسة الدفع',
+    adminDepositAmount: 'قيمة العربون',
+    adminAffectedBookings: 'حجوزات هتتأثر',
+    adminAffectedWarning: 'التعديل ده هيلغي الحجوزات دي، وهيتبعت للمرضى إشعار بالإلغاء وإن المواعيد اتغيرت.',
+    adminSaveAnyway: 'احفظ وألغِ الحجوزات',
+    bookingPayNow: 'ادفع الآن',
+    bookingPayLater: 'ادفع في الاستقبال',
+    bookingDepositNote: 'العربون بيحجزلك المكان، والباقي بيتدفع في الاستقبال.',
+    bookingDepositPaid: 'تم دفع العربون',
+    bookingBalanceDue: 'المتبقي',
+    bookingFreeNote: 'الحجز مجاني، والدفع في الاستقبال.',
+    bookingCancelled: 'تم إلغاء الموعد',
+    bookingRebook: 'احجز موعد جديد',
+    capacityFull: 'اكتمل العدد لهذا اليوم',
+    capacityRemaining: 'أماكن متبقية',
   );
 
   static const AppStrings en = AppStrings(
@@ -1469,6 +1695,81 @@ class AppStrings {
     adminTipBody: 'Tip text',
     adminReviewerName: 'Medical reviewer',
     adminReviewerRequired: 'A tip cannot be published without a named medical reviewer.',
+    doctorRequestTitle: 'Theatre request',
+    doctorRequestNew: 'New request',
+    doctorRequestNote: 'The administration allocates the theatre, time and price. You are notified with the full detail once it is confirmed.',
+    doctorRequestNoteLabel: 'Note to the administration',
+    doctorRequestNoteHelp: 'Urgency, equipment needed, any constraint on the date.',
+    doctorRequestSend: 'Send request',
+    doctorRequestSent: 'Request sent',
+    doctorRequestSentBody: 'The administration has been notified. You will be alerted as soon as it is scheduled.',
+    scheduleTitle: 'Schedule the operation',
+    scheduleRequestedBy: 'Requested by',
+    scheduleDate: 'Date',
+    scheduleTime: 'Time',
+    scheduleConfirmedPrice: 'Confirmed price',
+    scheduleConfirmedPriceHelp: 'This is the price the hospital commits to, not the initial estimate.',
+    scheduleConfirm: 'Confirm booking',
+    scheduleNotifiesDoctor: 'The surgeon and the patient are notified with the booking detail.',
+    scheduleDone: 'Booked, and the surgeon has been notified',
+    scheduleAction: 'Schedule',
+    scheduleQueue: 'Awaiting scheduling',
+    requestFromDoctor: 'Doctor request',
+    requestFromPatient: 'Patient request',
+    adminPolicy: 'Policies & settings',
+    policyDirectBooking: 'Doctors book theatres directly',
+    policyDirectBookingOn: 'A surgeon takes a slot immediately, subject to the conflict rules. Faster, but scheduling control is decentralised.',
+    policyDirectBookingOff: 'The surgeon sends a request and the administration allocates the theatre, time and price. More control, slower.',
+    policyNotifyOnChange: 'Notify patients when schedules change',
+    policyNotifyOnChangeNote: 'When a clinic day or a doctor shift changes, the affected bookings are cancelled, the patient is told, and they can rebook.',
+    policyNotifyOffWarning: 'Turning this off means a patient discovers the cancellation on arrival. Not recommended.',
+    policyApprovalWindow: 'Approval window',
+    policyApprovalWindowNote: 'After this window a request escalates to the medical director.',
+    policyCancellationCutoff: 'Cancellation cut-off',
+    policyCancellationNote: 'Up to this long before the appointment, the patient may cancel.',
+    policyDefaultPayment: 'Default payment policy',
+    adminUsers: 'Users & roles',
+    adminNewUser: 'New user',
+    adminEditUser: 'Edit user',
+    adminRoles: 'Roles',
+    adminRolesNote: 'One person may hold several roles; permissions are the union.',
+    adminApprovalCoverageThin: 'Only one person can approve surgeries. If they are away, patient requests stall — add a second.',
+    adminLinkedDoctor: 'Link to doctor profile',
+    adminLinkedDoctorNote: 'Linking lets the account see its own schedule and theatre list.',
+    adminAudit: 'Audit log',
+    adminAuditEmpty: 'No changes recorded',
+    adminAuditNote: 'The log is append-only: entries are never edited or removed.',
+    permManageCatalogue: 'Manage catalogue',
+    permManageUsers: 'Manage users',
+    permApprove: 'Approve surgeries',
+    permSchedule: 'Schedule',
+    permBookDirect: 'Book directly',
+    permOverride: 'Override conflicts',
+    permAudit: 'View audit log',
+    adminShifts: 'Shifts & capacity',
+    adminShiftsNote: 'Set which days the doctor works, the hours, and the maximum patients. The slots offered to patients are generated from this.',
+    adminShiftFrom: 'From',
+    adminShiftTo: 'To',
+    adminMaxPatients: 'Maximum patients',
+    adminNoCap: 'No cap',
+    adminWeeklyCapacity: 'Weekly capacity',
+    adminSlotLength: 'Slot length',
+    adminNoShift: 'Not working',
+    adminPaymentPolicy: 'Payment policy',
+    adminDepositAmount: 'Deposit amount',
+    adminAffectedBookings: 'Bookings affected',
+    adminAffectedWarning: 'This change cancels these bookings. Each patient is told the appointment is cancelled and the times have moved.',
+    adminSaveAnyway: 'Save and cancel them',
+    bookingPayNow: 'Pay now',
+    bookingPayLater: 'Pay at reception',
+    bookingDepositNote: 'The deposit holds your place; the balance is paid at reception.',
+    bookingDepositPaid: 'Deposit paid',
+    bookingBalanceDue: 'Balance due',
+    bookingFreeNote: 'Booking is free; you pay at reception.',
+    bookingCancelled: 'Appointment cancelled',
+    bookingRebook: 'Book a new time',
+    capacityFull: 'Fully booked for this day',
+    capacityRemaining: 'places left',
   );
 
   /// Rejection reasons for a surgery request.

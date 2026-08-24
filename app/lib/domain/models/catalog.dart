@@ -2,6 +2,39 @@ import 'package:flutter/widgets.dart' show Color;
 
 import 'enums.dart';
 
+/// A doctor's working window on one weekday, as minutes from midnight.
+///
+/// This is what actually generates a clinic's bookable slots: the clinic says
+/// which days it opens, the doctor says which hours they are in it, and
+/// [maxPatients] caps how many people can be booked into that window.
+class DoctorShift {
+  const DoctorShift({
+    required this.weekday,
+    required this.startsAt,
+    required this.endsAt,
+    this.maxPatients = 0,
+  });
+
+  /// ISO weekday: 1 = Monday … 7 = Sunday.
+  final int weekday;
+  final int startsAt;
+  final int endsAt;
+
+  /// 0 means "no cap" — bounded only by the length of the window.
+  final int maxPatients;
+
+  Duration get length => Duration(minutes: endsAt - startsAt);
+
+  bool get isValid => endsAt > startsAt;
+
+  /// Minutes each patient gets, once the window is divided by the cap.
+  int slotMinutes(int fallback) {
+    if (maxPatients <= 0) return fallback;
+    final each = (endsAt - startsAt) ~/ maxPatients;
+    return each < 5 ? 5 : each;
+  }
+}
+
 /// A bilingual label. Arabic is authoritative; English falls back to Arabic
 /// when a translation has not been supplied (PROMPT.md section 12.1).
 class Label {
@@ -61,6 +94,7 @@ class Doctor {
     required this.seniority,
     this.centreId,
     this.languages = const ['ar'],
+    this.shifts = const [],
   });
 
   final String id;
@@ -70,6 +104,29 @@ class Doctor {
   final int seniority;
   final String? centreId;
   final List<String> languages;
+
+  /// Working windows, set by the administrator (one per weekday at most).
+  final List<DoctorShift> shifts;
+
+  DoctorShift? shiftOn(int weekday) {
+    for (final shift in shifts) {
+      if (shift.weekday == weekday) return shift;
+    }
+    return null;
+  }
+
+  bool worksOn(int weekday) => shiftOn(weekday) != null;
+
+  /// Total cases this doctor accepts across the week. 0 where any shift is
+  /// uncapped, since the week is then not meaningfully bounded.
+  int get weeklyCapacity {
+    var total = 0;
+    for (final shift in shifts) {
+      if (shift.maxPatients <= 0) return 0;
+      total += shift.maxPatients;
+    }
+    return total;
+  }
 }
 
 class Clinic {
@@ -82,6 +139,9 @@ class Clinic {
     required this.workingDays,
     this.centreId,
     this.icon = 0xe3f3,
+    this.paymentPolicy = PaymentPolicy.payAtReception,
+    this.depositAmount = 0,
+    this.slotMinutes = 20,
   });
 
   final String id;
@@ -94,6 +154,16 @@ class Clinic {
   final List<int> workingDays;
   final String? centreId;
   final int icon;
+
+  /// Booking is never blocked by payment. This only decides whether the app
+  /// offers to take money, and whether a deposit holds the slot.
+  final PaymentPolicy paymentPolicy;
+
+  /// Amount held to secure a slot when [paymentPolicy] requires a deposit.
+  final int depositAmount;
+
+  /// Fallback appointment length, used where the doctor's shift sets no cap.
+  final int slotMinutes;
 }
 
 class OperatingTheatre {

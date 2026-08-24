@@ -4,6 +4,7 @@ import '../domain/models/booking.dart';
 import '../domain/models/catalog.dart';
 import '../domain/models/content.dart';
 import '../domain/models/enums.dart';
+import '../domain/models/governance.dart';
 import '../domain/models/operations.dart';
 import '../domain/models/patient.dart';
 import '../domain/models/time_range.dart';
@@ -392,25 +393,254 @@ class AppState extends ChangeNotifier {
       .where((r) => r.isAwaitingDecisionAt(DateTime.now()))
       .toList();
 
+  /// Requests awaiting a theatre, a time and a price.
+  List<SurgeryRequest> get awaitingScheduling => _requests
+      .where((r) => r.status == SurgeryRequestStatus.approved)
+      .toList();
+
+  List<SurgeryRequest> requestsByDoctor(String doctorId) => _requests
+      .where((r) => r.requestedByDoctorId == doctorId)
+      .toList();
+
+  /// A surgeon asks the administration for a slot.
+  ///
+  /// Unlike a patient request this is not a clinical question — the surgeon
+  /// has already decided the case. What the administration allocates is the
+  /// theatre, the time and the price.
+  SurgeryRequest submitDoctorSurgeryRequest({
+    required String doctorId,
+    required Patient patient,
+    required Procedure procedure,
+    String? clinicalNote,
+    DateTime? preferredFrom,
+    DateTime? preferredTo,
+  }) {
+    final now = DateTime.now();
+    final request = SurgeryRequest(
+      id: 'req-${now.microsecondsSinceEpoch}',
+      reference: 'DR-${now.millisecondsSinceEpoch % 1000000}',
+      patientId: patient.id,
+      procedureId: procedure.id,
+      classificationId: procedure.classificationId,
+      submittedAt: now,
+      estimatePriceSnapshot: '${procedure.price}',
+      origin: RequestOrigin.doctor,
+      requestedByDoctorId: doctorId,
+      clinicalNote: clinicalNote,
+      preferredSurgeonId: doctorId,
+      preferredFrom: preferredFrom,
+      preferredTo: preferredTo,
+    );
+    _requests.insert(0, request);
+    _alertApprovers(
+      templateCode: 'doctor_theatre_request',
+      title: 'طلب حجز غرفة عمليات من طبيب',
+      reference: request.reference,
+      context:
+          '${Seed.classificationById(procedure.classificationId).name.ar} · '
+          'بانتظار تحديد الموعد',
+      entityId: request.id,
+      deepLink: '/approvals/${request.id}',
+    );
+    _audit('created', 'surgery_request', request.id,
+        detail: '${request.reference} · طلب طبيب');
+    notifyListeners();
+    return request;
+  }
+
+  /// The administration allocates a theatre, a time and a price, and confirms.
+  ///
+  /// On success the request becomes a real theatre case and the requesting
+  /// surgeon is notified with the full detail — which is the point of the
+  /// whole flow: the surgeon asked, and now knows exactly what they got.
+  BookingOutcome scheduleRequest({
+    required String requestId,
+    required String theatreId,
+    required String surgeonId,
+    required DateTime start,
+    required int price,
+    Duration? duration,
+    String? overrideReason,
+  }) {
+    final index = _requests.indexWhere((r) => r.id == requestId);
+    if (index < 0) {
+      return const BookingRejected(BookingCheck.clear());
+    }
+    final request = _requests[index];
+    final procedure = Seed.procedureById(request.procedureId);
+    final classification =
+        Seed.classificationById(request.classificationId);
+    final patient = Seed.theatrePatients
+        .where((p) => p.id == request.patientId)
+        .toList();
+
+    final draft = BookingDraft(
+      theatreId: theatreId,
+      surgeonId: surgeonId,
+      patientId: request.patientId,
+      procedure: procedure,
+      classification: classification,
+      start: start,
+      duration: duration,
+    );
+
+    final outcome = bookTheatreCase(
+      draft: draft,
+      patient: patient.isEmpty ? Seed.demoPatient : patient.first,
+      origin: request.isFromDoctor
+          ? BookingOrigin.doctorRequest
+          : BookingOrigin.patientRequest,
+      overrideReason: overrideReason,
+    );
+
+    if (outcome is! BookingAccepted) return outcome;
+
+    _requests[index] = request.copyWith(
+      status: SurgeryRequestStatus.scheduled,
+      scheduledCaseId: outcome.surgeryCase.id,
+      scheduledTheatreId: theatreId,
+      scheduledStart: start,
+      confirmedPrice: price,
+      decidedAt: DateTime.now(),
+    );
+
+    final theatre = Seed.theatreById(theatreId);
+    final detail = '${procedure.name.ar} · ${theatre.code} · '
+        '${_stamp(start)} · $price ${'جنيه'}';
+
+    // The surgeon who asked gets the full confirmation.
+    if (request.requestedByDoctorId != null) {
+      _emit(AppNotification(
+        id: 'ntf-${_notifySeq++}',
+        channel: NotifyChannel.push,
+        audience: NotifyAudience.surgeon,
+        templateCode: 'theatre_request_scheduled',
+        title: 'تم تأكيد حجز غرفة العمليات',
+        body: detail,
+        sentAt: DateTime.now(),
+        entityId: request.id,
+        deepLink: '/theatre',
+      ));
+    }
+
+    _notifyPatient(
+      templateCode: 'surgery_scheduled',
+      title: 'تم تحديد موعد عمليتك',
+      body: '${theatre.code} · ${_stamp(start)}',
+      entityId: request.id,
+    );
+
+    _audit('scheduled', 'surgery_request', request.id, detail: detail);
+    notifyListeners();
+    return outcome;
+  }
+
   // ------------------------------------------------------------- appointments
 
+  /// Books a clinic appointment.
+  ///
+  /// Payment never gates the booking: [depositPaid] is whatever the patient
+  /// chose to pay up front, and zero is the normal case.
   Appointment bookClinicAppointment({
     required String patientId,
     required String clinicId,
     required String doctorId,
     required DateTime start,
-    Duration duration = const Duration(minutes: 20),
+    Duration? duration,
+    int depositPaid = 0,
   }) {
+    final now = DateTime.now();
+    final clinic = Seed.clinics.firstWhere((c) => c.id == clinicId);
+    final doctor = Seed.doctorById(doctorId);
+    final shift = doctor.shiftOn(start.weekday);
+    final minutes = shift?.slotMinutes(clinic.slotMinutes) ?? clinic.slotMinutes;
+
     final appointment = Appointment(
-      id: 'appt-${DateTime.now().microsecondsSinceEpoch}',
+      id: 'appt-${now.microsecondsSinceEpoch}',
       patientId: patientId,
       doctorId: doctorId,
       clinicId: clinicId,
-      range: TimeRange.fromDuration(start, duration),
+      range: TimeRange.fromDuration(
+          start, duration ?? Duration(minutes: minutes)),
+      reference: 'AP-${now.millisecondsSinceEpoch % 100000}',
+      fee: clinic.consultationFee,
+      depositPaid: depositPaid,
     );
     _appointments = [..._appointments, appointment];
+    _audit('created', 'appointment', appointment.id,
+        detail: '${clinic.name.ar} · ${_stamp(start)}');
     notifyListeners();
     return appointment;
+  }
+
+  /// Cancels an appointment and tells the patient why.
+  void cancelAppointment(
+    String appointmentId, {
+    required CancellationReason reason,
+    String? note,
+  }) {
+    final index = _appointments.indexWhere((a) => a.id == appointmentId);
+    if (index < 0) return;
+    final cancelled =
+        _appointments[index].cancelledBecause(reason, note: note);
+    _appointments = [..._appointments]..[index] = cancelled;
+    _notifyPatient(
+      templateCode: 'appointment_cancelled',
+      title: 'تم إلغاء موعدك',
+      body: note ?? cancelled.reference,
+      entityId: cancelled.id,
+    );
+    _audit('cancelled', 'appointment', cancelled.id, detail: reason.name);
+    notifyListeners();
+  }
+
+  /// Appointments that a proposed schedule would break.
+  ///
+  /// Called before the change is saved, so the administrator sees the cost of
+  /// the edit rather than discovering it from angry patients.
+  List<Appointment> appointmentsBrokenBy({
+    required String clinicId,
+    required List<int> newWorkingDays,
+    String? doctorId,
+    List<DoctorShift>? newShifts,
+  }) {
+    final now = DateTime.now();
+    return _appointments.where((a) {
+      if (!a.blocksTime || !a.range.start.isAfter(now)) return false;
+      if (a.clinicId != clinicId && a.doctorId != doctorId) return false;
+
+      if (a.clinicId == clinicId &&
+          !newWorkingDays.contains(a.range.start.weekday)) {
+        return true;
+      }
+      if (doctorId != null && a.doctorId == doctorId && newShifts != null) {
+        final shift = newShifts
+            .where((sh) => sh.weekday == a.range.start.weekday)
+            .toList();
+        if (shift.isEmpty) return true;
+        final minutes = a.range.start.hour * 60 + a.range.start.minute;
+        if (minutes < shift.first.startsAt || minutes >= shift.first.endsAt) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
+  }
+
+  /// Cancels every appointment a schedule change invalidates and notifies each
+  /// patient that the times moved and they may rebook.
+  int cancelBrokenAppointments(List<Appointment> broken) {
+    if (broken.isEmpty) return 0;
+    for (final appointment in broken) {
+      cancelAppointment(
+        appointment.id,
+        reason: CancellationReason.scheduleChanged,
+        note: _policy.notifyPatientsOnScheduleChange
+            ? 'تم تعديل مواعيد العيادة. برجاء اختيار موعد جديد من التطبيق.'
+            : null,
+      );
+    }
+    return broken.length;
   }
 
   Appointment? nextAppointmentFor(String patientId) {
@@ -425,20 +655,75 @@ class AppState extends ChangeNotifier {
     return upcoming.isEmpty ? null : upcoming.first;
   }
 
-  /// Clinic slots for a day. Real availability comes from the server; this
-  /// generates a plausible grid and removes what is already taken.
-  List<DateTime> clinicSlots(Clinic clinic, DateTime day) {
+  /// Bookable slots for a clinic on a day.
+  ///
+  /// Three things must agree before a slot exists: the clinic opens that day,
+  /// a doctor of that clinic is on shift, and the doctor's cap for that shift
+  /// has not been reached. The cap also decides how long each slot is — a
+  /// doctor who takes 12 patients in a four-hour clinic gets 20-minute slots.
+  List<DateTime> clinicSlots(Clinic clinic, DateTime day, {String? doctorId}) {
     if (!clinic.workingDays.contains(day.weekday)) return const [];
-    final slots = <DateTime>[];
-    for (var minutes = 10 * 60; minutes < 14 * 60; minutes += 20) {
-      final start = DateTime(day.year, day.month, day.day)
-          .add(Duration(minutes: minutes));
-      if (start.isBefore(DateTime.now())) continue;
-      final taken = _appointments.any((a) =>
-          a.blocksTime && a.clinicId == clinic.id && a.range.start == start);
-      if (!taken) slots.add(start);
+
+    final doctors = clinic.doctorIds
+        .map(Seed.doctorById)
+        .where((d) => doctorId == null || d.id == doctorId)
+        .toList();
+    if (doctors.isEmpty) return const [];
+
+    final slots = <DateTime>{};
+    final now = DateTime.now();
+
+    for (final doctor in doctors) {
+      final shift = doctor.shiftOn(day.weekday);
+      // A doctor whose shifts are configured is bound by them: no shift on
+      // this weekday means they are not in, so no slots. Only a doctor with
+      // no shifts at all falls back to the clinic's own hours, so that an
+      // incompletely configured hospital still books.
+      if (shift == null && doctor.shifts.isNotEmpty) continue;
+      final startsAt = shift?.startsAt ?? 10 * 60;
+      final endsAt = shift?.endsAt ?? 14 * 60;
+      final step = shift?.slotMinutes(clinic.slotMinutes) ?? clinic.slotMinutes;
+
+      final bookedForDoctor = _appointments
+          .where((a) =>
+              a.blocksTime &&
+              a.doctorId == doctor.id &&
+              _isSameDay(a.range.start, day))
+          .length;
+      final cap = shift?.maxPatients ?? 0;
+      if (cap > 0 && bookedForDoctor >= cap) continue;
+
+      var offered = 0;
+      for (var minutes = startsAt; minutes + step <= endsAt; minutes += step) {
+        if (cap > 0 && bookedForDoctor + offered >= cap) break;
+        final start = DateTime(day.year, day.month, day.day)
+            .add(Duration(minutes: minutes));
+        if (start.isBefore(now)) continue;
+        final taken = _appointments.any((a) =>
+            a.blocksTime &&
+            a.doctorId == doctor.id &&
+            a.range.start == start);
+        if (taken) continue;
+        slots.add(start);
+        offered++;
+      }
     }
-    return slots;
+
+    final ordered = slots.toList()..sort();
+    return ordered;
+  }
+
+  /// Remaining capacity for a doctor on a day. `null` means uncapped.
+  int? remainingCapacity(Doctor doctor, DateTime day) {
+    final shift = doctor.shiftOn(day.weekday);
+    if (shift == null || shift.maxPatients <= 0) return null;
+    final booked = _appointments
+        .where((a) =>
+            a.blocksTime &&
+            a.doctorId == doctor.id &&
+            _isSameDay(a.range.start, day))
+        .length;
+    return (shift.maxPatients - booked).clamp(0, shift.maxPatients);
   }
 
   // -------------------------------------------------------------- complaints
@@ -661,6 +946,120 @@ class AppState extends ChangeNotifier {
     return Seed.campaigns.where((c) => c.isPublishableAt(now)).toList();
   }
 
+  // ------------------------------------------- policy, users and audit log
+
+  HospitalPolicy _policy = const HospitalPolicy();
+  HospitalPolicy get policy => _policy;
+
+  void updatePolicy(HospitalPolicy value) {
+    _policy = value;
+    _audit('updated', 'policy', null,
+        detail: 'حجز الأطباء المباشر: '
+            '${value.doctorsBookTheatreDirectly ? "مفعّل" : "موقوف"}');
+    notifyListeners();
+  }
+
+  final List<AuditEntry> _audits = [];
+
+  /// Newest first. Append-only — nothing here is ever edited or removed.
+  List<AuditEntry> get auditLog => List.unmodifiable(_audits);
+
+  void _audit(String action, String entity, String? entityId,
+      {String? detail}) {
+    _audits.insert(
+      0,
+      AuditEntry(
+        id: 'aud-${DateTime.now().microsecondsSinceEpoch}-${_audits.length}',
+        actor: _actorName,
+        action: action,
+        entity: entity,
+        entityId: entityId,
+        at: DateTime.now(),
+        detail: detail,
+      ),
+    );
+  }
+
+  String get _actorName => switch (_session.role) {
+        UserRole.admin => 'الأدمن',
+        UserRole.surgeryApprover => 'الموافق',
+        UserRole.orScheduler => 'منسق العمليات',
+        UserRole.doctor => _session.doctorId == null
+            ? 'طبيب'
+            : Seed.doctorById(_session.doctorId!).name.ar,
+        UserRole.patient => 'مريض',
+        UserRole.guest => 'زائر',
+      };
+
+  final List<StaffUser> _staff = [
+    const StaffUser(
+      id: 'usr-1',
+      name: 'أ. سلمى عبد العزيز',
+      phone: '+201001112223',
+      roles: {UserRole.admin},
+    ),
+    const StaffUser(
+      id: 'usr-2',
+      name: 'د. أحمد سليم',
+      phone: '+201004445556',
+      roles: {UserRole.doctor, UserRole.surgeryApprover},
+      doctorId: 'doc-ortho-1',
+    ),
+    const StaffUser(
+      id: 'usr-3',
+      name: 'أ. منى رشاد',
+      phone: '+201007778889',
+      roles: {UserRole.orScheduler},
+    ),
+  ];
+
+  List<StaffUser> get staff => List.unmodifiable(_staff);
+
+  String upsertStaff({
+    String? id,
+    required String name,
+    required String phone,
+    required Set<UserRole> roles,
+    String? doctorId,
+    bool isActive = true,
+  }) {
+    final resolvedId = id ?? _newId('usr');
+    final user = StaffUser(
+      id: resolvedId,
+      name: name,
+      phone: phone,
+      roles: roles,
+      doctorId: doctorId,
+      isActive: isActive,
+    );
+    final index = _staff.indexWhere((u) => u.id == resolvedId);
+    if (index >= 0) {
+      _staff[index] = user;
+    } else {
+      _staff.add(user);
+    }
+    _audit(id == null ? 'created' : 'updated', 'user', resolvedId,
+        detail: '$name · ${roles.map((r) => r.name).join(", ")}');
+    notifyListeners();
+    return resolvedId;
+  }
+
+  void setStaffActive(String id, bool isActive) {
+    final index = _staff.indexWhere((u) => u.id == id);
+    if (index < 0) return;
+    _staff[index] = _staff[index].copyWith(isActive: isActive);
+    _audit(isActive ? 'enabled' : 'disabled', 'user', id);
+    notifyListeners();
+  }
+
+  /// Every approval permission needs at least two holders, so nobody's leave
+  /// can stall a patient's request (PROMPT.md §3.3, rule 3).
+  int holdersOf(bool Function(UserRole) permission) =>
+      _staff.where((u) => u.can(permission)).length;
+
+  bool get approvalCoverageIsThin =>
+      holdersOf((r) => r.canApproveSurgery) < 2;
+
   // ------------------------------------------------------------------ admin
   //
   // Catalogue maintenance. Each method here corresponds to an admin-console
@@ -717,6 +1116,8 @@ class AppState extends ChangeNotifier {
     } else {
       Seed.classifications.add(entry);
     }
+    _audit(id == null ? 'created' : 'updated', 'classification', resolvedId,
+        detail: name.ar);
     notifyListeners();
     return resolvedId;
   }
@@ -742,6 +1143,8 @@ class AppState extends ChangeNotifier {
       defaultBloodUnits: c.defaultBloodUnits,
       isActive: isActive,
     );
+    _audit(isActive ? 'enabled' : 'deactivated', 'classification', id,
+        detail: c.name.ar);
     notifyListeners();
   }
 
@@ -782,6 +1185,8 @@ class AppState extends ChangeNotifier {
     } else {
       Seed.procedures.add(entry);
     }
+    _audit(id == null ? 'created' : 'updated', 'procedure', resolvedId,
+        detail: name.ar);
     notifyListeners();
     return resolvedId;
   }
@@ -795,6 +1200,7 @@ class AppState extends ChangeNotifier {
     required Label specialty,
     required int seniority,
     String? centreId,
+    List<DoctorShift> shifts = const [],
   }) {
     final resolvedId = id ?? _newId('doc');
     final entry = Doctor(
@@ -804,6 +1210,7 @@ class AppState extends ChangeNotifier {
       specialty: specialty,
       seniority: seniority,
       centreId: centreId,
+      shifts: shifts,
     );
     final index = Seed.doctors.indexWhere((d) => d.id == resolvedId);
     if (index >= 0) {
@@ -811,6 +1218,8 @@ class AppState extends ChangeNotifier {
     } else {
       Seed.doctors.add(entry);
     }
+    _audit(id == null ? 'created' : 'updated', 'doctor', resolvedId,
+        detail: name.ar);
     notifyListeners();
     return resolvedId;
   }
@@ -825,6 +1234,8 @@ class AppState extends ChangeNotifier {
     required List<String> doctorIds,
     required List<int> workingDays,
     String? centreId,
+    PaymentPolicy paymentPolicy = PaymentPolicy.payAtReception,
+    int depositAmount = 0,
   }) {
     final resolvedId = id ?? _newId('clinic');
     final entry = Clinic(
@@ -835,6 +1246,8 @@ class AppState extends ChangeNotifier {
       doctorIds: doctorIds,
       workingDays: workingDays,
       centreId: centreId,
+      paymentPolicy: paymentPolicy,
+      depositAmount: depositAmount,
     );
     final index = Seed.clinics.indexWhere((c) => c.id == resolvedId);
     if (index >= 0) {
@@ -842,6 +1255,8 @@ class AppState extends ChangeNotifier {
     } else {
       Seed.clinics.add(entry);
     }
+    _audit(id == null ? 'created' : 'updated', 'clinic', resolvedId,
+        detail: name.ar);
     notifyListeners();
     return resolvedId;
   }
@@ -875,6 +1290,8 @@ class AppState extends ChangeNotifier {
     } else {
       Seed.theatres.add(entry);
     }
+    _audit(id == null ? 'created' : 'updated', 'theatre', resolvedId,
+        detail: name.ar);
     notifyListeners();
     return resolvedId;
   }
@@ -968,6 +1385,9 @@ class AppState extends ChangeNotifier {
     Seed.tips.removeWhere((t) => t.id == id);
     notifyListeners();
   }
+
+  static bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
 
   /// Minimal timestamp rendering for notification bodies. The UI has its own
   /// locale-aware formatter; notifications are composed here because in

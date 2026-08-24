@@ -10,6 +10,8 @@ import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../../domain/models/catalog.dart';
 import '../../domain/models/enums.dart';
+import 'admin_governance_screens.dart' show paymentPolicyLabel, paymentPolicyNote;
+import 'shift_editor.dart';
 import 'admin_widgets.dart';
 
 // ---------------------------------------------------------- classifications
@@ -510,10 +512,14 @@ class _ClinicFormState extends State<_ClinicForm> {
   late final List<int> _days = [...?widget.existing?.workingDays];
   late final List<String> _doctorIds = [...?widget.existing?.doctorIds];
   late String? _centreId = widget.existing?.centreId;
+  late PaymentPolicy _payment =
+      widget.existing?.paymentPolicy ?? PaymentPolicy.payAtReception;
+  late final _deposit =
+      TextEditingController(text: '${widget.existing?.depositAmount ?? 0}');
 
   @override
   void dispose() {
-    for (final c in [_nameAr, _nameEn, _fee, _followUp]) {
+    for (final c in [_nameAr, _nameEn, _fee, _followUp, _deposit]) {
       c.dispose();
     }
     super.dispose();
@@ -594,21 +600,65 @@ class _ClinicFormState extends State<_ClinicForm> {
           ],
           onChanged: (id) => setState(() => _centreId = id),
         ),
+        const SizedBox(height: Gap.xl),
+
+        // Payment never blocks a booking. This only decides whether the app
+        // offers to take money, and whether a deposit holds the slot.
+        AdminSectionLabel(s.adminPaymentPolicy),
+        for (final option in PaymentPolicy.values)
+          RadioListTile<PaymentPolicy>(
+            value: option,
+            // ignore: deprecated_member_use
+            groupValue: _payment,
+            // ignore: deprecated_member_use
+            onChanged: (v) => setState(() => _payment = v ?? _payment),
+            contentPadding: EdgeInsets.zero,
+            title: Text(paymentPolicyLabel(option, s),
+                style: Theme.of(context).textTheme.titleMedium),
+            subtitle: Text(paymentPolicyNote(option, s),
+                style: Theme.of(context).textTheme.bodySmall),
+          ),
+        if (_payment.requiresDeposit) ...[
+          const SizedBox(height: Gap.md),
+          AdminField(
+            controller: _deposit,
+            label: '${s.adminDepositAmount} (${s.commonEgp})',
+            digitsOnly: true,
+          ),
+        ],
       ],
     );
   }
 
-  void _save() {
-    context.read<AppState>().upsertClinic(
-          id: widget.existing?.id,
-          name: BilingualFields.toLabel(_nameAr, _nameEn),
-          consultationFee: parseIntOr(_fee.text, 0),
-          followUpFee: parseIntOr(_followUp.text, 0),
-          doctorIds: _doctorIds,
-          workingDays: _days,
-          centreId: _centreId,
-        );
-    Navigator.of(context).pop();
+  Future<void> _save() async {
+    final state = context.read<AppState>();
+    final existing = widget.existing;
+
+    if (existing != null) {
+      final broken = state.appointmentsBrokenBy(
+        clinicId: existing.id,
+        newWorkingDays: _days,
+      );
+      if (broken.isNotEmpty) {
+        final proceed = await confirmScheduleImpact(context, broken.length);
+        if (proceed != true) return;
+        state.cancelBrokenAppointments(broken);
+      }
+    }
+
+    if (!mounted) return;
+    state.upsertClinic(
+      id: existing?.id,
+      name: BilingualFields.toLabel(_nameAr, _nameEn),
+      consultationFee: parseIntOr(_fee.text, 0),
+      followUpFee: parseIntOr(_followUp.text, 0),
+      doctorIds: _doctorIds,
+      workingDays: _days,
+      centreId: _centreId,
+      paymentPolicy: _payment,
+      depositAmount: parseIntOr(_deposit.text, 0),
+    );
+    if (mounted) Navigator.of(context).pop();
   }
 }
 
@@ -632,7 +682,9 @@ class DoctorsAdminScreen extends StatelessWidget {
           AdminRow(
             title: doctor.name(s.localeName),
             subtitle: '${doctor.title(s.localeName)} · '
-                '${doctor.specialty(s.localeName)}',
+                '${doctor.specialty(s.localeName)}'
+                '${doctor.shifts.isEmpty ? "" : " · ${doctor.shifts.length} ${s.adminWorkingDays}"}'
+                '${doctor.weeklyCapacity == 0 ? "" : " · ${doctor.weeklyCapacity} ${s.adminDoctorsCount}"}',
             leading: const CircleAvatar(
               backgroundColor: AppColors.navyTint,
               child: Icon(Icons.person_outline, color: AppColors.navy),
@@ -678,6 +730,7 @@ class _DoctorFormState extends State<_DoctorForm> {
       TextEditingController(text: widget.existing?.specialty.en ?? '');
   late int _seniority = widget.existing?.seniority ?? 3;
   late String? _centreId = widget.existing?.centreId;
+  late final List<DoctorShift> _shifts = [...?widget.existing?.shifts];
 
   @override
   void dispose() {
@@ -736,20 +789,61 @@ class _DoctorFormState extends State<_DoctorForm> {
           ],
           onChanged: (id) => setState(() => _centreId = id),
         ),
+        const SizedBox(height: Gap.xl),
+
+        // Working hours and capacity: this is what actually generates the
+        // slots a patient can book.
+        AdminSectionLabel(s.adminShifts),
+        InfoNote(s.adminShiftsNote, icon: Icons.schedule_outlined),
+        const SizedBox(height: Gap.md),
+        ShiftEditor(
+          shifts: _shifts,
+          onChanged: (updated) => setState(() {
+            _shifts
+              ..clear()
+              ..addAll(updated);
+          }),
+        ),
       ],
     );
   }
 
-  void _save() {
-    context.read<AppState>().upsertDoctor(
-          id: widget.existing?.id,
-          name: BilingualFields.toLabel(_nameAr, _nameEn),
-          title: BilingualFields.toLabel(_titleAr, _titleEn),
-          specialty: BilingualFields.toLabel(_specialtyAr, _specialtyEn),
-          seniority: _seniority,
-          centreId: _centreId,
-        );
-    Navigator.of(context).pop();
+  Future<void> _save() async {
+    final state = context.read<AppState>();
+    final existing = widget.existing;
+
+    // Changing a doctor's hours can invalidate bookings already made. Show
+    // the cost before saving, never after.
+    if (existing != null) {
+      final broken = <dynamic>[];
+      for (final clinic
+          in Seed.clinics.where((c) => c.doctorIds.contains(existing.id))) {
+        broken.addAll(state.appointmentsBrokenBy(
+          clinicId: clinic.id,
+          newWorkingDays: clinic.workingDays,
+          doctorId: existing.id,
+          newShifts: _shifts,
+        ));
+      }
+      final unique = {for (final a in broken) a.id: a}.values.toList();
+      if (unique.isNotEmpty) {
+        final proceed = await confirmScheduleImpact(context, unique.length);
+        if (proceed != true) return;
+        state.cancelBrokenAppointments(unique.cast());
+      }
+    }
+
+    if (!mounted) return;
+    state.upsertDoctor(
+      id: existing?.id,
+      name: BilingualFields.toLabel(_nameAr, _nameEn),
+      title: BilingualFields.toLabel(_titleAr, _titleEn),
+      specialty: BilingualFields.toLabel(_specialtyAr, _specialtyEn),
+      seniority: _seniority,
+      centreId: _centreId,
+      shifts: _shifts,
+    );
+    if (mounted) Navigator.of(context).pop();
   }
 }
 

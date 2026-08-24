@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/l10n/app_strings.dart';
@@ -98,7 +99,9 @@ class _TheatreAvailabilityScreenState extends State<TheatreAvailabilityScreen> {
                           endHour: _endHour,
                           pixelsPerHour: _pixelsPerHour,
                           rowHeight: _rowHeight,
-                          onTapFree: session.role.canBookTheatreDirectly
+                          onTapFree: (session.role.canBookTheatreDirectly &&
+                                  (state.policy.doctorsBookTheatreDirectly ||
+                                      session.role == UserRole.admin))
                               ? (start) => _openBooking(theatre, start)
                               : null,
                         ),
@@ -110,14 +113,25 @@ class _TheatreAvailabilityScreenState extends State<TheatreAvailabilityScreen> {
           ),
         ],
       ),
+      // Which action a doctor gets is the hospital's policy, not the app's:
+      // book the slot outright, or ask the administration for one.
       floatingActionButton: session.role.canBookTheatreDirectly
-          ? FloatingActionButton.extended(
-              onPressed: () => _openBooking(Seed.theatres.first, null),
-              icon: const Icon(Icons.add),
-              label: Text(s.theatreBookDirect),
-              backgroundColor: AppColors.pink,
-              foregroundColor: Colors.white,
-            )
+          ? (state.policy.doctorsBookTheatreDirectly ||
+                  session.role == UserRole.admin
+              ? FloatingActionButton.extended(
+                  onPressed: () => _openBooking(Seed.theatres.first, null),
+                  icon: const Icon(Icons.add),
+                  label: Text(s.theatreBookDirect),
+                  backgroundColor: AppColors.pink,
+                  foregroundColor: Colors.white,
+                )
+              : FloatingActionButton.extended(
+                  onPressed: () => context.push('/theatre-request'),
+                  icon: const Icon(Icons.schedule_send_outlined),
+                  label: Text(s.doctorRequestTitle),
+                  backgroundColor: AppColors.navy,
+                  foregroundColor: Colors.white,
+                ))
           : null,
     );
   }

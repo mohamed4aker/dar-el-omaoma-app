@@ -10,6 +10,8 @@ import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../../domain/models/catalog.dart';
+import '../../domain/models/enums.dart';
+import '../admin/admin_governance_screens.dart' show paymentPolicyLabel;
 
 /// Deck slide 5: اختر عيادة → احجز الآن.
 class ClinicsScreen extends StatelessWidget {
@@ -199,6 +201,28 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
             ),
           ),
           const SizedBox(height: Gap.lg),
+          // Remaining capacity, so a patient sees the clinic filling up
+          // rather than just finding no slots.
+          Builder(builder: (context) {
+            final remaining = clinic.doctorIds
+                .map(Seed.doctorById)
+                .map((d) => state.remainingCapacity(d, _day))
+                .whereType<int>()
+                .fold<int?>(null, (a, b) => (a ?? 0) + b);
+            if (remaining == null) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(bottom: Gap.md),
+              child: InfoNote(
+                remaining == 0
+                    ? s.capacityFull
+                    : '$remaining ${s.capacityRemaining}',
+                icon: remaining == 0
+                    ? Icons.event_busy_outlined
+                    : Icons.groups_outlined,
+                color: remaining == 0 ? AppColors.danger : AppColors.success,
+              ),
+            );
+          }),
           if (slots.isEmpty)
             EmptyState(message: s.clinicNoSlots, icon: Icons.event_busy)
           else
@@ -228,6 +252,18 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
             icon: Icons.bolt_outlined,
             color: AppColors.success,
           ),
+          const SizedBox(height: Gap.md),
+          // Payment never blocks the booking; it is only ever an option.
+          InfoNote(
+            clinic.paymentPolicy.requiresDeposit
+                ? '${s.bookingDepositNote} '
+                    '${Fmt.money(clinic.depositAmount, s)}'
+                : s.bookingFreeNote,
+            icon: Icons.payments_outlined,
+            color: clinic.paymentPolicy.requiresDeposit
+                ? AppColors.warning
+                : AppColors.navy,
+          ),
         ],
       ),
     );
@@ -241,11 +277,21 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
       context.push('/login');
       return;
     }
+
+    var deposit = 0;
+    if (clinic.paymentPolicy.allowsOnlinePayment) {
+      final choice = await _askPayment(clinic);
+      if (choice == null) return;
+      deposit = choice;
+    }
+
+    if (!mounted) return;
     state.bookClinicAppointment(
       patientId: patient.id,
       clinicId: clinic.id,
       doctorId: clinic.doctorIds.first,
       start: slot,
+      depositPaid: deposit,
     );
     if (!mounted) return;
     await showDialog<void>(
@@ -268,7 +314,8 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: Gap.md),
-            StatusChip(s.bookingPayAtReception, color: AppColors.warning),
+            StatusChip(paymentPolicyLabel(clinic.paymentPolicy, s),
+                color: AppColors.warning),
           ],
         ),
         actions: [
@@ -277,6 +324,53 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
             child: Text(s.commonClose),
           ),
         ],
+      ),
+    );
+  }
+}
+
+extension on _ClinicDetailScreenState {
+  /// Offers payment, never demands it. Choosing "pay at reception" is always
+  /// available, including where a deposit is configured — the hospital can
+  /// then chase it, but the patient still leaves with a booking.
+  Future<int?> _askPayment(Clinic clinic) async {
+    final s = context.s;
+    final amount = clinic.paymentPolicy.requiresDeposit
+        ? clinic.depositAmount
+        : clinic.consultationFee;
+
+    return showModalBottomSheet<int>(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(Gap.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(paymentPolicyLabel(clinic.paymentPolicy, s),
+                style: Theme.of(context).textTheme.headlineMedium),
+            const SizedBox(height: Gap.md),
+            InfoNote(
+              clinic.paymentPolicy.requiresDeposit
+                  ? s.bookingDepositNote
+                  : s.bookingFreeNote,
+              icon: Icons.info_outline,
+            ),
+            const SizedBox(height: Gap.xl),
+            FilledButton.icon(
+              onPressed: () => Navigator.of(context).pop(amount),
+              icon: const Icon(Icons.credit_card),
+              label: Text('${s.bookingPayNow} — ${Fmt.money(amount, s)}'),
+            ),
+            const SizedBox(height: Gap.md),
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(0),
+              child: Text(s.bookingPayLater),
+            ),
+            const SizedBox(height: Gap.sm),
+          ],
+        ),
       ),
     );
   }

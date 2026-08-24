@@ -102,6 +102,27 @@ class AdminHomeScreen extends StatelessWidget {
         colour: AppColors.muted,
         route: '/notifications',
       ),
+      _Section(
+        icon: Icons.manage_accounts_outlined,
+        label: s.adminUsers,
+        count: state.staff.where((u) => u.isActive).length,
+        colour: AppColors.navy,
+        route: '/admin/users',
+      ),
+      _Section(
+        icon: Icons.tune,
+        label: s.adminPolicy,
+        count: state.policy.doctorsBookTheatreDirectly ? 1 : 0,
+        colour: AppColors.pink,
+        route: '/admin/policy',
+      ),
+      _Section(
+        icon: Icons.history,
+        label: s.adminAudit,
+        count: state.auditLog.length,
+        colour: AppColors.muted,
+        route: '/admin/audit',
+      ),
     ];
 
     return Scaffold(
