@@ -8,6 +8,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
+import '../more/more_screen.dart' show showChangePasswordDialog;
 
 /// Admin console home (PROMPT.md §14).
 ///
@@ -31,97 +32,161 @@ class AdminHomeScreen extends StatelessWidget {
       _ => 1.05,
     };
 
-    final sections = <_Section>[
-      _Section(
-        icon: Icons.category_outlined,
-        label: s.adminClassifications,
-        count: Seed.classifications.where((c) => c.isActive).length,
-        colour: AppColors.pink,
-        route: '/admin/classifications',
+    final today = Seed.today;
+    final todaysBookings = state
+        .allBookings()
+        .where((r) =>
+            r.at.year == today.year &&
+            r.at.month == today.month &&
+            r.at.day == today.day)
+        .length;
+
+    final groups = <(String, List<_Section>)>[
+      (
+        context.tr('الاستقبال', 'Reception'),
+        [
+          _Section(
+            icon: Icons.event_note_outlined,
+            label: context.tr('حجوزات اليوم', "Today's bookings"),
+            count: todaysBookings,
+            colour: AppColors.primary,
+            route: '/admin/bookings',
+          ),
+          _Section(
+            icon: Icons.people_alt_outlined,
+            label: context.tr('المرضى', 'Patients'),
+            count: state.patients.length,
+            colour: AppColors.accent,
+            route: '/admin/patients',
+          ),
+          _Section(
+            icon: Icons.feedback_outlined,
+            label: context.tr('شكاوى مفتوحة', 'Open complaints'),
+            count: state.complaints.where((c) => !c.isResolved).length,
+            colour: AppColors.warning,
+            route: '/admin/complaints',
+          ),
+          _Section(
+            icon: Icons.notifications_none,
+            label: s.moreNotifications,
+            count: state.myNotifications.length,
+            colour: AppColors.muted,
+            route: '/notifications',
+          ),
+        ],
       ),
-      _Section(
-        icon: Icons.healing_outlined,
-        label: s.adminProcedures,
-        count: Seed.procedures.length,
-        colour: AppColors.navy,
-        route: '/admin/procedures',
+      (
+        context.tr('بيانات المستشفى', 'Hospital data'),
+        [
+          _Section(
+            icon: Icons.local_hospital_outlined,
+            label: s.adminClinics,
+            count: Seed.clinics.length,
+            colour: AppColors.primary,
+            route: '/admin/clinics',
+          ),
+          _Section(
+            icon: Icons.badge_outlined,
+            label: s.adminDoctors,
+            count: Seed.doctors.length,
+            colour: AppColors.success,
+            route: '/admin/doctors',
+          ),
+          _Section(
+            icon: Icons.biotech_outlined,
+            label: context.tr('التحاليل والأسعار', 'Lab tests & prices'),
+            count: Seed.labTests.where((t) => t.isActive).length,
+            colour: AppColors.accent,
+            route: '/admin/lab-tests',
+          ),
+          _Section(
+            icon: Icons.local_offer_outlined,
+            label: context.tr('عروض المعمل', 'Lab offers'),
+            count: Seed.labPackages.where((p) => p.isActive).length,
+            colour: AppColors.primary,
+            route: '/admin/lab-packages',
+          ),
+          _Section(
+            icon: Icons.campaign_outlined,
+            label: s.adminOffers,
+            count: Seed.offers.length,
+            colour: AppColors.accent,
+            route: '/admin/offers',
+          ),
+          _Section(
+            icon: Icons.lightbulb_outline,
+            label: s.adminTips,
+            count: Seed.tips.length,
+            colour: AppColors.success,
+            route: '/admin/tips',
+          ),
+        ],
       ),
-      _Section(
-        icon: Icons.local_hospital_outlined,
-        label: s.adminClinics,
-        count: Seed.clinics.length,
-        colour: AppColors.navy,
-        route: '/admin/clinics',
+      (
+        context.tr('العمليات', 'Operating theatres'),
+        [
+          _Section(
+            icon: Icons.meeting_room_outlined,
+            label: s.adminTheatres,
+            count: Seed.theatres.length,
+            colour: AppColors.warning,
+            route: '/admin/theatres',
+          ),
+          _Section(
+            icon: Icons.healing_outlined,
+            label: s.adminProcedures,
+            count: Seed.procedures.length,
+            colour: AppColors.primary,
+            route: '/admin/procedures',
+          ),
+          _Section(
+            icon: Icons.category_outlined,
+            label: s.adminClassifications,
+            count: Seed.classifications.where((c) => c.isActive).length,
+            colour: AppColors.accent,
+            route: '/admin/classifications',
+          ),
+          _Section(
+            icon: Icons.fact_check_outlined,
+            label: s.approvalsTitle,
+            count: state.pendingApprovals.length,
+            colour: AppColors.danger,
+            route: '/approvals',
+          ),
+          _Section(
+            icon: Icons.event_available_outlined,
+            label: s.theatreAvailability,
+            count: state.casesOn(Seed.today).length,
+            colour: AppColors.primary,
+            route: '/theatre',
+          ),
+        ],
       ),
-      _Section(
-        icon: Icons.badge_outlined,
-        label: s.adminDoctors,
-        count: Seed.doctors.length,
-        colour: AppColors.success,
-        route: '/admin/doctors',
-      ),
-      _Section(
-        icon: Icons.meeting_room_outlined,
-        label: s.adminTheatres,
-        count: Seed.theatres.length,
-        colour: AppColors.warning,
-        route: '/admin/theatres',
-      ),
-      _Section(
-        icon: Icons.local_offer_outlined,
-        label: s.adminOffers,
-        count: Seed.offers.length,
-        colour: AppColors.pink,
-        route: '/admin/offers',
-      ),
-      _Section(
-        icon: Icons.lightbulb_outline,
-        label: s.adminTips,
-        count: Seed.tips.length,
-        colour: AppColors.success,
-        route: '/admin/tips',
-      ),
-      _Section(
-        icon: Icons.fact_check_outlined,
-        label: s.approvalsTitle,
-        count: state.pendingApprovals.length,
-        colour: AppColors.danger,
-        route: '/approvals',
-      ),
-      _Section(
-        icon: Icons.event_available_outlined,
-        label: s.theatreAvailability,
-        count: state.casesOn(Seed.today).length,
-        colour: AppColors.navy,
-        route: '/theatre',
-      ),
-      _Section(
-        icon: Icons.notifications_none,
-        label: s.moreNotifications,
-        count: state.notifications.length,
-        colour: AppColors.muted,
-        route: '/notifications',
-      ),
-      _Section(
-        icon: Icons.manage_accounts_outlined,
-        label: s.adminUsers,
-        count: state.staff.where((u) => u.isActive).length,
-        colour: AppColors.navy,
-        route: '/admin/users',
-      ),
-      _Section(
-        icon: Icons.tune,
-        label: s.adminPolicy,
-        count: state.policy.doctorsBookTheatreDirectly ? 1 : 0,
-        colour: AppColors.pink,
-        route: '/admin/policy',
-      ),
-      _Section(
-        icon: Icons.history,
-        label: s.adminAudit,
-        count: state.auditLog.length,
-        colour: AppColors.muted,
-        route: '/admin/audit',
+      (
+        context.tr('الإدارة', 'Administration'),
+        [
+          _Section(
+            icon: Icons.manage_accounts_outlined,
+            label: s.adminUsers,
+            count: state.staff.where((u) => u.isActive).length,
+            colour: AppColors.primary,
+            route: '/admin/users',
+          ),
+          _Section(
+            icon: Icons.tune,
+            label: s.adminPolicy,
+            count: state.policy.doctorsBookTheatreDirectly ? 1 : 0,
+            colour: AppColors.accent,
+            route: '/admin/policy',
+          ),
+          _Section(
+            icon: Icons.history,
+            label: s.adminAudit,
+            count: state.auditLog.length,
+            colour: AppColors.muted,
+            route: '/admin/audit',
+          ),
+        ],
       ),
     ];
 
@@ -131,28 +196,52 @@ class AdminHomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(s.adminConsole, style: const TextStyle(fontSize: 18)),
-            Text(s.appName,
-                style: const TextStyle(fontSize: 11, color: AppColors.pink)),
+            Text(state.session.staffName ?? s.appName,
+                style: const TextStyle(fontSize: 11, color: AppColors.accent)),
           ],
         ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(Gap.lg),
         children: [
+          if (state.adminUsesDefaultPassword) ...[
+            AppCard(
+              borderColor: AppColors.danger.withValues(alpha: 0.5),
+              child: Row(
+                children: [
+                  const Icon(Icons.warning_amber_rounded,
+                      color: AppColors.danger),
+                  const SizedBox(width: Gap.md),
+                  Expanded(
+                    child: Text(context.tr(
+                        'حساب الأدمن لسه بكلمة المرور الافتراضية. غيّرها دلوقتي.',
+                        'The admin account still uses the default password. Change it now.')),
+                  ),
+                  TextButton(
+                    onPressed: () => showChangePasswordDialog(context),
+                    child: Text(context.tr('تغيير', 'Change')),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: Gap.lg),
+          ],
           InfoNote(s.adminHomeNote, icon: Icons.admin_panel_settings_outlined),
-          const SizedBox(height: Gap.lg),
-          GridView.count(
-            crossAxisCount: columns,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: Gap.md,
-            mainAxisSpacing: Gap.md,
-            childAspectRatio: aspectRatio,
-            children: [
-              for (final section in sections)
-                _SectionTile(section: section),
-            ],
-          ),
+          for (final (title, sections) in groups) ...[
+            const SizedBox(height: Gap.xl),
+            SectionHeader(title),
+            GridView.count(
+              crossAxisCount: columns,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: Gap.md,
+              mainAxisSpacing: Gap.md,
+              childAspectRatio: aspectRatio,
+              children: [
+                for (final section in sections) _SectionTile(section: section),
+              ],
+            ),
+          ],
         ],
       ),
     );

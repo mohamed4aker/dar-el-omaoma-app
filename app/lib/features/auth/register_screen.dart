@@ -63,8 +63,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => _termsError = !_acceptedTerms);
     if (!formValid || !_acceptedTerms) return;
 
-    context.read<AppState>().signInAsPatient();
-    context.go('/home');
+    final result = context.read<AppState>().registerPatient(
+          fullName: _name.text,
+          nationalId: _nationalId.text,
+          phone: _phone.text,
+          email: _email.text,
+          companyName: _company.text,
+        );
+    switch (result) {
+      case RegistrationResult.created:
+        context.go('/home');
+      case RegistrationResult.alreadyRegistered:
+        showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(context.tr('الرقم القومي مسجل بالفعل', 'National ID already registered')),
+            content: Text(context.tr(
+                'فيه حساب بالرقم القومي ده على الجهاز. سجّل دخول بالرقم القومي ورقم الموبايل.',
+                'An account with this National ID exists on this device. Sign in with your National ID and mobile number.')),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(context.s.commonClose),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  context.pushReplacement('/login');
+                },
+                style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+                child: Text(context.s.loginTitle),
+              ),
+            ],
+          ),
+        );
+      case RegistrationResult.nationalIdInvalid:
+        _formKey.currentState?.validate();
+    }
   }
 
   @override

@@ -4,12 +4,16 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/l10n/app_strings.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/validation/national_id.dart';
+import '../../core/widgets/brand.dart';
 import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
-import '../../data/seed_data.dart';
 
+/// A returning patient signs in with their National ID and the mobile number
+/// they registered with. No SMS code: the hospital has no SMS gateway, and a
+/// code that never arrives is worse than no code.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -18,37 +22,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _nationalId = TextEditingController();
   final _phone = TextEditingController();
-  final _otp = TextEditingController();
-  bool _otpSent = false;
-  String? _error;
+  bool _failed = false;
 
   @override
   void dispose() {
+    _nationalId.dispose();
     _phone.dispose();
-    _otp.dispose();
     super.dispose();
   }
 
-  void _sendOtp() {
-    if (!PhoneNumber.isValid(_phone.text)) {
-      setState(() => _error = context.s.errorPhoneInvalid);
+  void _submit() {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    final ok = context.read<AppState>().signInPatient(
+          nationalId: _nationalId.text,
+          phone: _phone.text,
+        );
+    if (!ok) {
+      setState(() => _failed = true);
       return;
     }
-    setState(() {
-      _error = null;
-      _otpSent = true;
-    });
-  }
-
-  void _verify() {
-    // Demo build. In production the code is verified server-side, rate limited
-    // to three sends per hour and five attempts (PROMPT.md section 6.2).
-    if (_otp.text.trim() != '123456') {
-      setState(() => _error = context.s.otpInvalid);
-      return;
-    }
-    context.read<AppState>().signInAsPatient();
     context.go('/home');
   }
 
@@ -58,117 +53,75 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(s.loginTitle)),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(Gap.xl),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(Gap.xl),
             children: [
+              const Center(child: BrandMark(size: 80)),
+              const SizedBox(height: Gap.xl),
               Text(
-                _otpSent ? '${s.otpSubtitle} ${_phone.text}' : s.loginSubtitle,
+                context.tr('ادخل رقمك القومي ورقم الموبايل اللي سجلت بيه.',
+                    'Enter your National ID and the mobile number you registered with.'),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: Gap.xl),
-              if (!_otpSent) ...[
-                TextField(
-                  controller: _phone,
-                  keyboardType: TextInputType.phone,
-                  textDirection: TextDirection.ltr,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(11),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: s.loginPhoneLabel,
-                    hintText: s.loginPhoneHint,
-                    errorText: _error,
-                    prefixIcon: const Icon(Icons.phone_outlined),
-                  ),
+              TextFormField(
+                controller: _nationalId,
+                keyboardType: TextInputType.number,
+                textDirection: TextDirection.ltr,
+                textInputAction: TextInputAction.next,
+                inputFormatters: [LengthLimitingTextInputFormatter(14)],
+                decoration: InputDecoration(
+                  labelText: s.registerNationalId,
+                  prefixIcon: const Icon(Icons.badge_outlined),
+                  counterText: '',
                 ),
-                const SizedBox(height: Gap.xl),
-                FilledButton(onPressed: _sendOtp, child: Text(s.loginSendOtp)),
-              ] else ...[
-                TextField(
-                  controller: _otp,
-                  keyboardType: TextInputType.number,
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.center,
-                  autofocus: true,
-                  style: const TextStyle(fontSize: 24, letterSpacing: 8),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(6),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: s.otpTitle,
-                    errorText: _error,
-                  ),
+                validator: (v) => NationalId.parse(v ?? '').isValid
+                    ? null
+                    : s.errorNationalIdLength,
+                onChanged: (_) {
+                  if (_failed) setState(() => _failed = false);
+                },
+              ),
+              const SizedBox(height: Gap.lg),
+              TextFormField(
+                controller: _phone,
+                keyboardType: TextInputType.phone,
+                textDirection: TextDirection.ltr,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(11),
+                ],
+                decoration: InputDecoration(
+                  labelText: s.registerPhone,
+                  hintText: s.loginPhoneHint,
+                  prefixIcon: const Icon(Icons.phone_outlined),
+                  counterText: '',
                 ),
+                validator: (v) =>
+                    PhoneNumber.isValid(v ?? '') ? null : s.errorPhoneInvalid,
+                onChanged: (_) {
+                  if (_failed) setState(() => _failed = false);
+                },
+                onFieldSubmitted: (_) => _submit(),
+              ),
+              if (_failed) ...[
                 const SizedBox(height: Gap.lg),
-                InfoNote(s.loginDemoHint),
-                const SizedBox(height: Gap.xl),
-                FilledButton(onPressed: _verify, child: Text(s.otpVerify)),
-                const SizedBox(height: Gap.sm),
-                TextButton(
-                  onPressed: () => setState(() {
-                    _otpSent = false;
-                    _otp.clear();
-                    _error = null;
-                  }),
-                  child: Text(s.otpResend),
+                InfoNote(
+                  context.tr(
+                      'البيانات دي مش مطابقة لحساب على الجهاز ده. اتأكد من الرقم القومي ورقم الموبايل، أو أنشئ حساب جديد.',
+                      'These details do not match an account on this device. Check your National ID and mobile number, or create an account.'),
+                  icon: Icons.error_outline,
+                  color: AppColors.danger,
                 ),
               ],
-              const SizedBox(height: Gap.xxl),
-              const Divider(),
-              const SizedBox(height: Gap.lg),
-              // Demo-only role switch. In production the role is carried by the
-              // server-issued session token and is never selectable in the
-              // client (PROMPT.md section 5).
-              Text(
-                context.s.localeName == 'en'
-                    ? 'Demo: enter as a doctor to open the theatre module'
-                    : 'تجريبي: ادخل كطبيب لتجربة وحدة غرف العمليات',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              const SizedBox(height: Gap.xl),
+              FilledButton(onPressed: _submit, child: Text(s.loginTitle)),
               const SizedBox(height: Gap.md),
-              Wrap(
-                spacing: Gap.sm,
-                runSpacing: Gap.sm,
-                children: [
-                  for (final doctor in Seed.doctors.take(3))
-                    OutlinedButton(
-                      onPressed: () {
-                        context.read<AppState>().signInAsDoctor(doctor.id);
-                        context.go('/home');
-                      },
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, kMinTouchTarget),
-                        padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-                      ),
-                      child: Text(doctor.name(s.localeName)),
-                    ),
-                  OutlinedButton(
-                    onPressed: () {
-                      context.read<AppState>().signInAsApprover();
-                      context.go('/home');
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(0, kMinTouchTarget),
-                      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-                    ),
-                    child: Text(s.approvalsTitle),
-                  ),
-                  FilledButton(
-                    onPressed: () {
-                      context.read<AppState>().signInAsAdmin();
-                      context.go('/home');
-                    },
-                    style: FilledButton.styleFrom(
-                      minimumSize: const Size(0, kMinTouchTarget),
-                      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-                    ),
-                    child: Text(s.adminConsole),
-                  ),
-                ],
+              TextButton(
+                onPressed: () => context.pushReplacement('/register'),
+                child: Text(context.tr('أول مرة؟ أنشئ حساب', 'First time? Create an account')),
               ),
             ],
           ),

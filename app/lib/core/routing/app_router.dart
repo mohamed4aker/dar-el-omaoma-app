@@ -6,12 +6,16 @@ import '../../data/app_state.dart';
 import '../../domain/models/enums.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
+import '../../features/auth/staff_login_screen.dart';
 import '../../features/auth/welcome_screen.dart';
+import '../../features/admin/admin_bookings_screen.dart';
 import '../../features/admin/admin_catalog_screens.dart';
+import '../../features/admin/admin_lab_screens.dart';
 import '../../features/admin/admin_content_screens.dart';
 import '../../features/admin/admin_governance_screens.dart';
 import '../../features/admin/admin_home_screen.dart';
 import '../../features/approvals/approvals_screen.dart';
+import '../../features/bookings/my_bookings_screen.dart';
 import '../../features/bloodbank/blood_bank_screen.dart';
 import '../../features/centres/centres_screen.dart';
 import '../../features/clinics/clinics_screen.dart';
@@ -20,6 +24,7 @@ import '../../features/content/content_screens.dart';
 import '../../features/content/home_care_screen.dart';
 import '../../features/diagnostics/diagnostics_screens.dart';
 import '../../features/home/home_screen.dart';
+import '../../features/lab/lab_screen.dart';
 import '../../features/medical_file/medical_file_screen.dart';
 import '../../features/more/more_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
@@ -33,9 +38,26 @@ import '../../features/visiting/visiting_screen.dart';
 
 /// Routes are declared as paths so that Universal Links and App Links map onto
 /// them directly (PROMPT.md section 12.3).
-GoRouter buildRouter() {
+GoRouter buildRouter({required AppState state}) {
   return GoRouter(
-    initialLocation: '/welcome',
+    // A returning user lands on home; first launch shows the welcome screen.
+    initialLocation: state.session.isSignedIn ? '/home' : '/welcome',
+    refreshListenable: state,
+    redirect: (context, route) {
+      final path = route.matchedLocation;
+      final staffOnly = path.startsWith('/admin') ||
+          path.startsWith('/approvals') ||
+          path.startsWith('/theatre');
+      if (staffOnly && !state.session.isStaff) return '/staff-login';
+      if (path.startsWith('/admin/') &&
+          !path.startsWith('/admin/bookings') &&
+          !path.startsWith('/admin/patients') &&
+          !path.startsWith('/admin/complaints') &&
+          state.session.role != UserRole.admin) {
+        return '/home';
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/welcome',
@@ -43,6 +65,9 @@ GoRouter buildRouter() {
       ),
       GoRoute(path: '/login', builder: (_, _) => const LoginScreen()),
       GoRoute(path: '/register', builder: (_, _) => const RegisterScreen()),
+      GoRoute(
+          path: '/staff-login', builder: (_, _) => const StaffLoginScreen()),
+      GoRoute(path: '/bookings', builder: (_, _) => const MyBookingsScreen()),
       GoRoute(path: '/about', builder: (_, _) => const AboutScreen()),
       GoRoute(path: '/contact', builder: (_, _) => const ContactScreen()),
 
@@ -56,6 +81,15 @@ GoRouter buildRouter() {
             builder: (_, state) => ClinicDetailScreen(
               clinicId: state.pathParameters['clinicId']!,
             ),
+            routes: [
+              GoRoute(
+                path: 'doctor/:doctorId',
+                builder: (_, state) => DoctorBookingScreen(
+                  clinicId: state.pathParameters['clinicId']!,
+                  doctorId: state.pathParameters['doctorId']!,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -133,6 +167,29 @@ GoRouter buildRouter() {
               path: 'users', builder: (_, _) => const UsersAdminScreen()),
           GoRoute(
               path: 'audit', builder: (_, _) => const AuditAdminScreen()),
+          GoRoute(
+              path: 'bookings',
+              builder: (_, _) => const AdminBookingsScreen()),
+          GoRoute(
+            path: 'patients',
+            builder: (_, _) => const AdminPatientsScreen(),
+            routes: [
+              GoRoute(
+                path: ':patientId',
+                builder: (_, state) => AdminPatientDetailScreen(
+                    patientId: state.pathParameters['patientId']!),
+              ),
+            ],
+          ),
+          GoRoute(
+              path: 'complaints',
+              builder: (_, _) => const AdminComplaintsScreen()),
+          GoRoute(
+              path: 'lab-tests',
+              builder: (_, _) => const AdminLabTestsScreen()),
+          GoRoute(
+              path: 'lab-packages',
+              builder: (_, _) => const AdminLabPackagesScreen()),
         ],
       ),
 
@@ -168,8 +225,11 @@ class _FileOrPractice extends StatelessWidget {
     final session = context.watch<AppState>().session;
     return switch (session.role) {
       UserRole.admin => const AdminHomeScreen(),
-      UserRole.doctor => const TheatreAvailabilityScreen(),
-      UserRole.surgeryApprover => const ApprovalsScreen(),
+      UserRole.reception => const AdminBookingsScreen(),
+      UserRole.doctor => AdminBookingsScreen(doctorId: session.doctorId),
+      UserRole.surgeryApprover ||
+      UserRole.orScheduler =>
+        const ApprovalsScreen(),
       _ => const MedicalFileScreen(),
     };
   }

@@ -32,7 +32,7 @@ class PolicyAdminScreen extends StatelessWidget {
         padding: const EdgeInsets.all(Gap.lg),
         children: [
           AppCard(
-            borderColor: AppColors.pink.withValues(alpha: 0.5),
+            borderColor: AppColors.accent.withValues(alpha: 0.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,7 +53,7 @@ class PolicyAdminScreen extends StatelessWidget {
                       : Icons.schedule_send_outlined,
                   color: policy.doctorsBookTheatreDirectly
                       ? AppColors.success
-                      : AppColors.navy,
+                      : AppColors.primary,
                 ),
               ],
             ),
@@ -199,11 +199,11 @@ class UsersAdminScreen extends StatelessWidget {
             subtitle: user.roles.map((r) => roleLabel(r, s)).join(' · '),
             dimmed: !user.isActive,
             leading: CircleAvatar(
-              backgroundColor: AppColors.navyTint,
+              backgroundColor: AppColors.primaryTint,
               child: Text(
                 user.name.characters.first,
                 style: const TextStyle(
-                    color: AppColors.navy, fontWeight: FontWeight.w700),
+                    color: AppColors.primary, fontWeight: FontWeight.w700),
               ),
             ),
             trailing: Switch(
@@ -240,9 +240,13 @@ class _UserFormState extends State<_UserForm> {
       TextEditingController(text: widget.existing?.phone ?? '');
   late final Set<UserRole> _roles = {...?widget.existing?.roles};
   late String? _doctorId = widget.existing?.doctorId;
+  late final _username =
+      TextEditingController(text: widget.existing?.username ?? '');
+  final _password = TextEditingController();
 
   static const _assignable = [
     UserRole.admin,
+    UserRole.reception,
     UserRole.surgeryApprover,
     UserRole.orScheduler,
     UserRole.doctor,
@@ -252,7 +256,26 @@ class _UserFormState extends State<_UserForm> {
   void dispose() {
     _name.dispose();
     _phone.dispose();
+    _username.dispose();
+    _password.dispose();
     super.dispose();
+  }
+
+  String? get _credentialsError {
+    final state = context.read<AppState>();
+    final username = _username.text.trim();
+    if (username.length < 3) {
+      return context.tr('اسم المستخدم 3 حروف على الأقل', 'Username needs 3+ characters');
+    }
+    if (state.usernameTaken(username, exceptId: widget.existing?.id)) {
+      return context.tr('اسم المستخدم مستخدم بالفعل', 'Username already taken');
+    }
+    final isNew = widget.existing == null ||
+        widget.existing!.passwordHash.isEmpty;
+    if ((isNew || _password.text.isNotEmpty) && _password.text.length < 6) {
+      return context.tr('كلمة المرور 6 حروف على الأقل', 'Password needs 6+ characters');
+    }
+    return null;
   }
 
   @override
@@ -260,7 +283,9 @@ class _UserFormState extends State<_UserForm> {
     final s = context.s;
     return AdminFormSheet(
       title: widget.existing == null ? s.adminNewUser : s.adminEditUser,
-      saveEnabled: _name.text.trim().isNotEmpty && _roles.isNotEmpty,
+      saveEnabled: _name.text.trim().isNotEmpty &&
+          _roles.isNotEmpty &&
+          _credentialsError == null,
       onSave: _save,
       children: [
         AdminField(
@@ -273,6 +298,29 @@ class _UserFormState extends State<_UserForm> {
           label: s.registerPhone,
           textDirection: TextDirection.ltr,
         ),
+        AdminSectionLabel(context.tr('بيانات الدخول', 'Sign-in')),
+        AdminField(
+          controller: _username,
+          label: context.tr('اسم المستخدم', 'Username'),
+          textDirection: TextDirection.ltr,
+          onChanged: (_) => setState(() {}),
+        ),
+        AdminField(
+          controller: _password,
+          label: widget.existing == null
+              ? context.tr('كلمة المرور', 'Password')
+              : context.tr('كلمة مرور جديدة (سيبها فاضية لو مش هتغيرها)',
+                  'New password (leave empty to keep)'),
+          textDirection: TextDirection.ltr,
+          onChanged: (_) => setState(() {}),
+        ),
+        if (_credentialsError != null &&
+            (_username.text.isNotEmpty || _password.text.isNotEmpty))
+          Padding(
+            padding: const EdgeInsets.only(bottom: Gap.lg),
+            child: Text(_credentialsError!,
+                style: const TextStyle(color: AppColors.danger)),
+          ),
         AdminSectionLabel(s.adminRoles),
         for (final role in _assignable)
           CheckboxListTile(
@@ -319,6 +367,8 @@ class _UserFormState extends State<_UserForm> {
           roles: _roles,
           doctorId: _doctorId,
           isActive: widget.existing?.isActive ?? true,
+          username: _username.text.trim(),
+          password: _password.text.isEmpty ? null : _password.text,
         );
     Navigator.of(context).pop();
   }
@@ -422,6 +472,8 @@ String roleLabel(UserRole role, AppStrings s) =>
       (UserRole.surgeryApprover, _) => 'موافق العمليات',
       (UserRole.orScheduler, 'en') => 'Theatre scheduler',
       (UserRole.orScheduler, _) => 'منسق غرف العمليات',
+      (UserRole.reception, 'en') => 'Reception',
+      (UserRole.reception, _) => 'استقبال',
       (UserRole.doctor, 'en') => 'Doctor',
       (UserRole.doctor, _) => 'طبيب',
       (UserRole.patient, 'en') => 'Patient',
@@ -432,6 +484,8 @@ String roleLabel(UserRole role, AppStrings s) =>
 
 String rolePermissions(UserRole role, AppStrings s) {
   final permissions = <String>[
+    if (role.canManageBookings)
+      s.localeName == 'en' ? 'Bookings & patients' : 'الحجوزات والمرضى',
     if (role.canManageCatalogue) s.permManageCatalogue,
     if (role.canManageUsers) s.permManageUsers,
     if (role.canApproveSurgery) s.permApprove,

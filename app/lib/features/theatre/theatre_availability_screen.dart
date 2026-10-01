@@ -122,14 +122,14 @@ class _TheatreAvailabilityScreenState extends State<TheatreAvailabilityScreen> {
                   onPressed: () => _openBooking(Seed.theatres.first, null),
                   icon: const Icon(Icons.add),
                   label: Text(s.theatreBookDirect),
-                  backgroundColor: AppColors.pink,
+                  backgroundColor: AppColors.accent,
                   foregroundColor: Colors.white,
                 )
               : FloatingActionButton.extended(
                   onPressed: () => context.push('/theatre-request'),
                   icon: const Icon(Icons.schedule_send_outlined),
                   label: Text(s.doctorRequestTitle),
-                  backgroundColor: AppColors.navy,
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                 ))
           : null,
@@ -171,11 +171,11 @@ class _DayStrip extends StatelessWidget {
               width: 66,
               padding: const EdgeInsets.symmetric(vertical: Gap.sm),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.navy : Colors.transparent,
+                color: isSelected ? AppColors.primary : Colors.transparent,
                 borderRadius: BorderRadius.circular(Radii.input),
                 border: Border.all(
                   color: isSelected
-                      ? AppColors.navy
+                      ? AppColors.primary
                       : Theme.of(context).colorScheme.outline,
                 ),
               ),
@@ -267,7 +267,7 @@ class _Legend extends StatelessWidget {
         runSpacing: Gap.xs,
         children: [
           _LegendItem(color: AppColors.success, label: s.theatreFree),
-          _LegendItem(color: AppColors.navy, label: s.theatreBooked),
+          _LegendItem(color: AppColors.primary, label: s.theatreBooked),
           _LegendItem(color: AppColors.warning, label: s.theatreProvisional),
           _LegendItem(color: AppColors.muted, label: s.theatreTurnover),
           _LegendItem(color: AppColors.danger, label: s.theatreBlocked),
@@ -453,7 +453,7 @@ class _TheatreRow extends StatelessWidget {
                     width: _widthFor(c.range),
                     color: c.origin == BookingOrigin.patientRequest
                         ? AppColors.warning
-                        : AppColors.navy,
+                        : AppColors.primary,
                     accent: Seed.classificationById(c.classificationId).colour,
                     label: Seed.procedureById(c.procedureId).name(s.localeName),
                     sublabel:

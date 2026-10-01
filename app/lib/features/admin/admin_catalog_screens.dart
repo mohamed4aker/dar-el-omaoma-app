@@ -10,7 +10,6 @@ import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../../domain/models/catalog.dart';
 import '../../domain/models/enums.dart';
-import 'admin_governance_screens.dart' show paymentPolicyLabel, paymentPolicyNote;
 import 'shift_editor.dart';
 import 'admin_widgets.dart';
 
@@ -506,20 +505,21 @@ class _ClinicFormState extends State<_ClinicForm> {
   late final _nameEn =
       TextEditingController(text: widget.existing?.name.en ?? '');
   late final _fee = TextEditingController(
-      text: '${widget.existing?.consultationFee ?? 500}');
+      text: '${widget.existing?.consultationFee ?? 0}');
   late final _followUp =
-      TextEditingController(text: '${widget.existing?.followUpFee ?? 250}');
+      TextEditingController(text: '${widget.existing?.followUpFee ?? 0}');
+  late final _note = TextEditingController(text: widget.existing?.note ?? '');
   late final List<int> _days = [...?widget.existing?.workingDays];
   late final List<String> _doctorIds = [...?widget.existing?.doctorIds];
   late String? _centreId = widget.existing?.centreId;
-  late PaymentPolicy _payment =
+  late final PaymentPolicy _payment =
       widget.existing?.paymentPolicy ?? PaymentPolicy.payAtReception;
   late final _deposit =
       TextEditingController(text: '${widget.existing?.depositAmount ?? 0}');
 
   @override
   void dispose() {
-    for (final c in [_nameAr, _nameEn, _fee, _followUp, _deposit]) {
+    for (final c in [_nameAr, _nameEn, _fee, _followUp, _deposit, _note]) {
       c.dispose();
     }
     super.dispose();
@@ -560,6 +560,18 @@ class _ClinicFormState extends State<_ClinicForm> {
             ),
           ],
         ),
+        AdminField(
+          controller: _note,
+          label: context.tr('ملاحظة تظهر للمرضى (اختياري)',
+              'Note shown to patients (optional)'),
+          hint: context.tr('مثال: خارج التعاقد', 'e.g. not covered by contracts'),
+        ),
+        InfoNote(
+          context.tr('سعر الكشف 0 = "يُحدد في الاستقبال".',
+              'A fee of 0 shows as "set at reception".'),
+          icon: Icons.info_outline,
+        ),
+        const SizedBox(height: Gap.lg),
         AdminSectionLabel(s.adminWorkingDays),
         WeekdayPicker(
           selected: _days,
@@ -571,21 +583,28 @@ class _ClinicFormState extends State<_ClinicForm> {
         if (Seed.doctors.isEmpty)
           InfoNote(s.adminAddDoctorFirst, color: AppColors.warning)
         else
-          Wrap(
-            spacing: Gap.sm,
-            runSpacing: Gap.sm,
-            children: [
-              for (final doctor in Seed.doctors)
-                FilterChip(
-                  label: Text(doctor.name(s.localeName)),
-                  selected: _doctorIds.contains(doctor.id),
-                  onSelected: (_) => setState(() {
-                    _doctorIds.contains(doctor.id)
-                        ? _doctorIds.remove(doctor.id)
-                        : _doctorIds.add(doctor.id);
-                  }),
-                ),
+          SelectionField(
+            labels: [
+              for (final id in _doctorIds)
+                (id, Seed.doctorById(id).name(s.localeName)),
             ],
+            addLabel: context.tr('اختيار الأطباء', 'Choose doctors'),
+            onRemove: (id) => setState(() => _doctorIds.remove(id)),
+            onEdit: () async {
+              final picked = await showMultiPicker(
+                context: context,
+                title: s.adminDoctors,
+                options: [
+                  for (final d in Seed.doctors) (d.id, d.name(s.localeName)),
+                ],
+                selected: _doctorIds,
+              );
+              if (picked != null) {
+                setState(() => _doctorIds
+                  ..clear()
+                  ..addAll(picked));
+              }
+            },
           ),
         const SizedBox(height: Gap.lg),
         AdminSectionLabel(s.adminCentre),
@@ -602,30 +621,15 @@ class _ClinicFormState extends State<_ClinicForm> {
         ),
         const SizedBox(height: Gap.xl),
 
-        // Payment never blocks a booking. This only decides whether the app
-        // offers to take money, and whether a deposit holds the slot.
+        // Payment never blocks a booking. Online payment and deposits need a
+        // payment gateway; until one is connected, patients pay at reception
+        // and the app does not pretend otherwise.
         AdminSectionLabel(s.adminPaymentPolicy),
-        for (final option in PaymentPolicy.values)
-          RadioListTile<PaymentPolicy>(
-            value: option,
-            // ignore: deprecated_member_use
-            groupValue: _payment,
-            // ignore: deprecated_member_use
-            onChanged: (v) => setState(() => _payment = v ?? _payment),
-            contentPadding: EdgeInsets.zero,
-            title: Text(paymentPolicyLabel(option, s),
-                style: Theme.of(context).textTheme.titleMedium),
-            subtitle: Text(paymentPolicyNote(option, s),
-                style: Theme.of(context).textTheme.bodySmall),
-          ),
-        if (_payment.requiresDeposit) ...[
-          const SizedBox(height: Gap.md),
-          AdminField(
-            controller: _deposit,
-            label: '${s.adminDepositAmount} (${s.commonEgp})',
-            digitsOnly: true,
-          ),
-        ],
+        InfoNote(
+          context.tr('الدفع في الاستقبال. الدفع أونلاين والعربون بيتفعلوا لما تتربط بوابة دفع.',
+              'Payment at reception. Online payment and deposits switch on once a payment gateway is connected.'),
+          icon: Icons.payments_outlined,
+        ),
       ],
     );
   }
@@ -657,6 +661,7 @@ class _ClinicFormState extends State<_ClinicForm> {
       centreId: _centreId,
       paymentPolicy: _payment,
       depositAmount: parseIntOr(_deposit.text, 0),
+      note: _note.text,
     );
     if (mounted) Navigator.of(context).pop();
   }
@@ -681,16 +686,24 @@ class DoctorsAdminScreen extends StatelessWidget {
         for (final doctor in Seed.doctors)
           AdminRow(
             title: doctor.name(s.localeName),
-            subtitle: '${doctor.title(s.localeName)} · '
-                '${doctor.specialty(s.localeName)}'
-                '${doctor.shifts.isEmpty ? "" : " · ${doctor.shifts.length} ${s.adminWorkingDays}"}'
-                '${doctor.weeklyCapacity == 0 ? "" : " · ${doctor.weeklyCapacity} ${s.adminDoctorsCount}"}',
+            subtitle: [
+              if (doctor.title(s.localeName).isNotEmpty) doctor.title(s.localeName),
+              doctor.specialty(s.localeName),
+              if (doctor.shifts.isEmpty)
+                context.tr('بدون مواعيد أونلاين', 'no online hours')
+              else
+                context.tr('${doctor.shifts.length} أيام عمل',
+                    '${doctor.shifts.length} working days'),
+              if (doctor.weeklyCapacity > 0)
+                context.tr('${doctor.weeklyCapacity} كشف/أسبوع',
+                    '${doctor.weeklyCapacity} visits/week'),
+            ].join(' · '),
             leading: const CircleAvatar(
-              backgroundColor: AppColors.navyTint,
-              child: Icon(Icons.person_outline, color: AppColors.navy),
+              backgroundColor: AppColors.primaryTint,
+              child: Icon(Icons.person_outline, color: AppColors.primary),
             ),
             trailing: StatusChip('${s.adminSeniority} ${doctor.seniority}',
-                color: AppColors.navy),
+                color: AppColors.primary),
             onTap: () => _openForm(context, doctor),
           ),
       ],
@@ -731,11 +744,19 @@ class _DoctorFormState extends State<_DoctorForm> {
   late int _seniority = widget.existing?.seniority ?? 3;
   late String? _centreId = widget.existing?.centreId;
   late final List<DoctorShift> _shifts = [...?widget.existing?.shifts];
+  late final _note =
+      TextEditingController(text: widget.existing?.scheduleNote ?? '');
+  late final List<String> _clinicIds = [
+    for (final c in Seed.clinics)
+      if (widget.existing != null && c.doctorIds.contains(widget.existing!.id))
+        c.id,
+  ];
 
   @override
   void dispose() {
     for (final c in [
       _nameAr, _nameEn, _titleAr, _titleEn, _specialtyAr, _specialtyEn,
+      _note,
     ]) {
       c.dispose();
     }
@@ -777,19 +798,53 @@ class _DoctorFormState extends State<_DoctorForm> {
           label: '$_seniority',
           onChanged: (v) => setState(() => _seniority = v.round()),
         ),
-        AdminSectionLabel(s.adminCentre),
-        DropdownButtonFormField<String?>(
-          initialValue: _centreId,
-          isExpanded: true,
-          items: [
-            DropdownMenuItem(value: null, child: Text(s.adminNoCentre)),
-            for (final centre in Seed.centres)
-              DropdownMenuItem(
-                  value: centre.id, child: Text(centre.name(s.localeName))),
+        AdminSectionLabel(s.adminClinics),
+        SelectionField(
+          labels: [
+            for (final id in _clinicIds)
+              (id, Seed.clinicById(id)?.name(s.localeName) ?? id),
           ],
-          onChanged: (id) => setState(() => _centreId = id),
+          addLabel: context.tr('اختيار العيادات', 'Choose clinics'),
+          onRemove: (id) => setState(() => _clinicIds.remove(id)),
+          onEdit: () async {
+            final picked = await showMultiPicker(
+              context: context,
+              title: s.adminClinics,
+              options: [
+                for (final c in Seed.clinics) (c.id, c.name(s.localeName)),
+              ],
+              selected: _clinicIds,
+            );
+            if (picked != null) {
+              setState(() => _clinicIds
+                ..clear()
+                ..addAll(picked));
+            }
+          },
         ),
+        if (Seed.centres.isNotEmpty) ...[
+          AdminSectionLabel(s.adminCentre),
+          DropdownButtonFormField<String?>(
+            initialValue: _centreId,
+            isExpanded: true,
+            items: [
+              DropdownMenuItem(value: null, child: Text(s.adminNoCentre)),
+              for (final centre in Seed.centres)
+                DropdownMenuItem(
+                    value: centre.id, child: Text(centre.name(s.localeName))),
+            ],
+            onChanged: (id) => setState(() => _centreId = id),
+          ),
+        ],
         const SizedBox(height: Gap.xl),
+        AdminField(
+          controller: _note,
+          label: context.tr('المواعيد كما تظهر للمرضى (نص)',
+              'Timetable as shown to patients (text)'),
+          hint: context.tr('مثال: السبت والثلاثاء 6 مساءً',
+              'e.g. Saturday and Tuesday 6 pm'),
+          maxLines: 3,
+        ),
 
         // Working hours and capacity: this is what actually generates the
         // slots a patient can book.
@@ -842,6 +897,8 @@ class _DoctorFormState extends State<_DoctorForm> {
       seniority: _seniority,
       centreId: _centreId,
       shifts: _shifts,
+      scheduleNote: _note.text.trim(),
+      clinicIds: _clinicIds,
     );
     if (mounted) Navigator.of(context).pop();
   }

@@ -1,36 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'data/app_state.dart';
+import 'data/storage.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // The hospital's catalogue ships inside the app; everything after the first
+  // launch is read back from the device.
+  final bundled = Map<String, dynamic>.from(jsonDecode(
+          await rootBundle.loadString('assets/seed/hospital_data.json'))
+      as Map);
+  final state = AppState(storage: PrefsStorage());
+  await state.load(bundled: bundled);
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppState(),
-      child: const DarElOmoumaApp(),
+    ChangeNotifierProvider.value(
+      value: state,
+      child: DarElOmoumaApp(state: state),
     ),
   );
 }
 
 class DarElOmoumaApp extends StatefulWidget {
-  const DarElOmoumaApp({super.key});
+  const DarElOmoumaApp({required this.state, super.key});
+
+  final AppState state;
 
   @override
   State<DarElOmoumaApp> createState() => _DarElOmoumaAppState();
 }
 
 class _DarElOmoumaAppState extends State<DarElOmoumaApp> {
-  final _router = buildRouter();
+  late final _router = buildRouter(state: widget.state);
 
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
 
     return MaterialApp.router(
-      title: 'Dar El Omouma',
+      title: 'دار الأمومة',
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       theme: AppTheme.light(),

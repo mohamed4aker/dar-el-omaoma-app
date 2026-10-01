@@ -1,5 +1,13 @@
 /// Roles, per PROMPT.md section 3.2.
-enum UserRole { guest, patient, doctor, orScheduler, surgeryApprover, admin }
+enum UserRole {
+  guest,
+  patient,
+  doctor,
+  reception,
+  orScheduler,
+  surgeryApprover,
+  admin,
+}
 
 extension UserRoleX on UserRole {
   bool get canBookTheatreDirectly => switch (this) {
@@ -31,6 +39,11 @@ extension UserRoleX on UserRole {
   bool get canManageUsers => this == UserRole.admin;
 
   bool get canViewAuditLog => this == UserRole.admin;
+
+  /// Reception: every booking and patient, booking on a caller's behalf,
+  /// marking attendance, answering complaints.
+  bool get canManageBookings =>
+      this == UserRole.reception || this == UserRole.admin;
 }
 
 /// Booking origin — used to distinguish doctor-direct bookings (no approval)

@@ -209,11 +209,11 @@ class _RequestSheetState extends State<_RequestSheet> {
                   child: Container(
                     width: 72,
                     decoration: BoxDecoration(
-                      color: selected ? AppColors.navy : Colors.transparent,
+                      color: selected ? AppColors.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(Radii.input),
                       border: Border.all(
                         color: selected
-                            ? AppColors.navy
+                            ? AppColors.primary
                             : Theme.of(context).colorScheme.outline,
                       ),
                     ),
@@ -334,8 +334,8 @@ class _RequestCard extends StatelessWidget {
         Seed.homeCareServices.firstWhere((x) => x.id == request.serviceId);
 
     final (label, colour) = switch (request.status) {
-      HomeCareStatus.submitted => (s.statusSubmitted, AppColors.navy),
-      HomeCareStatus.scheduled => (s.statusScheduled, AppColors.navy),
+      HomeCareStatus.submitted => (s.statusSubmitted, AppColors.primary),
+      HomeCareStatus.scheduled => (s.statusScheduled, AppColors.primary),
       HomeCareStatus.enRoute => (
           s.localeName == 'en' ? 'On the way' : 'الفريق في الطريق',
           AppColors.warning

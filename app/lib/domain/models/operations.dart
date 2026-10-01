@@ -27,6 +27,7 @@ class AppNotification {
     this.entityId,
     this.deepLink,
     this.carriesPhi = false,
+    this.recipientId,
   });
 
   /// A staff alert. Free of protected health information by construction.
@@ -71,6 +72,10 @@ class AppNotification {
 
   /// True only for in-app content, which is behind authentication.
   final bool carriesPhi;
+
+  /// The patient this is addressed to. Null for staff alerts, which every
+  /// member of staff with the matching role sees.
+  final String? recipientId;
 
   bool get isExternalChannel =>
       channel == NotifyChannel.whatsapp || channel == NotifyChannel.sms;

@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
+import '../core/validation/national_id.dart';
 import '../domain/models/booking.dart';
 import '../domain/models/catalog.dart';
 import '../domain/models/content.dart';
@@ -9,7 +14,9 @@ import '../domain/models/operations.dart';
 import '../domain/models/patient.dart';
 import '../domain/models/time_range.dart';
 import '../domain/scheduling/booking_conflicts.dart';
+import 'codec.dart';
 import 'seed_data.dart';
+import 'storage.dart';
 
 /// Outcome of attempting to write a theatre booking.
 sealed class BookingOutcome {
@@ -27,24 +34,185 @@ class BookingRejected extends BookingOutcome {
   final BookingCheck check;
 }
 
-/// In-memory application state.
+/// Outcome of registering a patient.
+enum RegistrationResult { created, nationalIdInvalid, alreadyRegistered }
+
+/// Outcome of booking a clinic appointment.
+sealed class AppointmentOutcome {
+  const AppointmentOutcome();
+}
+
+class AppointmentBooked extends AppointmentOutcome {
+  const AppointmentBooked(this.appointment);
+  final Appointment appointment;
+}
+
+/// The slot was taken, or the doctor's day filled up, after the patient
+/// opened the screen.
+class AppointmentSlotGone extends AppointmentOutcome {
+  const AppointmentSlotGone();
+}
+
+/// The patient already holds a booking with this doctor on this day.
+class AppointmentDuplicate extends AppointmentOutcome {
+  const AppointmentDuplicate(this.existing);
+  final Appointment existing;
+}
+
+/// Application state, saved on the device.
 ///
-/// This stands in for the API described in PROMPT.md section 9 so the app runs
-/// end to end without a backend. Every method here maps to an endpoint; when
-/// the API lands, only this class changes.
+/// Every method here maps to an endpoint of the API described in PROMPT.md
+/// section 9; when a shared server is connected, only this class changes.
 ///
-/// It deliberately preserves the server's authority model: [bookTheatreCase]
-/// re-runs the conflict check at write time rather than trusting whatever the
-/// UI last displayed, mirroring the database constraint that will do the real
-/// arbitration in production.
+/// It deliberately preserves the server's authority model: bookings re-check
+/// availability at write time rather than trusting whatever the screen last
+/// displayed, mirroring the database constraint that does the real
+/// arbitration once there is a server.
 class AppState extends ChangeNotifier {
-  AppState() {
-    _cases = Seed.cases();
-    _appointments = Seed.appointments();
-    _blocks = Seed.theatreBlocks();
-  }
+  AppState({StorageBackend? storage}) : _storage = storage ?? MemoryStorage();
 
   static const _scheduler = TheatreScheduler();
+
+  // --------------------------------------------------------------- storage
+
+  final StorageBackend _storage;
+  bool _loaded = false;
+  bool _saveQueued = false;
+
+  /// Version of the bundled catalogue this device was last seeded from.
+  int _dataVersion = 0;
+
+  /// Once the administration edits the catalogue, a newer bundled catalogue
+  /// in an app update must not overwrite their work.
+  bool _catalogueEdited = false;
+
+  bool get isLoaded => _loaded;
+
+  /// Loads saved data, or seeds from the hospital's bundled catalogue on the
+  /// first launch.
+  Future<void> load({required Map<String, dynamic> bundled}) async {
+    Map<String, dynamic>? saved;
+    try {
+      final raw = await _storage.read();
+      if (raw != null && raw.isNotEmpty) {
+        saved = Map<String, dynamic>.from(jsonDecode(raw) as Map);
+      }
+    } on FormatException {
+      saved = null; // A corrupt save is replaced rather than crashing.
+    }
+
+    final bundledVersion = Codec.toInt(bundled['dataVersion'], 1);
+    Seed.clear();
+    if (saved == null) {
+      Seed.loadFrom(bundled);
+      _dataVersion = bundledVersion;
+      _ensureAdminAccount();
+    } else {
+      _restore(saved);
+      final upgrade = !_catalogueEdited && bundledVersion > _dataVersion;
+      Seed.loadFrom(upgrade ? bundled : saved['catalogue'] as Map<String, dynamic>? ?? bundled);
+      if (upgrade) _dataVersion = bundledVersion;
+      _ensureAdminAccount();
+      _resumeSession(saved['session']);
+    }
+    _loaded = true;
+    super.notifyListeners();
+    await _flush();
+  }
+
+  /// Every change is followed by a save. Saves are coalesced, so a burst of
+  /// changes in one frame writes once.
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
+    if (!_loaded || _saveQueued) return;
+    _saveQueued = true;
+    scheduleMicrotask(() {
+      _saveQueued = false;
+      unawaited(_flush());
+    });
+  }
+
+  Future<void> _flush() => _storage.write(jsonEncode(toJson()));
+
+  Map<String, dynamic> toJson() => {
+        'v': 1,
+        'dataVersion': _dataVersion,
+        'catalogueEdited': _catalogueEdited,
+        'catalogue': Seed.toJson(),
+        'patients': _patients.map(Codec.patient).toList(),
+        'staff': _staff.map(Codec.staff).toList(),
+        'appointments': _appointments.map(Codec.appointment).toList(),
+        'labBookings': _labBookings.map(Codec.labBooking).toList(),
+        'complaints': _complaints.map(Codec.complaint).toList(),
+        'cases': _cases.map(Codec.surgeryCase).toList(),
+        'blocks': _blocks.map(Codec.block).toList(),
+        'requests': _requests.map(Codec.surgeryRequest).toList(),
+        'audits': _audits.take(1000).map(Codec.audit).toList(),
+        'notifications':
+            _notifications.take(300).map(Codec.notification).toList(),
+        'policy': Codec.policy(_policy),
+        'prefs': {
+          'locale': _locale.languageCode,
+          'theme': _themeMode.name,
+        },
+        'session': {
+          'patientId': _session.isStaff ? null : _session.patient?.id,
+          'staffId': _session.staffId,
+        },
+      };
+
+  void _restore(Map<String, dynamic> doc) {
+    _dataVersion = Codec.toInt(doc['dataVersion']);
+    _catalogueEdited = (doc['catalogueEdited'] as bool?) ?? false;
+    _patients
+      ..clear()
+      ..addAll(Codec.list(doc['patients'], Codec.toPatient));
+    _staff
+      ..clear()
+      ..addAll(Codec.list(doc['staff'], Codec.toStaff));
+    _appointments = Codec.list(doc['appointments'], Codec.toAppointment);
+    _labBookings
+      ..clear()
+      ..addAll(Codec.list(doc['labBookings'], Codec.toLabBooking));
+    _complaints
+      ..clear()
+      ..addAll(Codec.list(doc['complaints'], Codec.toComplaint));
+    _cases = Codec.list(doc['cases'], Codec.toSurgeryCase);
+    _blocks = Codec.list(doc['blocks'], Codec.toBlock);
+    _requests
+      ..clear()
+      ..addAll(Codec.list(doc['requests'], Codec.toSurgeryRequest));
+    _audits
+      ..clear()
+      ..addAll(Codec.list(doc['audits'], Codec.toAudit));
+    _notifications
+      ..clear()
+      ..addAll(Codec.list(doc['notifications'], Codec.toNotification));
+    _notifySeq = _notifications.length;
+    _policy = Codec.toPolicy(doc['policy']);
+    final prefs = doc['prefs'];
+    if (prefs is Map) {
+      _locale = Locale((prefs['locale'] as String?) ?? 'ar');
+      _themeMode = Codec.toEnum(
+          ThemeMode.values, prefs['theme'], ThemeMode.system);
+    }
+  }
+
+  void _resumeSession(Object? json) {
+    if (json is! Map) return;
+    final staffId = json['staffId'] as String?;
+    final patientId = json['patientId'] as String?;
+    if (staffId != null) {
+      final user = staffById(staffId);
+      if (user != null && user.isActive) _session = _sessionFor(user);
+    } else if (patientId != null) {
+      final patient = patientById(patientId);
+      if (patient != null) {
+        _session = Session(role: UserRole.patient, patient: patient);
+      }
+    }
+  }
 
   // ------------------------------------------------------------- preferences
 
@@ -71,36 +239,228 @@ class AppState extends ChangeNotifier {
   Session _session = const Session.guest();
   Session get session => _session;
 
-  void signInAsPatient() {
-    _session = Session(role: UserRole.patient, patient: Seed.demoPatient);
+  // Patients ------------------------------------------------------------------
+
+  final List<Patient> _patients = [];
+  List<Patient> get patients => List.unmodifiable(_patients);
+
+  Patient? patientById(String id) {
+    for (final p in _patients) {
+      if (p.id == id) return p;
+    }
+    return null;
+  }
+
+  Patient? patientByNationalId(String nationalId) {
+    final wanted = NationalId.normalise(nationalId);
+    for (final p in _patients) {
+      if (p.nationalId == wanted) return p;
+    }
+    return null;
+  }
+
+  /// Creates a patient account and signs it in.
+  ///
+  /// The National ID is the identity: date of birth, sex and governorate come
+  /// from it rather than being typed, and it can only be registered once.
+  RegistrationResult registerPatient({
+    required String fullName,
+    required String nationalId,
+    required String phone,
+    String? email,
+    String? companyName,
+    String? googleEmail,
+    bool signIn = true,
+  }) {
+    final parsed = NationalId.parse(nationalId);
+    final info = parsed.info;
+    if (!parsed.isValid || info == null) {
+      return RegistrationResult.nationalIdInvalid;
+    }
+    final normalised = NationalId.normalise(nationalId);
+    if (patientByNationalId(normalised) != null) {
+      return RegistrationResult.alreadyRegistered;
+    }
+    final now = DateTime.now();
+    final patient = Patient(
+      id: _newId('pat'),
+      mrn: 'DO-${(now.millisecondsSinceEpoch % 1000000).toString().padLeft(6, '0')}',
+      fullName: fullName.trim().replaceAll(RegExp(r'\s+'), ' '),
+      phoneE164: PhoneNumber.toE164(phone) ?? NationalId.normalise(phone),
+      dateOfBirth: info.dateOfBirth,
+      isMale: info.isMale,
+      email: (email == null || email.trim().isEmpty) ? null : email.trim(),
+      companyName: (companyName == null || companyName.trim().isEmpty)
+          ? null
+          : companyName.trim(),
+      nationalId: normalised,
+      governorate: info.governorateAr,
+      createdAt: now,
+      googleEmail: googleEmail,
+    );
+    _patients.add(patient);
+    _lastRegistered = patient;
+    // Reception registering a caller stays signed in as reception.
+    if (signIn) _session = Session(role: UserRole.patient, patient: patient);
+    _audit('created', 'patient', patient.id, detail: patient.mrn);
+    notifyListeners();
+    return RegistrationResult.created;
+  }
+
+  Patient? _lastRegistered;
+
+  /// The patient most recently created by [registerPatient].
+  Patient? get lastRegistered => _lastRegistered;
+
+  /// Finds patients by name, National ID, phone or file number.
+  List<Patient> searchPatients(String query) {
+    final q = NationalId.normalise(query);
+    final text = query.trim();
+    if (text.isEmpty) return List.of(_patients.reversed);
+    return _patients.reversed.where((p) {
+      if (q.isNotEmpty &&
+          ((p.nationalId ?? '').contains(q) ||
+              p.phoneLocal.contains(q) ||
+              p.mrn.contains(q))) {
+        return true;
+      }
+      return p.fullName.contains(text) || p.mrn.contains(text.toUpperCase());
+    }).toList();
+  }
+
+  /// A returning patient signs in with their National ID and the mobile
+  /// number they registered with — two things only they should know together.
+  bool signInPatient({required String nationalId, required String phone}) {
+    final patient = patientByNationalId(nationalId);
+    if (patient == null) return false;
+    if (patient.phoneE164 != PhoneNumber.toE164(phone)) return false;
+    _session = Session(role: UserRole.patient, patient: patient);
+    notifyListeners();
+    return true;
+  }
+
+  // Staff -----------------------------------------------------------------------
+
+  /// The account the hospital receives the app with. Its password must be
+  /// changed on first use; the admin console nags until it is.
+  static const defaultAdminUsername = 'admin';
+  static const defaultAdminPassword = 'admin123';
+
+  void _ensureAdminAccount() {
+    if (_staff.any((u) => u.roles.contains(UserRole.admin))) return;
+    const id = 'usr-admin';
+    _staff.add(StaffUser(
+      id: id,
+      name: 'مدير النظام',
+      phone: '',
+      roles: const {UserRole.admin},
+      username: defaultAdminUsername,
+      passwordHash: hashPassword(id, defaultAdminPassword),
+    ));
+  }
+
+  /// Salted with the account id, so two accounts with the same password do
+  /// not share a hash.
+  static String hashPassword(String salt, String password) =>
+      sha256.convert(utf8.encode('$salt:$password')).toString();
+
+  bool get adminUsesDefaultPassword => _staff.any((u) =>
+      u.username == defaultAdminUsername &&
+      u.passwordHash == hashPassword(u.id, defaultAdminPassword));
+
+  StaffUser? staffById(String id) {
+    for (final u in _staff) {
+      if (u.id == id) return u;
+    }
+    return null;
+  }
+
+  Session _sessionFor(StaffUser user) => Session(
+        role: user.primaryRole,
+        doctorId: user.doctorId,
+        staffId: user.id,
+        staffName: user.name,
+      );
+
+  StaffUser? get currentStaff =>
+      _session.staffId == null ? null : staffById(_session.staffId!);
+
+  /// Signs a member of staff in. Inactive accounts are refused.
+  bool signInStaff({required String username, required String password}) {
+    final wanted = username.trim().toLowerCase();
+    for (final user in _staff) {
+      if (user.username.toLowerCase() != wanted || !user.isActive) continue;
+      if (user.passwordHash != hashPassword(user.id, password)) return false;
+      _session = _sessionFor(user);
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
+  /// Changes the signed-in member of staff's password.
+  bool changeOwnPassword({required String current, required String next}) {
+    final user = currentStaff;
+    if (user == null) return false;
+    if (user.passwordHash != hashPassword(user.id, current)) return false;
+    final index = _staff.indexWhere((u) => u.id == user.id);
+    _staff[index] =
+        user.copyWith(passwordHash: hashPassword(user.id, next));
+    _audit('updated', 'password', user.id);
+    notifyListeners();
+    return true;
+  }
+
+  /// Test support only: put known records in place without going through
+  /// the screens.
+  @visibleForTesting
+  void debugInstall({
+    List<Patient> patients = const [],
+    List<SurgeryCase> cases = const [],
+    List<TheatreBlock> blocks = const [],
+    List<Appointment> appointments = const [],
+  }) {
+    _patients
+      ..clear()
+      ..addAll(patients);
+    _cases = [...cases];
+    _blocks = [...blocks];
+    _appointments = [...appointments];
+    _ensureAdminAccount();
+  }
+
+  /// Test support only: sign in as a role without credentials.
+  @visibleForTesting
+  void signInAsPatient([Patient? patient]) {
+    final who = patient ?? (_patients.isEmpty ? null : _patients.first);
+    _session = Session(role: UserRole.patient, patient: who);
     notifyListeners();
   }
 
-  /// The demo build lets the user switch into doctor mode so the theatre
-  /// module can be exercised. In production the role arrives from the server
-  /// inside the session token and is never selectable in the client
-  /// (PROMPT.md section 5).
+  @visibleForTesting
   void signInAsDoctor(String doctorId) {
     _session = Session(
       role: UserRole.doctor,
-      patient: Seed.demoPatient,
       doctorId: doctorId,
+      staffId: 'test-doctor',
+      staffName: Seed.doctorById(doctorId).name.ar,
     );
     notifyListeners();
   }
 
-  /// Demo-only, as with [signInAsDoctor].
+  @visibleForTesting
   void signInAsAdmin() {
-    _session = Session(role: UserRole.admin, patient: Seed.demoPatient);
+    _session = const Session(
+        role: UserRole.admin, staffId: 'test-admin', staffName: 'الأدمن');
     notifyListeners();
   }
 
-  /// Demo-only, as with [signInAsDoctor].
+  @visibleForTesting
   void signInAsApprover() {
-    _session = Session(
-      role: UserRole.surgeryApprover,
-      patient: Seed.demoPatient,
-    );
+    _session = const Session(
+        role: UserRole.surgeryApprover,
+        staffId: 'test-approver',
+        staffName: 'الموافق');
     notifyListeners();
   }
 
@@ -114,6 +474,28 @@ class AppState extends ChangeNotifier {
   final List<AppNotification> _notifications = [];
   List<AppNotification> get notifications => List.unmodifiable(_notifications);
 
+  /// What the signed-in person should see: a patient their own messages,
+  /// staff the staff alerts.
+  List<AppNotification> get myNotifications {
+    final session = _session;
+    if (session.isStaff) {
+      return _notifications
+          .where((n) =>
+              n.audience != NotifyAudience.patient &&
+              (n.audience != NotifyAudience.surgeon ||
+                  n.recipientId == null ||
+                  n.recipientId == session.doctorId))
+          .toList();
+    }
+    final patient = session.patient;
+    if (patient == null) return const [];
+    return _notifications
+        .where((n) =>
+            n.audience == NotifyAudience.patient &&
+            n.recipientId == patient.id)
+        .toList();
+  }
+
   int get unreadApproverAlerts => _notifications
       .where((n) => n.audience == NotifyAudience.approvers)
       .length;
@@ -124,9 +506,11 @@ class AppState extends ChangeNotifier {
     _notifications.insert(0, notification);
   }
 
-  /// Fans an alert out to the approvers across every channel in the delivery
-  /// chain (PROMPT.md §12.4, rule 2): in-app push first, WhatsApp second, SMS
-  /// as the fallback if still unactioned. None of them carry clinical detail.
+  /// Alerts the staff inside the app. The message carries a reference and
+  /// no clinical detail, so it is already in the form WhatsApp and SMS need
+  /// (PROMPT.md §12.4, rule 1) — those channels are added when the hospital's
+  /// WhatsApp Business and SMS accounts are connected; nothing is claimed to
+  /// have been sent on them before then.
   void _alertApprovers({
     required String templateCode,
     required String title,
@@ -135,50 +519,46 @@ class AppState extends ChangeNotifier {
     String? entityId,
     String? deepLink,
   }) {
-    final now = DateTime.now();
-    for (final channel in const [
-      NotifyChannel.push,
-      NotifyChannel.whatsapp,
-      NotifyChannel.sms,
-    ]) {
-      _emit(AppNotification.staffAlert(
-        id: 'ntf-${_notifySeq++}',
-        channel: channel,
-        audience: NotifyAudience.approvers,
-        templateCode: templateCode,
-        title: title,
-        reference: reference,
-        context: context,
-        sentAt: now,
-        entityId: entityId,
-        deepLink: deepLink,
-      ));
-    }
+    _emit(AppNotification.staffAlert(
+      id: 'ntf-${_notifySeq++}',
+      channel: NotifyChannel.inApp,
+      audience: NotifyAudience.approvers,
+      templateCode: templateCode,
+      title: title,
+      reference: reference,
+      context: context,
+      sentAt: DateTime.now(),
+      entityId: entityId,
+      deepLink: deepLink,
+    ));
   }
 
   void _notifyPatient({
+    required String? patientId,
     required String templateCode,
     required String title,
     required String body,
     String? entityId,
   }) {
+    if (patientId == null) return;
     _emit(AppNotification(
       id: 'ntf-${_notifySeq++}',
-      channel: NotifyChannel.push,
+      channel: NotifyChannel.inApp,
       audience: NotifyAudience.patient,
       templateCode: templateCode,
       title: title,
       body: body,
       sentAt: DateTime.now(),
       entityId: entityId,
+      recipientId: patientId,
     ));
   }
 
   // ------------------------------------------------------------------ theatre
 
-  late List<SurgeryCase> _cases;
-  late List<Appointment> _appointments;
-  late List<TheatreBlock> _blocks;
+  List<SurgeryCase> _cases = [];
+  List<Appointment> _appointments = [];
+  List<TheatreBlock> _blocks = [];
   final List<SurgeryRequest> _requests = [];
 
   List<SurgeryCase> get cases => List.unmodifiable(_cases);
@@ -267,6 +647,7 @@ class AppState extends ChangeNotifier {
     _cases = [..._cases, booked];
 
     _notifyPatient(
+      patientId: patient.id,
       templateCode: 'surgery_scheduled',
       title: 'تم تحديد موعد العملية',
       body: _stamp(booked.range.start),
@@ -349,6 +730,7 @@ class AppState extends ChangeNotifier {
     );
 
     _notifyPatient(
+      patientId: request.patientId,
       templateCode: 'surgery_request_decided',
       title: switch (decision) {
         SurgeryRequestStatus.approved => 'تمت الموافقة على طلبك',
@@ -470,9 +852,10 @@ class AppState extends ChangeNotifier {
     final procedure = Seed.procedureById(request.procedureId);
     final classification =
         Seed.classificationById(request.classificationId);
-    final patient = Seed.theatrePatients
-        .where((p) => p.id == request.patientId)
-        .toList();
+    final patient = patientById(request.patientId);
+    if (patient == null) {
+      return const BookingRejected(BookingCheck.clear());
+    }
 
     final draft = BookingDraft(
       theatreId: theatreId,
@@ -486,7 +869,7 @@ class AppState extends ChangeNotifier {
 
     final outcome = bookTheatreCase(
       draft: draft,
-      patient: patient.isEmpty ? Seed.demoPatient : patient.first,
+      patient: patient,
       origin: request.isFromDoctor
           ? BookingOrigin.doctorRequest
           : BookingOrigin.patientRequest,
@@ -512,8 +895,9 @@ class AppState extends ChangeNotifier {
     if (request.requestedByDoctorId != null) {
       _emit(AppNotification(
         id: 'ntf-${_notifySeq++}',
-        channel: NotifyChannel.push,
+        channel: NotifyChannel.inApp,
         audience: NotifyAudience.surgeon,
+        recipientId: request.requestedByDoctorId,
         templateCode: 'theatre_request_scheduled',
         title: 'تم تأكيد حجز غرفة العمليات',
         body: detail,
@@ -524,6 +908,7 @@ class AppState extends ChangeNotifier {
     }
 
     _notifyPatient(
+      patientId: request.patientId,
       templateCode: 'surgery_scheduled',
       title: 'تم تحديد موعد عمليتك',
       body: '${theatre.code} · ${_stamp(start)}',
@@ -537,11 +922,13 @@ class AppState extends ChangeNotifier {
 
   // ------------------------------------------------------------- appointments
 
-  /// Books a clinic appointment.
+  /// Books a clinic appointment with a specific doctor.
   ///
-  /// Payment never gates the booking: [depositPaid] is whatever the patient
-  /// chose to pay up front, and zero is the normal case.
-  Appointment bookClinicAppointment({
+  /// Availability is re-checked here, at write time: between the patient
+  /// opening the screen and tapping the slot, someone else may have taken it
+  /// or filled the doctor's day. Payment never gates the booking:
+  /// [depositPaid] is zero unless a payment gateway took money.
+  AppointmentOutcome bookClinicAppointment({
     required String patientId,
     required String clinicId,
     required String doctorId,
@@ -550,27 +937,57 @@ class AppState extends ChangeNotifier {
     int depositPaid = 0,
   }) {
     final now = DateTime.now();
-    final clinic = Seed.clinics.firstWhere((c) => c.id == clinicId);
+    final clinic = Seed.clinicById(clinicId);
+    if (clinic == null) return const AppointmentSlotGone();
     final doctor = Seed.doctorById(doctorId);
+
+    final day = DateTime(start.year, start.month, start.day);
+    if (!clinicSlots(clinic, day, doctorId: doctorId).contains(start)) {
+      return const AppointmentSlotGone();
+    }
+    for (final a in _appointments) {
+      if (a.blocksTime &&
+          a.patientId == patientId &&
+          a.doctorId == doctorId &&
+          _isSameDay(a.range.start, start)) {
+        return AppointmentDuplicate(a);
+      }
+    }
+
     final shift = doctor.shiftOn(start.weekday);
     final minutes = shift?.slotMinutes(clinic.slotMinutes) ?? clinic.slotMinutes;
-
     final appointment = Appointment(
-      id: 'appt-${now.microsecondsSinceEpoch}',
+      id: _newId('appt'),
       patientId: patientId,
       doctorId: doctorId,
       clinicId: clinicId,
       range: TimeRange.fromDuration(
           start, duration ?? Duration(minutes: minutes)),
-      reference: 'AP-${now.millisecondsSinceEpoch % 100000}',
+      reference: 'AP-${(now.millisecondsSinceEpoch % 1000000).toString().padLeft(6, '0')}',
       fee: clinic.consultationFee,
       depositPaid: depositPaid,
+      createdAt: now,
     );
     _appointments = [..._appointments, appointment];
+    _alertApprovers(
+      templateCode: 'appointment_booked',
+      title: 'حجز عيادة جديد',
+      reference: appointment.reference,
+      context: '${clinic.name.ar} · ${doctor.name.ar} · ${_stamp(start)}',
+      entityId: appointment.id,
+      deepLink: '/admin/bookings',
+    );
+    _notifyPatient(
+      patientId: patientId,
+      templateCode: 'appointment_confirmed',
+      title: 'تم تأكيد حجزك',
+      body: '${clinic.name.ar} · ${doctor.name.ar} · ${_stamp(start)}',
+      entityId: appointment.id,
+    );
     _audit('created', 'appointment', appointment.id,
-        detail: '${clinic.name.ar} · ${_stamp(start)}');
+        detail: '${appointment.reference} · ${clinic.name.ar} · ${_stamp(start)}');
     notifyListeners();
-    return appointment;
+    return AppointmentBooked(appointment);
   }
 
   /// Cancels an appointment and tells the patient why.
@@ -584,15 +1001,45 @@ class AppState extends ChangeNotifier {
     final cancelled =
         _appointments[index].cancelledBecause(reason, note: note);
     _appointments = [..._appointments]..[index] = cancelled;
-    _notifyPatient(
-      templateCode: 'appointment_cancelled',
-      title: 'تم إلغاء موعدك',
-      body: note ?? cancelled.reference,
-      entityId: cancelled.id,
-    );
+    final byPatient = reason == CancellationReason.patientRequested;
+    if (!byPatient) {
+      _notifyPatient(
+        patientId: cancelled.patientId,
+        templateCode: 'appointment_cancelled',
+        title: 'تم إلغاء موعدك',
+        body: note ?? cancelled.reference,
+        entityId: cancelled.id,
+      );
+    } else {
+      _alertApprovers(
+        templateCode: 'appointment_cancelled_by_patient',
+        title: 'إلغاء حجز من المريض',
+        reference: cancelled.reference,
+        context: _stamp(cancelled.range.start),
+        entityId: cancelled.id,
+        deepLink: '/admin/bookings',
+      );
+    }
     _audit('cancelled', 'appointment', cancelled.id, detail: reason.name);
     notifyListeners();
   }
+
+  /// Reception marks the visit: attended, or did not come.
+  void setAppointmentStatus(String appointmentId, AppointmentStatus status) {
+    final index = _appointments.indexWhere((a) => a.id == appointmentId);
+    if (index < 0) return;
+    _appointments = [..._appointments]
+      ..[index] = _appointments[index].withStatus(status);
+    _audit(status.name, 'appointment', appointmentId);
+    notifyListeners();
+  }
+
+  /// Whether the patient may still cancel this appointment themselves.
+  bool patientCanCancel(Appointment a) =>
+      a.blocksTime &&
+      a.range.start
+          .subtract(_policy.clinicCancellationCutoff)
+          .isAfter(DateTime.now());
 
   /// Appointments that a proposed schedule would break.
   ///
@@ -643,6 +1090,11 @@ class AppState extends ChangeNotifier {
     return broken.length;
   }
 
+  List<Appointment> appointmentsFor(String patientId) => _appointments
+      .where((a) => a.patientId == patientId)
+      .toList()
+    ..sort((a, b) => b.range.start.compareTo(a.range.start));
+
   Appointment? nextAppointmentFor(String patientId) {
     final now = DateTime.now();
     final upcoming = _appointments
@@ -665,8 +1117,9 @@ class AppState extends ChangeNotifier {
     if (!clinic.workingDays.contains(day.weekday)) return const [];
 
     final doctors = clinic.doctorIds
+        .where((id) => doctorId == null || id == doctorId)
         .map(Seed.doctorById)
-        .where((d) => doctorId == null || d.id == doctorId)
+        .where((d) => d.isBookableOnline)
         .toList();
     if (doctors.isEmpty) return const [];
 
@@ -674,15 +1127,14 @@ class AppState extends ChangeNotifier {
     final now = DateTime.now();
 
     for (final doctor in doctors) {
+      // The doctor's own working window decides: no window on this weekday
+      // means they are not in. A doctor with no windows at all (by
+      // appointment, own patients only) is not booked online.
       final shift = doctor.shiftOn(day.weekday);
-      // A doctor whose shifts are configured is bound by them: no shift on
-      // this weekday means they are not in, so no slots. Only a doctor with
-      // no shifts at all falls back to the clinic's own hours, so that an
-      // incompletely configured hospital still books.
-      if (shift == null && doctor.shifts.isNotEmpty) continue;
-      final startsAt = shift?.startsAt ?? 10 * 60;
-      final endsAt = shift?.endsAt ?? 14 * 60;
-      final step = shift?.slotMinutes(clinic.slotMinutes) ?? clinic.slotMinutes;
+      if (shift == null || !shift.isValid) continue;
+      final startsAt = shift.startsAt;
+      final endsAt = shift.endsAt;
+      final step = shift.slotMinutes(clinic.slotMinutes);
 
       final bookedForDoctor = _appointments
           .where((a) =>
@@ -690,7 +1142,7 @@ class AppState extends ChangeNotifier {
               a.doctorId == doctor.id &&
               _isSameDay(a.range.start, day))
           .length;
-      final cap = shift?.maxPatients ?? 0;
+      final cap = shift.maxPatients;
       if (cap > 0 && bookedForDoctor >= cap) continue;
 
       var offered = 0;
@@ -738,16 +1190,42 @@ class AppState extends ChangeNotifier {
   }) {
     final now = DateTime.now();
     final complaint = Complaint(
-      id: 'cmp-${now.microsecondsSinceEpoch}',
+      id: _newId('cmp'),
       reference: 'CX-${now.millisecondsSinceEpoch % 100000}',
       category: category,
       body: body,
       submittedAt: now,
       isAnonymous: isAnonymous,
+      patientId: isAnonymous ? null : _session.patient?.id,
     );
     _complaints.insert(0, complaint);
+    _alertApprovers(
+      templateCode: 'complaint_received',
+      title: 'شكوى جديدة',
+      reference: complaint.reference,
+      context: 'بانتظار الرد',
+      entityId: complaint.id,
+      deepLink: '/admin/complaints',
+    );
     notifyListeners();
     return complaint;
+  }
+
+  /// Answers and closes a complaint. The patient is told, unless they chose
+  /// to stay anonymous.
+  void resolveComplaint(String id, String response) {
+    final index = _complaints.indexWhere((c) => c.id == id);
+    if (index < 0) return;
+    _complaints[index] = _complaints[index].resolvedWith(response, DateTime.now());
+    _notifyPatient(
+      patientId: _complaints[index].patientId,
+      templateCode: 'complaint_resolved',
+      title: 'رد على شكواك ${_complaints[index].reference}',
+      body: response,
+      entityId: id,
+    );
+    _audit('resolved', 'complaint', id);
+    notifyListeners();
   }
 
   // ------------------------------------------------------------- home care
@@ -792,6 +1270,7 @@ class AppState extends ChangeNotifier {
     if (index < 0) return;
     _homeCare[index] = _homeCare[index].copyWith(status: status);
     _notifyPatient(
+      patientId: _homeCare[index].patientId,
       templateCode: 'home_care_status',
       title: 'تحديث طلب الرعاية المنزلية',
       body: _homeCare[index].reference,
@@ -909,6 +1388,7 @@ class AppState extends ChangeNotifier {
     if (index < 0) return;
     _campaignPatients[index] = _campaignPatients[index].copyWith(stage: stage);
     _notifyPatient(
+      patientId: _campaignPatients[index].patientId,
       templateCode: 'campaign_stage_changed',
       title: 'تحديث في برنامج الخبير الزائر',
       body: _campaignPatients[index].campaignId,
@@ -964,8 +1444,14 @@ class AppState extends ChangeNotifier {
   /// Newest first. Append-only — nothing here is ever edited or removed.
   List<AuditEntry> get auditLog => List.unmodifiable(_audits);
 
+  static const _catalogueEntities = {
+    'classification', 'procedure', 'doctor', 'clinic', 'theatre',
+    'lab_test', 'lab_package', 'offer', 'tip',
+  };
+
   void _audit(String action, String entity, String? entityId,
       {String? detail}) {
+    if (_catalogueEntities.contains(entity)) _catalogueEdited = true;
     _audits.insert(
       0,
       AuditEntry(
@@ -980,41 +1466,32 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  String get _actorName => switch (_session.role) {
-        UserRole.admin => 'الأدمن',
-        UserRole.surgeryApprover => 'الموافق',
-        UserRole.orScheduler => 'منسق العمليات',
-        UserRole.doctor => _session.doctorId == null
-            ? 'طبيب'
-            : Seed.doctorById(_session.doctorId!).name.ar,
-        UserRole.patient => 'مريض',
-        UserRole.guest => 'زائر',
-      };
+  String get _actorName {
+    final name = _session.staffName;
+    if (name != null && name.isNotEmpty) return name;
+    return switch (_session.role) {
+      UserRole.admin => 'الأدمن',
+      UserRole.surgeryApprover => 'الموافق',
+      UserRole.orScheduler => 'منسق العمليات',
+      UserRole.reception => 'الاستقبال',
+      UserRole.doctor => _session.doctorId == null
+          ? 'طبيب'
+          : Seed.doctorById(_session.doctorId!).name.ar,
+      UserRole.patient => _session.patient?.fullName ?? 'مريض',
+      UserRole.guest => 'زائر',
+    };
+  }
 
-  final List<StaffUser> _staff = [
-    const StaffUser(
-      id: 'usr-1',
-      name: 'أ. سلمى عبد العزيز',
-      phone: '+201001112223',
-      roles: {UserRole.admin},
-    ),
-    const StaffUser(
-      id: 'usr-2',
-      name: 'د. أحمد سليم',
-      phone: '+201004445556',
-      roles: {UserRole.doctor, UserRole.surgeryApprover},
-      doctorId: 'doc-ortho-1',
-    ),
-    const StaffUser(
-      id: 'usr-3',
-      name: 'أ. منى رشاد',
-      phone: '+201007778889',
-      roles: {UserRole.orScheduler},
-    ),
-  ];
+  final List<StaffUser> _staff = [];
 
   List<StaffUser> get staff => List.unmodifiable(_staff);
 
+  bool usernameTaken(String username, {String? exceptId}) => _staff.any((u) =>
+      u.id != exceptId &&
+      u.username.toLowerCase() == username.trim().toLowerCase());
+
+  /// Creates or edits a staff account. [password] is only applied when given,
+  /// so editing someone's roles does not reset their password.
   String upsertStaff({
     String? id,
     required String name,
@@ -1022,8 +1499,11 @@ class AppState extends ChangeNotifier {
     required Set<UserRole> roles,
     String? doctorId,
     bool isActive = true,
+    String? username,
+    String? password,
   }) {
     final resolvedId = id ?? _newId('usr');
+    final existing = staffById(resolvedId);
     final user = StaffUser(
       id: resolvedId,
       name: name,
@@ -1031,6 +1511,10 @@ class AppState extends ChangeNotifier {
       roles: roles,
       doctorId: doctorId,
       isActive: isActive,
+      username: (username ?? existing?.username ?? '').trim(),
+      passwordHash: (password != null && password.isNotEmpty)
+          ? hashPassword(resolvedId, password)
+          : (existing?.passwordHash ?? ''),
     );
     final index = _staff.indexWhere((u) => u.id == resolvedId);
     if (index >= 0) {
@@ -1201,8 +1685,11 @@ class AppState extends ChangeNotifier {
     required int seniority,
     String? centreId,
     List<DoctorShift> shifts = const [],
+    String? scheduleNote,
+    List<String>? clinicIds,
   }) {
     final resolvedId = id ?? _newId('doc');
+    final existing = id == null ? null : Seed.doctors.where((d) => d.id == id);
     final entry = Doctor(
       id: resolvedId,
       name: name,
@@ -1211,12 +1698,43 @@ class AppState extends ChangeNotifier {
       seniority: seniority,
       centreId: centreId,
       shifts: shifts,
+      // Null keeps the current note; an empty string clears it.
+      scheduleNote: scheduleNote == null
+          ? ((existing != null && existing.isNotEmpty)
+              ? existing.first.scheduleNote
+              : null)
+          : (scheduleNote.isEmpty ? null : scheduleNote),
     );
+    // Which clinics list this doctor, when the form says.
+    if (clinicIds != null) {
+      for (var i = 0; i < Seed.clinics.length; i++) {
+        final c = Seed.clinics[i];
+        final listed = c.doctorIds.contains(resolvedId);
+        final wanted = clinicIds.contains(c.id);
+        if (listed == wanted) continue;
+        Seed.clinics[i] = _clinicWith(c,
+            doctorIds: wanted
+                ? [...c.doctorIds, resolvedId]
+                : c.doctorIds.where((d) => d != resolvedId).toList());
+      }
+    }
     final index = Seed.doctors.indexWhere((d) => d.id == resolvedId);
     if (index >= 0) {
       Seed.doctors[index] = entry;
     } else {
       Seed.doctors.add(entry);
+    }
+    // A clinic is open on any day one of its doctors works. Without this, a
+    // new working day for a doctor would silently produce no slots.
+    for (var i = 0; i < Seed.clinics.length; i++) {
+      final c = Seed.clinics[i];
+      if (!c.doctorIds.contains(resolvedId)) continue;
+      final days = {...c.workingDays, ...shifts.map((sh) => sh.weekday)}
+          .toList()
+        ..sort();
+      if (days.length != c.workingDays.length) {
+        Seed.clinics[i] = _clinicWith(c, workingDays: days);
+      }
     }
     _audit(id == null ? 'created' : 'updated', 'doctor', resolvedId,
         detail: name.ar);
@@ -1225,6 +1743,23 @@ class AppState extends ChangeNotifier {
   }
 
   // Clinics ------------------------------------------------------------------
+
+  static Clinic _clinicWith(Clinic c,
+          {List<String>? doctorIds, List<int>? workingDays}) =>
+      Clinic(
+        id: c.id,
+        name: c.name,
+        note: c.note,
+        consultationFee: c.consultationFee,
+        followUpFee: c.followUpFee,
+        doctorIds: doctorIds ?? c.doctorIds,
+        workingDays: workingDays ?? c.workingDays,
+        centreId: c.centreId,
+        icon: c.icon,
+        paymentPolicy: c.paymentPolicy,
+        depositAmount: c.depositAmount,
+        slotMinutes: c.slotMinutes,
+      );
 
   String upsertClinic({
     String? id,
@@ -1236,11 +1771,15 @@ class AppState extends ChangeNotifier {
     String? centreId,
     PaymentPolicy paymentPolicy = PaymentPolicy.payAtReception,
     int depositAmount = 0,
+    String? note,
+    int? slotMinutes,
   }) {
     final resolvedId = id ?? _newId('clinic');
+    final previous = Seed.clinicById(resolvedId);
     final entry = Clinic(
       id: resolvedId,
       name: name,
+      note: (note == null || note.trim().isEmpty) ? null : note.trim(),
       consultationFee: consultationFee,
       followUpFee: followUpFee,
       doctorIds: doctorIds,
@@ -1248,6 +1787,7 @@ class AppState extends ChangeNotifier {
       centreId: centreId,
       paymentPolicy: paymentPolicy,
       depositAmount: depositAmount,
+      slotMinutes: slotMinutes ?? previous?.slotMinutes ?? 15,
     );
     final index = Seed.clinics.indexWhere((c) => c.id == resolvedId);
     if (index >= 0) {
@@ -1316,6 +1856,162 @@ class AppState extends ChangeNotifier {
         .toList();
     notifyListeners();
     return affected;
+  }
+
+  // Laboratory ---------------------------------------------------------------
+
+  final List<LabBooking> _labBookings = [];
+  List<LabBooking> get labBookings => List.unmodifiable(_labBookings);
+
+  List<LabBooking> labBookingsFor(String patientId) => _labBookings
+      .where((b) => b.patientId == patientId)
+      .toList()
+    ..sort((a, b) => b.visitAt.compareTo(a.visitAt));
+
+  /// Prices a basket at today's prices.
+  int labTotal({List<String> testIds = const [], List<String> packageIds = const []}) {
+    var total = 0;
+    for (final id in testIds) {
+      total += Seed.labTestById(id)?.price ?? 0;
+    }
+    for (final id in packageIds) {
+      total += Seed.labPackageById(id)?.price ?? 0;
+    }
+    return total;
+  }
+
+  /// Books a laboratory visit. The total is frozen at today's prices.
+  LabBooking bookLab({
+    required String patientId,
+    required DateTime visitAt,
+    List<String> testIds = const [],
+    List<String> packageIds = const [],
+  }) {
+    if (testIds.isEmpty && packageIds.isEmpty) {
+      throw ArgumentError('A lab booking needs at least one test or package');
+    }
+    final now = DateTime.now();
+    final booking = LabBooking(
+      id: _newId('lab'),
+      reference: 'LB-${(now.millisecondsSinceEpoch % 1000000).toString().padLeft(6, '0')}',
+      patientId: patientId,
+      visitAt: visitAt,
+      testIds: List.unmodifiable(testIds),
+      packageIds: List.unmodifiable(packageIds),
+      total: labTotal(testIds: testIds, packageIds: packageIds),
+      createdAt: now,
+    );
+    _labBookings.insert(0, booking);
+    final items = testIds.length + packageIds.length;
+    _alertApprovers(
+      templateCode: 'lab_booked',
+      title: 'حجز معمل جديد',
+      reference: booking.reference,
+      context: '$items ${items == 1 ? 'بند' : 'بنود'} · ${_stamp(visitAt)}',
+      entityId: booking.id,
+      deepLink: '/admin/bookings',
+    );
+    _notifyPatient(
+      patientId: patientId,
+      templateCode: 'lab_booking_confirmed',
+      title: 'تم تأكيد حجز المعمل',
+      body: '${booking.reference} · ${_stamp(visitAt)}',
+      entityId: booking.id,
+    );
+    _audit('created', 'lab_booking', booking.id, detail: booking.reference);
+    notifyListeners();
+    return booking;
+  }
+
+  void setLabBookingStatus(String id, AppointmentStatus status,
+      {CancellationReason? reason}) {
+    final index = _labBookings.indexWhere((b) => b.id == id);
+    if (index < 0) return;
+    _labBookings[index] =
+        _labBookings[index].copyWith(status: status, cancelReason: reason);
+    if (status == AppointmentStatus.cancelled &&
+        reason != CancellationReason.patientRequested) {
+      _notifyPatient(
+        patientId: _labBookings[index].patientId,
+        templateCode: 'lab_booking_cancelled',
+        title: 'تم إلغاء حجز المعمل',
+        body: _labBookings[index].reference,
+        entityId: id,
+      );
+    }
+    _audit(status.name, 'lab_booking', id);
+    notifyListeners();
+  }
+
+  String upsertLabTest({
+    String? id,
+    required Label name,
+    required Label category,
+    required int price,
+    String code = '',
+    bool isActive = true,
+  }) {
+    final resolvedId = id ?? _newId('lab');
+    final entry = LabTest(
+      id: resolvedId,
+      code: code,
+      name: name,
+      category: category,
+      price: price,
+      isActive: isActive,
+    );
+    final index = Seed.labTests.indexWhere((t) => t.id == resolvedId);
+    if (index >= 0) {
+      Seed.labTests[index] = entry;
+    } else {
+      Seed.labTests.add(entry);
+    }
+    _audit(id == null ? 'created' : 'updated', 'lab_test', resolvedId,
+        detail: '${name.ar} · $price');
+    notifyListeners();
+    return resolvedId;
+  }
+
+  String upsertLabPackage({
+    String? id,
+    required Label name,
+    required List<String> tests,
+    required int price,
+    int priceBefore = 0,
+    Label? preparation,
+    bool isActive = true,
+  }) {
+    final resolvedId = id ?? _newId('pkg');
+    final entry = LabPackage(
+      id: resolvedId,
+      name: name,
+      tests: tests,
+      price: price,
+      priceBefore: priceBefore,
+      preparation: preparation,
+      isActive: isActive,
+    );
+    final index = Seed.labPackages.indexWhere((p) => p.id == resolvedId);
+    if (index >= 0) {
+      Seed.labPackages[index] = entry;
+    } else {
+      Seed.labPackages.add(entry);
+    }
+    _audit(id == null ? 'created' : 'updated', 'lab_package', resolvedId,
+        detail: '${name.ar} · $price');
+    notifyListeners();
+    return resolvedId;
+  }
+
+  // Bookings, as reception sees them -------------------------------------------
+
+  /// Every booking on the books — clinic and laboratory — newest visit first.
+  List<BookingRow> allBookings() {
+    final rows = <BookingRow>[
+      for (final a in _appointments) BookingRow.clinic(a),
+      for (final b in _labBookings) BookingRow.lab(b),
+    ]..sort((x, y) => y.at.compareTo(x.at));
+    return rows;
   }
 
   // Content ------------------------------------------------------------------
@@ -1408,4 +2104,36 @@ class AppState extends ChangeNotifier {
         parts.skip(1).map((p) => '${p.characters.first}.').join(' ');
     return '${parts.first} $initials';
   }
+}
+
+/// One line in reception's booking list: a clinic appointment or a lab visit.
+class BookingRow {
+  BookingRow.clinic(Appointment this.appointment)
+      : lab = null,
+        id = appointment.id,
+        reference = appointment.reference,
+        patientId = appointment.patientId,
+        at = appointment.range.start,
+        status = appointment.status,
+        createdAt = appointment.createdAt;
+
+  BookingRow.lab(LabBooking this.lab)
+      : appointment = null,
+        id = lab.id,
+        reference = lab.reference,
+        patientId = lab.patientId,
+        at = lab.visitAt,
+        status = lab.status,
+        createdAt = lab.createdAt;
+
+  final Appointment? appointment;
+  final LabBooking? lab;
+  final String id;
+  final String reference;
+  final String patientId;
+  final DateTime at;
+  final AppointmentStatus status;
+  final DateTime? createdAt;
+
+  bool get isLab => lab != null;
 }

@@ -19,19 +19,19 @@ abstract final class AppTheme {
     final onSurface = isDark ? AppColors.darkText : AppColors.text;
     final muted = isDark ? AppColors.darkMuted : AppColors.muted;
     final border = isDark ? AppColors.darkBorder : AppColors.border;
-    final primary = isDark ? const Color(0xFF6E9BD6) : AppColors.navy;
+    final primary = isDark ? AppColors.darkPrimary : AppColors.primary;
 
     final scheme = ColorScheme(
       brightness: brightness,
       primary: primary,
-      onPrimary: isDark ? AppColors.navyDark : Colors.white,
-      secondary: AppColors.pink,
+      onPrimary: isDark ? AppColors.primaryDark : Colors.white,
+      secondary: isDark ? AppColors.brandTeal : AppColors.accent,
       onSecondary: Colors.white,
       error: AppColors.danger,
       onError: Colors.white,
       surface: surface,
       onSurface: onSurface,
-      surfaceContainerHighest: isDark ? AppColors.darkSurface : AppColors.navyTint,
+      surfaceContainerHighest: isDark ? AppColors.darkSurface : AppColors.primaryTint,
       outline: border,
     );
 
@@ -40,7 +40,7 @@ abstract final class AppTheme {
       brightness: brightness,
       colorScheme: scheme,
       scaffoldBackgroundColor: background,
-      fontFamily: null, // System Arabic font; see PROMPT.md 2.3 for production fonts.
+      fontFamily: 'Cairo',
     );
 
     return base.copyWith(
@@ -115,16 +115,19 @@ abstract final class AppTheme {
         errorMaxLines: 3,
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: isDark ? AppColors.darkBackground : AppColors.navyTint,
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.primaryTint,
         side: BorderSide(color: border),
-        labelStyle: TextStyle(color: onSurface, fontSize: 13),
+        // Cairo's tall ascenders are clipped by the chip's fixed height at
+        // the default line height.
+        labelStyle: TextStyle(color: onSurface, fontSize: 13, height: 1.15),
+        labelPadding: const EdgeInsets.symmetric(horizontal: 6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Radii.pill),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: surface,
-        indicatorColor: isDark ? AppColors.navyDark : AppColors.navyTint,
+        indicatorColor: isDark ? AppColors.primaryDark : AppColors.primaryTint,
         elevation: 0,
         height: 68,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,

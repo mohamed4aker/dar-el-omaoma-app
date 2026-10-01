@@ -95,6 +95,7 @@ class Doctor {
     this.centreId,
     this.languages = const ['ar'],
     this.shifts = const [],
+    this.scheduleNote,
   });
 
   final String id;
@@ -104,6 +105,17 @@ class Doctor {
   final int seniority;
   final String? centreId;
   final List<String> languages;
+
+  /// The timetable in the hospital's own words ("السبت والثلاثاء 6 مساء").
+  ///
+  /// Always shown to patients beside the bookable slots, because it carries
+  /// what slots cannot: "حالاته فقط", "بموعد مسبق", "كشف بدون سونار".
+  final String? scheduleNote;
+
+  /// Online booking needs at least one configured working window. A doctor
+  /// without one (by appointment, own patients only, on call) is listed with
+  /// their timetable and a call button instead.
+  bool get isBookableOnline => shifts.any((s) => s.isValid);
 
   /// Working windows, set by the administrator (one per weekday at most).
   final List<DoctorShift> shifts;
@@ -142,10 +154,15 @@ class Clinic {
     this.paymentPolicy = PaymentPolicy.payAtReception,
     this.depositAmount = 0,
     this.slotMinutes = 20,
+    this.note,
   });
 
   final String id;
   final Label name;
+
+  /// Shown under the clinic name — e.g. "خارج التعاقد" (not covered by the
+  /// hospital's insurance contracts).
+  final String? note;
   final int consultationFee;
   final int followUpFee;
   final List<String> doctorIds;
@@ -252,17 +269,55 @@ class LabTest {
     required this.id,
     required this.name,
     required this.price,
-    required this.sample,
-    required this.turnaround,
+    this.code = '',
+    this.category = const Label('تحاليل عامة', 'General tests'),
+    this.sample,
+    this.turnaround,
     this.preparation,
+    this.isActive = true,
+  });
+
+  final String id;
+
+  /// The laboratory's own code from its price list.
+  final String code;
+  final Label name;
+  final Label category;
+  final int price;
+  final Label? sample;
+  final Label? turnaround;
+  final Label? preparation;
+  final bool isActive;
+}
+
+/// A priced bundle of tests — the laboratory's printed offers
+/// ("عروض التحاليل بمعمل دار الأمومة").
+class LabPackage {
+  const LabPackage({
+    required this.id,
+    required this.name,
+    required this.tests,
+    required this.price,
+    this.priceBefore = 0,
+    this.preparation,
+    this.isActive = true,
   });
 
   final String id;
   final Label name;
+
+  /// Test names as printed on the offer.
+  final List<String> tests;
   final int price;
-  final Label sample;
-  final Label turnaround;
+
+  /// The undiscounted price; 0 when the package is not on offer.
+  final int priceBefore;
+
+  /// "صيام 10 ساعات", "ثاني عينة بول صباحي".
   final Label? preparation;
+  final bool isActive;
+
+  int get saving => priceBefore > price ? priceBefore - price : 0;
 }
 
 class RadiologyStudy {

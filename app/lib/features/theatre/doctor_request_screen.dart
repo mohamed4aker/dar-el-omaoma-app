@@ -143,7 +143,7 @@ class _DoctorRequestScreenState extends State<DoctorRequestScreen> {
           isExpanded: true,
           hint: Text(s.theatreSelectPatient),
           items: [
-            for (final p in Seed.theatrePatients)
+            for (final p in context.read<AppState>().patients)
               DropdownMenuItem(
                 value: p.id,
                 child: Text('${p.fullName} — ${p.mrn}',
@@ -151,7 +151,7 @@ class _DoctorRequestScreenState extends State<DoctorRequestScreen> {
               ),
           ],
           onChanged: (id) => setState(() =>
-              _patient = Seed.theatrePatients.firstWhere((p) => p.id == id)),
+              _patient = context.read<AppState>().patientById(id!)),
         ),
         const SizedBox(height: Gap.lg),
 

@@ -14,6 +14,7 @@ class Appointment {
     this.depositPaid = 0,
     this.cancelReason,
     this.cancelNote,
+    this.createdAt,
   });
 
   final String id;
@@ -21,6 +22,9 @@ class Appointment {
   final String doctorId;
   final String clinicId;
   final TimeRange range;
+
+  /// When the patient made the booking.
+  final DateTime? createdAt;
   final AppointmentStatus status;
   final String reference;
   final int fee;
@@ -48,6 +52,73 @@ class Appointment {
         depositPaid: depositPaid,
         cancelReason: reason,
         cancelNote: note,
+        createdAt: createdAt,
+      );
+
+  Appointment withStatus(AppointmentStatus value) => Appointment(
+        id: id,
+        patientId: patientId,
+        doctorId: doctorId,
+        clinicId: clinicId,
+        range: range,
+        status: value,
+        reference: reference,
+        fee: fee,
+        depositPaid: depositPaid,
+        cancelReason: cancelReason,
+        cancelNote: cancelNote,
+        createdAt: createdAt,
+      );
+}
+
+/// A laboratory visit: individual tests, offer packages, or both.
+///
+/// The lab takes walk-ins, so the time is the patient's intended arrival —
+/// it orders the queue rather than reserving a slot.
+class LabBooking {
+  const LabBooking({
+    required this.id,
+    required this.reference,
+    required this.patientId,
+    required this.visitAt,
+    required this.testIds,
+    required this.packageIds,
+    required this.total,
+    required this.createdAt,
+    this.status = AppointmentStatus.confirmed,
+    this.cancelReason,
+  });
+
+  final String id;
+  final String reference;
+  final String patientId;
+  final DateTime visitAt;
+  final List<String> testIds;
+  final List<String> packageIds;
+
+  /// Price at the moment of booking. Later price changes do not alter it.
+  final int total;
+  final DateTime createdAt;
+  final AppointmentStatus status;
+  final CancellationReason? cancelReason;
+
+  bool get isActive => status == AppointmentStatus.confirmed;
+
+  LabBooking copyWith({
+    AppointmentStatus? status,
+    CancellationReason? cancelReason,
+  }) =>
+      LabBooking(
+        id: id,
+        reference: reference,
+        patientId: patientId,
+        visitAt: visitAt,
+        testIds: testIds,
+        packageIds: packageIds,
+        total: total,
+        createdAt: createdAt,
+        status: status ?? this.status,
+        cancelReason: cancelReason ?? this.cancelReason,
       );
 }
 

@@ -29,7 +29,7 @@ class OffersScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: Gap.md),
               child: AppCard(
-                borderColor: AppColors.pink.withValues(alpha: 0.4),
+                borderColor: AppColors.accent.withValues(alpha: 0.4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -41,7 +41,7 @@ class OffersScreen extends StatelessWidget {
                                   Theme.of(context).textTheme.titleLarge),
                         ),
                         StatusChip('-${offer.discountPercent}%',
-                            color: AppColors.pink),
+                            color: AppColors.accent),
                       ],
                     ),
                     const SizedBox(height: Gap.sm),
@@ -74,7 +74,7 @@ class OffersScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     const Icon(Icons.event_available_outlined,
-                        color: AppColors.navy),
+                        color: AppColors.primary),
                     const SizedBox(width: Gap.md),
                     Expanded(
                       child: Column(
@@ -323,7 +323,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                             complaint.isAnonymous
                                 ? s.complaintsAnonymous
                                 : complaint.reference,
-                            color: AppColors.navy,
+                            color: AppColors.primary,
                           ),
                         ],
                       ),

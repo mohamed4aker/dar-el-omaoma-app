@@ -190,7 +190,7 @@ class InfoNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = color ?? AppColors.navy;
+    final base = color ?? AppColors.primary;
     return Container(
       padding: const EdgeInsets.all(Gap.md),
       decoration: BoxDecoration(
@@ -228,7 +228,7 @@ class PriceText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.titleMedium?.copyWith(
-          color: strikethrough ? AppColors.muted : AppColors.pink,
+          color: strikethrough ? AppColors.muted : AppColors.accent,
           decoration: strikethrough ? TextDecoration.lineThrough : null,
         );
     return Text('${_group(amount)} $currency', style: style);

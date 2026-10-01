@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/l10n/app_strings.dart';
@@ -21,7 +22,7 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = context.s;
-    final items = context.watch<AppState>().notifications;
+    final items = context.watch<AppState>().myNotifications;
 
     return Scaffold(
       appBar: AppBar(title: Text(s.moreNotifications)),
@@ -33,9 +34,6 @@ class NotificationsScreen extends StatelessWidget {
           : ListView(
               padding: const EdgeInsets.all(Gap.lg),
               children: [
-                InfoNote(s.notificationsNoPhi,
-                    icon: Icons.privacy_tip_outlined),
-                const SizedBox(height: Gap.lg),
                 for (final item in items)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Gap.md),
@@ -55,48 +53,31 @@ class _NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = context.s;
-    final (label, colour, icon) = switch (item.channel) {
-      NotifyChannel.push => (s.channelPush, AppColors.navy, Icons.notifications),
-      NotifyChannel.whatsapp => (s.channelWhatsapp, AppColors.success, Icons.chat),
-      NotifyChannel.sms => (s.channelSms, AppColors.warning, Icons.sms),
-      NotifyChannel.inApp => (s.channelInApp, AppColors.pink, Icons.apps),
-    };
+    final link = item.deepLink;
 
     return AppCard(
-      child: Column(
+      onTap: link == null || !link.startsWith('/admin')
+          ? null
+          : () => context.push(link),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              StatusChip(label, color: colour, icon: icon),
-              const Spacer(),
-              Text(Fmt.time(item.sentAt),
-                  style: Theme.of(context).textTheme.labelSmall),
-            ],
-          ),
-          const SizedBox(height: Gap.sm),
-          Text(item.title, style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: Gap.xs),
-          Text(item.body, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: Gap.sm),
-          Row(
-            children: [
-              Icon(Icons.code, size: 13, color: AppColors.muted),
-              const SizedBox(width: Gap.xs),
-              Expanded(
-                child: Text(
-                  item.templateCode,
-                  textDirection: TextDirection.ltr,
+          const Icon(Icons.notifications_outlined, color: AppColors.primary),
+          const SizedBox(width: Gap.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.title, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: Gap.xs),
+                Text(item.body, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: Gap.xs),
+                Text(
+                  '${Fmt.date(item.sentAt, s)} · ${Fmt.clock(item.sentAt, s)}',
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
-              ),
-              if (item.isExternalChannel)
-                Text(s.channelTemplateApproved,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall
-                        ?.copyWith(color: AppColors.success)),
-            ],
+              ],
+            ),
           ),
         ],
       ),

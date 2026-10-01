@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/utils/launch.dart';
 import '../../core/widgets/common.dart';
 import '../../data/seed_data.dart';
 
@@ -63,9 +64,8 @@ Future<void> showEmergencySheet(BuildContext context) {
           const SizedBox(height: Gap.lg),
           FilledButton.icon(
             onPressed: () {
-              // Production: launch tel: via url_launcher. Kept as a no-op in
-              // this build so the demo never dials a real number.
               Navigator.of(context).pop();
+              Launch.call(context, Seed.emergencyPhone);
             },
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.danger,
@@ -73,12 +73,6 @@ Future<void> showEmergencySheet(BuildContext context) {
             ),
             icon: const Icon(Icons.call),
             label: Text(s.contactCall),
-          ),
-          const SizedBox(height: Gap.md),
-          OutlinedButton.icon(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.local_shipping_outlined),
-            label: Text(s.contactAmbulance),
           ),
           const SizedBox(height: Gap.lg),
           InfoNote(s.contactAmbulanceNote, color: AppColors.warning),

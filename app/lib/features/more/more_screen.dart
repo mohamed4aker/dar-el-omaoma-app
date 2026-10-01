@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/utils/launch.dart';
+import '../../core/widgets/brand.dart';
 import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
 import '../auth/welcome_screen.dart' show DeveloperInfo;
@@ -50,21 +52,29 @@ class MoreScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Gap.lg),
+          if (state.session.patient != null && !state.session.isStaff)
+            _Tile(
+              icon: Icons.event_note_outlined,
+              label: s.bookingsTitle,
+              onTap: () => context.push('/bookings'),
+            ),
+          if (state.session.isSignedIn)
+            _Tile(
+              icon: Icons.notifications_outlined,
+              label: s.moreNotifications,
+              onTap: () => context.push('/notifications'),
+            ),
           _Tile(
             icon: Icons.call_outlined,
             label: s.contactTitle,
             onTap: () => context.push('/contact'),
           ),
-          _Tile(
-            icon: Icons.notifications_outlined,
-            label: s.moreNotifications,
-            onTap: () {},
-          ),
-          _Tile(
-            icon: Icons.privacy_tip_outlined,
-            label: s.morePrivacy,
-            onTap: () {},
-          ),
+          if (state.session.isStaff)
+            _Tile(
+              icon: Icons.password_outlined,
+              label: context.tr('تغيير كلمة المرور', 'Change password'),
+              onTap: () => showChangePasswordDialog(context),
+            ),
           _Tile(
             icon: Icons.info_outline,
             label: s.moreAbout,
@@ -80,11 +90,18 @@ class MoreScreen extends StatelessWidget {
               icon: const Icon(Icons.logout),
               label: Text(s.moreSignOut),
             )
-          else
+          else ...[
             FilledButton(
               onPressed: () => context.push('/login'),
               child: Text(s.moreSignIn),
             ),
+            const SizedBox(height: Gap.sm),
+            TextButton.icon(
+              onPressed: () => context.push('/staff-login'),
+              icon: const Icon(Icons.badge_outlined),
+              label: Text(context.tr('دخول الموظفين', 'Staff sign-in')),
+            ),
+          ],
         ],
       ),
     );
@@ -107,27 +124,15 @@ class AboutScreen extends StatelessWidget {
           AppCard(
             child: Column(
               children: [
-                Container(
-                  width: 76,
-                  height: 76,
-                  decoration: BoxDecoration(
-                    color: AppColors.navyTint,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.pink, width: 2),
-                  ),
-                  child: const Icon(Icons.pregnant_woman_outlined,
-                      size: 38, color: AppColors.navy),
-                ),
+                const BrandLockup(markSize: 96),
                 const SizedBox(height: Gap.md),
-                Text(s.appName,
-                    style: Theme.of(context).textTheme.titleLarge),
                 Text(s.tagline,
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: AppColors.pink)),
+                        ?.copyWith(color: AppColors.accent)),
                 const SizedBox(height: Gap.sm),
-                Text('v0.1.0',
+                Text('v1.0.0',
                     style: Theme.of(context).textTheme.labelSmall),
               ],
             ),
@@ -142,22 +147,27 @@ class AboutScreen extends StatelessWidget {
                 const SizedBox(height: Gap.xs),
                 Text(DeveloperInfo.companyName,
                     style: Theme.of(context).textTheme.titleLarge),
+                Text(DeveloperInfo.engineer,
+                    style: Theme.of(context).textTheme.bodyMedium),
                 const Divider(height: Gap.xl),
-                _Line(
-                  icon: Icons.language,
-                  value: DeveloperInfo.website,
-                  onTap: () {},
-                ),
+                if (DeveloperInfo.website.isNotEmpty)
+                  _Line(
+                    icon: Icons.language,
+                    value: DeveloperInfo.website,
+                    onTap: () => Launch.url(context, DeveloperInfo.website),
+                  ),
                 _Line(
                   icon: Icons.support_agent_outlined,
                   value: DeveloperInfo.supportPhone,
-                  onTap: () {},
+                  onTap: () => Launch.call(context, DeveloperInfo.supportPhone),
                 ),
-                _Line(
-                  icon: Icons.mail_outline,
-                  value: DeveloperInfo.supportEmail,
-                  onTap: () {},
-                ),
+                if (DeveloperInfo.supportEmail.isNotEmpty)
+                  _Line(
+                    icon: Icons.mail_outline,
+                    value: DeveloperInfo.supportEmail,
+                    onTap: () => Launch.url(
+                        context, 'mailto:${DeveloperInfo.supportEmail}'),
+                  ),
               ],
             ),
           ),
@@ -238,7 +248,7 @@ class _Tile extends StatelessWidget {
             const EdgeInsets.symmetric(horizontal: Gap.lg, vertical: Gap.md),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.navy),
+            Icon(icon, color: AppColors.primary),
             const SizedBox(width: Gap.md),
             Expanded(
               child: Text(label,
@@ -250,4 +260,84 @@ class _Tile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Changes the signed-in staff member's password.
+Future<void> showChangePasswordDialog(BuildContext context) async {
+  final current = TextEditingController();
+  final next = TextEditingController();
+  final repeat = TextEditingController();
+  String? error;
+  await showDialog<void>(
+    context: context,
+    builder: (dialogContext) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
+        title: Text(context.tr('تغيير كلمة المرور', 'Change password')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: current,
+              obscureText: true,
+              decoration: InputDecoration(
+                  labelText: context.tr('كلمة المرور الحالية', 'Current password')),
+            ),
+            const SizedBox(height: Gap.md),
+            TextField(
+              controller: next,
+              obscureText: true,
+              decoration: InputDecoration(
+                  labelText: context.tr('كلمة المرور الجديدة (6 حروف على الأقل)',
+                      'New password (at least 6 characters)')),
+            ),
+            const SizedBox(height: Gap.md),
+            TextField(
+              controller: repeat,
+              obscureText: true,
+              decoration: InputDecoration(
+                  labelText: context.tr('أعد كتابتها', 'Repeat it')),
+            ),
+            if (error != null) ...[
+              const SizedBox(height: Gap.md),
+              Text(error!, style: const TextStyle(color: AppColors.danger)),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(context.s.commonCancel),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+            onPressed: () {
+              if (next.text.length < 6) {
+                setState(() => error = context.tr(
+                    'كلمة المرور قصيرة.', 'Password is too short.'));
+                return;
+              }
+              if (next.text != repeat.text) {
+                setState(() => error = context.tr(
+                    'كلمتا المرور غير متطابقتين.', 'Passwords do not match.'));
+                return;
+              }
+              final ok = context.read<AppState>().changeOwnPassword(
+                  current: current.text, next: next.text);
+              if (!ok) {
+                setState(() => error = context.tr(
+                    'كلمة المرور الحالية غير صحيحة.',
+                    'Current password is wrong.'));
+                return;
+              }
+              Navigator.of(dialogContext).pop();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(context.tr(
+                      'تم تغيير كلمة المرور', 'Password changed'))));
+            },
+            child: Text(context.tr('حفظ', 'Save')),
+          ),
+        ],
+      ),
+    ),
+  );
 }

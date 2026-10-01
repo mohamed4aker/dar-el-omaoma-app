@@ -53,6 +53,7 @@ class Complaint {
     required this.isAnonymous,
     this.response,
     this.resolvedAt,
+    this.patientId,
   });
 
   final String id;
@@ -63,6 +64,23 @@ class Complaint {
   final bool isAnonymous;
   final String? response;
   final DateTime? resolvedAt;
+
+  /// Null for anonymous complaints, which by design cannot be traced back.
+  final String? patientId;
+
+  bool get isResolved => resolvedAt != null;
+
+  Complaint resolvedWith(String reply, DateTime at) => Complaint(
+        id: id,
+        reference: reference,
+        category: category,
+        body: body,
+        submittedAt: submittedAt,
+        isAnonymous: isAnonymous,
+        response: reply,
+        resolvedAt: at,
+        patientId: patientId,
+      );
 
   /// Acknowledgement target from PROMPT.md section 6.5.
   static const Duration acknowledgementTarget = Duration(hours: 24);

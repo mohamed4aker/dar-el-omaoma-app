@@ -5,11 +5,14 @@ import 'package:dar_el_omouma/domain/models/operations.dart';
 import 'package:dar_el_omouma/domain/scheduling/booking_conflicts.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fixtures.dart';
+
 void main() {
   late AppState state;
 
   setUp(() {
     state = AppState();
+    Fixtures.install(state);
     state.signInAsPatient();
   });
 
@@ -18,7 +21,7 @@ void main() {
     return BookingDraft(
       theatreId: 'or-2',
       surgeonId: 'doc-ortho-1',
-      patientId: Seed.demoPatient.id,
+      patientId: Fixtures.demoPatient.id,
       procedure: procedure,
       classification: Seed.classificationById(procedure.classificationId),
       start: start,
@@ -26,9 +29,9 @@ void main() {
   }
 
   group('patient surgery request → approval (PROMPT.md 6.13.6)', () {
-    test('submitting alerts every approver on push, WhatsApp and SMS', () {
+    test('submitting alerts the approvers inside the app', () {
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -36,16 +39,16 @@ void main() {
       final alerts = state.notifications
           .where((n) => n.audience == NotifyAudience.approvers)
           .toList();
-      expect(
-        alerts.map((n) => n.channel).toSet(),
-        {NotifyChannel.push, NotifyChannel.whatsapp, NotifyChannel.sms},
-      );
+      // In-app only: nothing claims a WhatsApp or SMS was sent until the
+      // hospital's accounts for those channels are connected.
+      expect(alerts, isNotEmpty);
+      expect(alerts.map((n) => n.channel).toSet(), {NotifyChannel.inApp});
     });
 
     test('a request is never a confirmed booking', () {
       final before = state.cases.length;
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -56,7 +59,7 @@ void main() {
 
     test('the estimate the patient saw is stored verbatim', () {
       final request = state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-hip'),
         estimateSnapshot: '120,000 جنيه',
       );
@@ -65,7 +68,7 @@ void main() {
 
     test('approving notifies the patient and clears the queue', () {
       final request = state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -86,7 +89,7 @@ void main() {
 
     test('a rejection always carries a reason back to the patient', () {
       final request = state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -105,7 +108,7 @@ void main() {
   group('approval SLA escalation', () {
     test('a fresh request is not overdue', () {
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -114,7 +117,7 @@ void main() {
 
     test('an unactioned request escalates once the window passes', () {
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -130,7 +133,7 @@ void main() {
 
     test('escalation is not repeated on the same request', () {
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -141,7 +144,7 @@ void main() {
 
     test('a decided request never escalates', () {
       final request = state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
@@ -155,15 +158,15 @@ void main() {
   });
 
   group('no protected health information leaves the app (PROMPT.md 12.4)', () {
-    test('WhatsApp and SMS bodies never contain a patient name', () {
+    test('staff alerts — the text WhatsApp and SMS will carry — never name the patient', () {
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
       state.requestHomeCare(
         serviceId: 'hc-nursing',
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         address: 'المعادي',
         preferredFrom: DateTime.now().add(const Duration(days: 1)),
         preferredTo: DateTime.now().add(const Duration(days: 1, hours: 2)),
@@ -175,9 +178,10 @@ void main() {
         requiredBy: DateTime.now().add(const Duration(days: 2)),
       );
 
-      final nameParts = Seed.demoPatient.fullName.split(' ');
-      final external =
-          state.notifications.where((n) => n.isExternalChannel).toList();
+      final nameParts = Fixtures.demoPatient.fullName.split(' ');
+      final external = state.notifications
+          .where((n) => n.audience != NotifyAudience.patient)
+          .toList();
 
       expect(external, isNotEmpty, reason: 'the test must have something to check');
       for (final notification in external) {
@@ -186,18 +190,22 @@ void main() {
           expect(text.contains(part), isFalse,
               reason: 'leaked "$part" on ${notification.channel.name}');
         }
-        expect(text.contains(Seed.demoPatient.mrn), isFalse);
+        expect(text.contains(Fixtures.demoPatient.mrn), isFalse);
         expect(notification.carriesPhi, isFalse);
       }
     });
 
     test('every external message names an approved template', () {
       state.submitSurgeryRequest(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById('proc-carpal'),
         estimateSnapshot: '9,000 جنيه',
       );
-      for (final n in state.notifications.where((n) => n.isExternalChannel)) {
+      final staffAlerts = state.notifications
+          .where((n) => n.audience != NotifyAudience.patient)
+          .toList();
+      expect(staffAlerts, isNotEmpty);
+      for (final n in staffAlerts) {
         expect(n.templateCode, isNotEmpty);
       }
     });
@@ -208,7 +216,7 @@ void main() {
       final start = Seed.at(3, 9);
       final outcome = state.bookTheatreCase(
         draft: draftFor('proc-carpal', start),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       expect(outcome, isA<BookingAccepted>());
@@ -219,12 +227,12 @@ void main() {
       final start = Seed.at(4, 9);
       state.bookTheatreCase(
         draft: draftFor('proc-carpal', start),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       final second = state.bookTheatreCase(
         draft: draftFor('proc-carpal', start),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       expect(second, isA<BookingRejected>());
@@ -238,12 +246,12 @@ void main() {
       final start = Seed.at(5, 9);
       state.bookTheatreCase(
         draft: draftFor('proc-carpal', start),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       final forced = state.bookTheatreCase(
         draft: draftFor('proc-carpal', start),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
         overrideReason: 'حالة عاجلة بقرار المدير الطبي',
       );
@@ -267,12 +275,12 @@ void main() {
     test('doctor-added and self-registered patients share one pipeline', () {
       state.addToCampaign(
         campaignId: 'camp-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         addedByDoctor: false,
       );
       state.addToCampaign(
         campaignId: 'camp-1',
-        patient: Seed.theatrePatients[1],
+        patient: Fixtures.theatrePatients[1],
         addedByDoctor: true,
       );
 
@@ -287,7 +295,7 @@ void main() {
 
       final entry = state.addToCampaign(
         campaignId: 'camp-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         addedByDoctor: false,
       );
       expect(state.confirmedCohort(campaign), before);
@@ -299,7 +307,7 @@ void main() {
     test('a cohort below the threshold warns the coordinator', () {
       state.addToCampaign(
         campaignId: 'camp-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         addedByDoctor: false,
       );
       expect(
@@ -314,7 +322,7 @@ void main() {
     test('a request is tracked and free to cancel before dispatch', () {
       final request = state.requestHomeCare(
         serviceId: 'hc-nursing',
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         address: 'المعادي، القاهرة',
         preferredFrom: DateTime.now().add(const Duration(days: 1)),
         preferredTo: DateTime.now().add(const Duration(days: 1, hours: 2)),

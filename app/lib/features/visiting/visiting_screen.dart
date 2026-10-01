@@ -69,9 +69,9 @@ class _CampaignCard extends StatelessWidget {
             children: [
               const CircleAvatar(
                 radius: 26,
-                backgroundColor: AppColors.navyTint,
+                backgroundColor: AppColors.primaryTint,
                 child: Icon(Icons.person_outline,
-                    color: AppColors.navy, size: 28),
+                    color: AppColors.primary, size: 28),
               ),
               const SizedBox(width: Gap.md),
               Expanded(
@@ -238,7 +238,7 @@ class _CampaignCard extends StatelessWidget {
               child: Text(s.theatreSelectPatient,
                   style: Theme.of(context).textTheme.titleLarge),
             ),
-            for (final patient in Seed.theatrePatients)
+            for (final patient in context.read<AppState>().patients)
               ListTile(
                 leading: const Icon(Icons.person_outline),
                 title: Text(patient.fullName),
@@ -321,7 +321,7 @@ class _PipelineRow extends StatelessWidget {
               _stageLabel(entry.stage, s),
               color: entry.countsTowardsCohort
                   ? AppColors.success
-                  : AppColors.navy,
+                  : AppColors.primary,
             ),
             if (next != null)
               IconButton(

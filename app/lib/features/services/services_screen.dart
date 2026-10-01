@@ -1,31 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/common.dart';
+import '../../data/app_state.dart';
+import '../../data/seed_data.dart';
 
+/// Every patient-facing service. A service appears once the hospital has
+/// something in it: an empty "Radiology" tile is worse than none.
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final s = context.s;
+    context.watch<AppState>();
     final items = <(IconData, String, String, Color)>[
       (Icons.local_hospital_outlined, s.serviceClinics, '/clinics',
-          AppColors.navy),
-      (Icons.monitor_heart_outlined, s.serviceRadiology, '/radiology',
-          AppColors.pink),
-      (Icons.biotech_outlined, s.serviceLab, '/lab', AppColors.success),
-      (Icons.healing_outlined, s.serviceSurgery, '/surgery',
+          AppColors.primary),
+      (Icons.biotech_outlined, context.tr('المعمل والتحاليل', 'Lab & tests'),
+          '/lab', AppColors.accent),
+      if (Seed.radiology.isNotEmpty)
+        (Icons.monitor_heart_outlined, s.serviceRadiology, '/radiology',
+            AppColors.primary),
+      if (Seed.procedures.any((p) => p.patientRequestable))
+        (Icons.healing_outlined, s.serviceSurgery, '/surgery',
+            AppColors.warning),
+      if (Seed.centres.any((c) => c.isPublished))
+        (Icons.apartment_outlined, s.serviceCentres, '/centres',
+            AppColors.accent),
+      if (Seed.campaigns.isNotEmpty)
+        (Icons.flight_takeoff_outlined, s.serviceVisitingExperts, '/visiting',
+            AppColors.primary),
+      if (Seed.homeCareServices.isNotEmpty)
+        (Icons.home_work_outlined, s.homeCare, '/home-care', AppColors.success),
+      if (Seed.offers.isNotEmpty)
+        (Icons.local_offer_outlined, s.homeOffers, '/offers', AppColors.accent),
+      if (Seed.tips.isNotEmpty)
+        (Icons.lightbulb_outline, s.homeTips, '/tips', AppColors.success),
+      (Icons.feedback_outlined, s.homeComplaints, '/complaints',
           AppColors.warning),
-      (Icons.apartment_outlined, s.serviceCentres, '/centres',
-          AppColors.navy),
-      (Icons.flight_takeoff_outlined, s.serviceVisitingExperts, '/visiting',
-          AppColors.pink),
-      (Icons.home_work_outlined, s.homeCare, '/home-care', AppColors.success),
-      (Icons.local_offer_outlined, s.homeOffers, '/offers', AppColors.pink),
+      (Icons.call_outlined, s.contactTitle, '/contact', AppColors.primary),
     ];
 
     return Scaffold(

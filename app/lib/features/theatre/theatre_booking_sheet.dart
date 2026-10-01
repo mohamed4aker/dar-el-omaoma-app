@@ -222,7 +222,7 @@ class _TheatreBookingSheetState extends State<_TheatreBookingSheet> {
             isExpanded: true,
             hint: Text(s.theatreSelectPatient),
             items: [
-              for (final p in Seed.theatrePatients)
+              for (final p in context.read<AppState>().patients)
                 DropdownMenuItem(
                   value: p.id,
                   child: Text('${p.fullName} — ${p.mrn}',
@@ -230,7 +230,7 @@ class _TheatreBookingSheetState extends State<_TheatreBookingSheet> {
                 ),
             ],
             onChanged: (id) => setState(() =>
-                _patient = Seed.theatrePatients.firstWhere((p) => p.id == id)),
+                _patient = context.read<AppState>().patientById(id!)),
           ),
           const SizedBox(height: Gap.lg),
 
@@ -309,7 +309,7 @@ class _TheatreBookingSheetState extends State<_TheatreBookingSheet> {
           FilledButton(
             onPressed: _canConfirm(check) ? _confirm : null,
             style: FilledButton.styleFrom(
-              backgroundColor: blocked ? AppColors.danger : AppColors.pink,
+              backgroundColor: blocked ? AppColors.danger : AppColors.accent,
               foregroundColor: Colors.white,
             ),
             child: Text(s.theatreConfirmBooking),

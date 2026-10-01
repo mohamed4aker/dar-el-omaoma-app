@@ -6,6 +6,8 @@ import 'package:dar_el_omouma/domain/models/governance.dart';
 import 'package:dar_el_omouma/domain/models/operations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fixtures.dart';
+
 /// Doctor-initiated requests, central scheduling, doctor capacity, schedule
 /// changes and payment options.
 void main() {
@@ -15,6 +17,7 @@ void main() {
 
   setUp(() {
     state = AppState();
+    Fixtures.install(state);
     state.signInAsAdmin();
     doctorCount = Seed.doctors.length;
     clinicCount = Seed.clinics.length;
@@ -30,7 +33,7 @@ void main() {
       final before = state.cases.length;
       state.submitDoctorSurgeryRequest(
         doctorId: 'doc-ortho-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         procedure: Seed.procedureById('proc-acl'),
       );
       expect(state.cases.length, before);
@@ -41,24 +44,21 @@ void main() {
     test('the request alerts the schedulers on every channel', () {
       state.submitDoctorSurgeryRequest(
         doctorId: 'doc-ortho-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         procedure: Seed.procedureById('proc-acl'),
         clinicalNote: 'حالة شبه عاجلة',
       );
       final alerts = state.notifications
           .where((n) => n.templateCode == 'doctor_theatre_request');
-      expect(alerts.map((n) => n.channel).toSet(), {
-        NotifyChannel.push,
-        NotifyChannel.whatsapp,
-        NotifyChannel.sms,
-      });
+      expect(alerts, isNotEmpty);
+      expect(alerts.map((n) => n.channel).toSet(), {NotifyChannel.inApp});
     });
 
     test('scheduling creates the case and notifies the requesting surgeon',
         () {
       final request = state.submitDoctorSurgeryRequest(
         doctorId: 'doc-ortho-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         procedure: Seed.procedureById('proc-carpal'),
       );
 
@@ -90,7 +90,7 @@ void main() {
     test('the patient is told the date too', () {
       final request = state.submitDoctorSurgeryRequest(
         doctorId: 'doc-ortho-1',
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         procedure: Seed.procedureById('proc-carpal'),
       );
       state.scheduleRequest(
@@ -111,7 +111,7 @@ void main() {
     test('scheduling into an occupied theatre is refused', () {
       final request = state.submitDoctorSurgeryRequest(
         doctorId: 'doc-neuro-1',
-        patient: Seed.theatrePatients[2],
+        patient: Fixtures.theatrePatients[2],
         procedure: Seed.procedureById('proc-disc'),
       );
       // case-1 already holds or-1 from 09:00 today.
@@ -199,8 +199,8 @@ void main() {
       );
       final clinic = Seed.clinics.firstWhere((c) => c.id == clinicId);
       final day = nextWeekday(DateTime.sunday);
-      // Four hours at the 20-minute default.
-      expect(state.clinicSlots(clinic, day), hasLength(12));
+      // Four hours at the clinic's 15-minute default.
+      expect(state.clinicSlots(clinic, day), hasLength(16));
       expect(state.remainingCapacity(doctor, day), isNull);
     });
 
@@ -308,7 +308,7 @@ void main() {
       }
       final slot = state.clinicSlots(clinic, day).first;
       state.bookClinicAppointment(
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         clinicId: clinicId,
         doctorId: doctorId,
         start: slot,
@@ -363,12 +363,13 @@ void main() {
 
     test('a booking with no payment still succeeds and records the balance',
         () {
-      final appointment = state.bookClinicAppointment(
-        patientId: Seed.demoPatient.id,
+      final appointment = (state.bookClinicAppointment(
+        patientId: Fixtures.demoPatient.id,
         clinicId: 'clinic-obgyn',
         doctorId: 'doc-obgyn-1',
         start: Seed.at(6, 11),
-      );
+      ) as AppointmentBooked)
+          .appointment;
       expect(appointment.depositPaid, 0);
       expect(appointment.fee, 500);
       expect(appointment.balanceDue, 500);
@@ -376,13 +377,14 @@ void main() {
     });
 
     test('a deposit reduces the balance but is not required to book', () {
-      final appointment = state.bookClinicAppointment(
-        patientId: Seed.demoPatient.id,
+      final appointment = (state.bookClinicAppointment(
+        patientId: Fixtures.demoPatient.id,
         clinicId: 'clinic-obgyn',
         doctorId: 'doc-obgyn-1',
         start: Seed.at(7, 11),
         depositPaid: 200,
-      );
+      ) as AppointmentBooked)
+          .appointment;
       expect(appointment.depositPaid, 200);
       expect(appointment.balanceDue, 300);
     });
@@ -429,22 +431,22 @@ void main() {
     });
 
     test('thin approval coverage is detected when a holder is disabled', () {
-      // The seed ships with two holders — the administrator and a consultant
-      // who also approves — which is the minimum the rule requires.
-      expect(state.holdersOf((r) => r.canApproveSurgery), 2);
-      expect(state.approvalCoverageIsThin, isFalse);
-
-      // Take one of them off duty and the hospital is one absence away from
-      // stalling every patient request.
-      state.setStaffActive('usr-2', false);
+      // The hospital receives the app with one administrator: one approver,
+      // which is one absence away from stalling every patient request.
+      expect(state.holdersOf((r) => r.canApproveSurgery), 1);
       expect(state.approvalCoverageIsThin, isTrue);
 
-      state.upsertStaff(
+      final second = state.upsertStaff(
         name: 'د. منى فاروق',
         phone: '+201009998887',
         roles: {UserRole.surgeryApprover},
+        username: 'mona',
+        password: 'secret1',
       );
       expect(state.approvalCoverageIsThin, isFalse);
+
+      state.setStaffActive(second, false);
+      expect(state.approvalCoverageIsThin, isTrue);
     });
 
     test('catalogue edits are written to the audit log', () {

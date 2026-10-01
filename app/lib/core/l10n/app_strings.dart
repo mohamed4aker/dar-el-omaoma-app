@@ -1802,3 +1802,10 @@ class AppStrings {
 extension AppStringsX on BuildContext {
   AppStrings get s => AppStrings.of(this);
 }
+
+/// Inline bilingual text for screens added after the string catalogue:
+/// `context.tr('احجز', 'Book')`. Arabic first, as everywhere in the app.
+extension TrX on BuildContext {
+  String tr(String ar, String en) =>
+      AppStrings.of(this).localeName == 'en' ? en : ar;
+}

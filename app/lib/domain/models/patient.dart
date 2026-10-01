@@ -14,6 +14,10 @@ class Patient {
     this.allergies = const [],
     this.chronicConditions = const [],
     this.pregnancy,
+    this.nationalId,
+    this.governorate,
+    this.createdAt,
+    this.googleEmail,
   });
 
   final String id;
@@ -22,6 +26,30 @@ class Patient {
   final String phoneE164;
   final DateTime dateOfBirth;
   final bool isMale;
+
+  /// The 14-digit Egyptian National ID; the patient's identity in this app.
+  final String? nationalId;
+
+  /// Derived from the National ID at registration.
+  final String? governorate;
+  final DateTime? createdAt;
+
+  /// Set when the account was created with Google sign-in.
+  final String? googleEmail;
+
+  /// Whole years, as at [now].
+  int ageAt(DateTime now) {
+    var years = now.year - dateOfBirth.year;
+    if (now.month < dateOfBirth.month ||
+        (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
+      years--;
+    }
+    return years < 0 ? 0 : years;
+  }
+
+  /// Local display form of the stored E.164 number: +201012345678 → 01012345678.
+  String get phoneLocal =>
+      phoneE164.startsWith('+20') ? '0${phoneE164.substring(3)}' : phoneE164;
   final String? email;
   final String? companyName;
   final String? bloodGroup;
@@ -50,13 +78,30 @@ class Pregnancy {
 }
 
 class Session {
-  const Session({required this.role, this.patient, this.doctorId});
+  const Session({
+    required this.role,
+    this.patient,
+    this.doctorId,
+    this.staffId,
+    this.staffName,
+  });
 
-  const Session.guest() : role = UserRole.guest, patient = null, doctorId = null;
+  const Session.guest()
+      : role = UserRole.guest,
+        patient = null,
+        doctorId = null,
+        staffId = null,
+        staffName = null;
 
   final UserRole role;
   final Patient? patient;
   final String? doctorId;
+
+  /// Set when a member of staff is signed in.
+  final String? staffId;
+  final String? staffName;
+
+  bool get isStaff => staffId != null;
 
   bool get isGuest => role == UserRole.guest;
   bool get isDoctor => role == UserRole.doctor;

@@ -21,9 +21,13 @@ abstract final class Fmt {
     return '${d.day} ${months[d.month - 1]} ${d.year}';
   }
 
+  /// "1 Oct" / "1 أكتوبر". Arabic month names are not abbreviated: "أكت"
+  /// reads as a typo, not as October.
   static String shortDate(DateTime d, AppStrings s) {
-    final months = s.localeName == 'en' ? _monthsEn : _monthsAr;
-    return '${d.day} ${months[d.month - 1].substring(0, 3)}';
+    if (s.localeName == 'en') {
+      return '${d.day} ${_monthsEn[d.month - 1].substring(0, 3)}';
+    }
+    return '${d.day} ${_monthsAr[d.month - 1]}';
   }
 
   static String weekday(DateTime d, AppStrings s) {
@@ -35,6 +39,26 @@ abstract final class Fmt {
   /// AM/PM in Arabic invites mistakes on a theatre list.
   static String time(DateTime d) =>
       '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+
+  /// 12-hour clock for patients, the way the hospital writes its own
+  /// timetable: "8:30 م", "10:00 ص". Staff screens keep [time].
+  static String clock(DateTime d, AppStrings s) =>
+      minutesClock(d.hour * 60 + d.minute, s);
+
+  static String minutesClock(int minutesFromMidnight, AppStrings s) {
+    final m = minutesFromMidnight % (24 * 60);
+    final hour = m ~/ 60;
+    final minute = m % 60;
+    final h12 = hour % 12 == 0 ? 12 : hour % 12;
+    final en = s.localeName == 'en';
+    final suffix = hour < 12 ? (en ? 'am' : 'ص') : (en ? 'pm' : 'م');
+    return '$h12:${minute.toString().padLeft(2, '0')} $suffix';
+  }
+
+  static String weekdayName(int isoWeekday, AppStrings s) {
+    final days = s.localeName == 'en' ? _weekdaysEn : _weekdaysAr;
+    return days[(isoWeekday - 1) % 7];
+  }
 
   static String timeRange(DateTime start, DateTime end) =>
       '${time(start)} – ${time(end)}';

@@ -7,6 +7,8 @@ import 'package:dar_el_omouma/domain/scheduling/booking_conflicts.dart';
 import 'package:flutter/material.dart' show Color;
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fixtures.dart';
+
 /// Admin catalogue maintenance (PROMPT.md §14).
 ///
 /// The seed lists are process-wide, so each test restores what it changed.
@@ -22,6 +24,7 @@ void main() {
 
   setUp(() {
     state = AppState();
+    Fixtures.install(state);
     classificationCount = Seed.classifications.length;
     procedureCount = Seed.procedures.length;
     clinicCount = Seed.clinics.length;
@@ -78,12 +81,12 @@ void main() {
         draft: BookingDraft(
           theatreId: 'or-4',
           surgeonId: 'doc-uro-1',
-          patientId: Seed.demoPatient.id,
+          patientId: Fixtures.demoPatient.id,
           procedure: procedure,
           classification: Seed.classificationById(id),
           start: Seed.at(6, 10),
         ),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       expect(outcome, isA<BookingAccepted>());
@@ -153,7 +156,7 @@ void main() {
       final draft = BookingDraft(
         theatreId: 'or-1',
         surgeonId: 'doc-ortho-1',
-        patientId: Seed.demoPatient.id,
+        patientId: Fixtures.demoPatient.id,
         procedure: Seed.procedureById(procedureId),
         classification: classification,
         start: Seed.at(7, 10),
@@ -208,15 +211,37 @@ void main() {
         draft: BookingDraft(
           theatreId: 'or-2',
           surgeonId: doctorId,
-          patientId: Seed.demoPatient.id,
+          patientId: Fixtures.demoPatient.id,
           procedure: Seed.procedureById('proc-carpal'),
           classification: Seed.classificationById('cls-minor'),
           start: Seed.at(8, 10),
         ),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       expect(outcome, isA<BookingAccepted>());
+    });
+
+    test('a doctor with no working hours is listed but not booked online', () {
+      final doctorId = state.upsertDoctor(
+        name: const Label('د. بالموعد', 'Dr By-appointment'),
+        title: const Label('استشاري', 'Consultant'),
+        specialty: const Label('وراثة', 'Genetics'),
+        seniority: 3,
+        scheduleNote: 'يتم التحديد بموعد مسبق',
+      );
+      final clinicId = state.upsertClinic(
+        name: const Label('عيادة الوراثة', 'Genetics clinic'),
+        consultationFee: 0,
+        followUpFee: 0,
+        doctorIds: [doctorId],
+        workingDays: const [1, 2, 3, 4, 5, 6, 7],
+      );
+      final clinic = Seed.clinics.firstWhere((c) => c.id == clinicId);
+      expect(Seed.doctorById(doctorId).isBookableOnline, isFalse);
+      for (var i = 1; i <= 7; i++) {
+        expect(state.clinicSlots(clinic, Seed.at(i, 0)), isEmpty);
+      }
     });
 
     test('a new clinic offers slots on its configured working days', () {
@@ -225,6 +250,9 @@ void main() {
         title: const Label('أخصائي', 'Specialist'),
         specialty: const Label('جلدية', 'Dermatology'),
         seniority: 2,
+        shifts: const [
+          DoctorShift(weekday: DateTime.sunday, startsAt: 600, endsAt: 720),
+        ],
       );
       final clinicId = state.upsertClinic(
         name: const Label('عيادة الجلدية', 'Dermatology clinic'),
@@ -264,12 +292,12 @@ void main() {
         draft: BookingDraft(
           theatreId: id,
           surgeonId: 'doc-ortho-1',
-          patientId: Seed.demoPatient.id,
+          patientId: Fixtures.demoPatient.id,
           procedure: Seed.procedureById('proc-acl'),
           classification: Seed.classificationById('cls-major'),
           start: Seed.at(9, 9),
         ),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       expect(outcome, isA<BookingAccepted>());
@@ -288,12 +316,12 @@ void main() {
         draft: BookingDraft(
           theatreId: id,
           surgeonId: 'doc-ortho-1',
-          patientId: Seed.demoPatient.id,
+          patientId: Fixtures.demoPatient.id,
           procedure: Seed.procedureById('proc-acl'),
           classification: Seed.classificationById('cls-major'),
           start: Seed.at(10, 9),
         ),
-        patient: Seed.demoPatient,
+        patient: Fixtures.demoPatient,
         origin: BookingOrigin.doctorDirect,
       );
       expect(outcome, isA<BookingRejected>());

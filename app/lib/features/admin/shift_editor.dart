@@ -88,7 +88,7 @@ class ShiftEditor extends StatelessWidget {
                 ? s.adminNoCap
                 : '${s.adminWeeklyCapacity}: $capacity',
             icon: Icons.groups_outlined,
-            color: AppColors.navy,
+            color: AppColors.primary,
           ),
         ],
       ],
@@ -121,7 +121,7 @@ class _DayRow extends StatelessWidget {
       child: AppCard(
         padding: const EdgeInsets.all(Gap.md),
         borderColor: active
-            ? AppColors.navy.withValues(alpha: 0.4)
+            ? AppColors.primary.withValues(alpha: 0.4)
             : Theme.of(context).colorScheme.outline,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -46,27 +46,45 @@ jobs:
       - name: الاختبارات
         run: flutter test
 
+      # مفتاح المستشفى للتوقيع (لجوجل بلاي) لو اتضاف في Secrets.
+      # من غيره بيتستخدم مفتاح التطوير المحفوظ في المشروع، فكل نسخة بتتثبت
+      # فوق اللي قبلها من غير ما المستخدم يمسح التطبيق.
+      - name: مفتاح التوقيع
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+            echo "ANDROID_KEYSTORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> "$GITHUB_ENV"
+            echo "ANDROID_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> "$GITHUB_ENV"
+            echo "ANDROID_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}" >> "$GITHUB_ENV"
+            echo "Signing with the hospital key"
+          else
+            echo "Signing with the development key"
+          fi
+
       - name: بناء APK (نسخة شاملة)
-        run: flutter build apk --release
+        run: flutter build apk --release --build-number=${{ github.run_number }}
 
       - name: بناء APK لكل معمارية (ملفات أصغر)
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release --split-per-abi --build-number=${{ github.run_number }}
 
       - name: بناء App Bundle (لجوجل بلاي)
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --build-number=${{ github.run_number }}
 
       - name: تجهيز اسم الملف
         run: |
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk \
-             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-universal.apk
+             dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}-universal.apk
           # ده اللي بيشتغل على ٩٩٪ من موبايلات النهاردة وحجمه أصغر بكتير
           cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
-             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm64.apk
+             dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}-arm64.apk
           cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk \
-             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm32.apk
+             dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}-arm32.apk
           cp build/app/outputs/bundle/release/app-release.aab \
-             dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}.aab
+             dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}.aab
           ls -lh dist
 
       - name: نشر نسخة للتنزيل المباشر
@@ -76,29 +94,25 @@ jobs:
           name: دار الأمومة — نسخة تجريبية ${{ github.run_number }}
           prerelease: true
           body: |
-            نسخة تجريبية من تطبيق **مستشفى دار الأمومة**.
+            **تطبيق مستشفى دار الأمومة** — نسخة ${{ github.run_number }}
 
-            نزّل ملف **arm64** من تحت (ده اللي بيشتغل على معظم
-            الموبايلات وحجمه أصغر)، ولو مااشتغلش جرّب **universal**.
-            ثبّته على الموبايل عادي
-            (هيطلبك تسمح بالتثبيت من مصدر غير معروف — ده طبيعي لأي
-            تطبيق مش نازل من Google Play).
+            نزّل ملف **arm64** (بيشتغل على معظم الموبايلات)، ولو مااشتغلش جرّب **universal**.
+            هيطلب السماح بالتثبيت من مصدر غير معروف — طبيعي لأي تطبيق مش من Google Play.
 
-            **الدخول التجريبي**
+            **البيانات:** 43 عيادة و155 طبيب بمواعيدهم، وأسعار المعمل (408 تحليل) و14 عرض.
 
-            من شاشة تسجيل الدخول:
-            - رقم الهاتف `01013009936` والكود `123456` → دخول كمريض
-            - أو انزل تحت واختار: **د. أحمد سليم** (جريد غرف العمليات)،
-              **صندوق الموافقات**، أو **لوحة التحكم** (إدارة العيادات
-              والعمليات والتصنيفات والأطباء والصلاحيات).
+            **المريض:** «إنشاء حساب» بالاسم الرباعي والرقم القومي والموبايل.
+            **الموظفين:** «دخول الموظفين» — المستخدم `admin` وكلمة المرور `admin123`
+            (غيّرها من لوحة التحكم أول ما تدخل).
 
-            ⚠️ البيانات في الذاكرة، فأي حاجة تضيفها بتضيع لما تقفل
-            التطبيق — ده لحد ما الباك إند يتعمل.
+            ⚠️ البيانات بتتحفظ على الموبايل نفسه. الحجز اللي يتعمل على موبايل مريض
+            مش بيظهر على موبايل الاستقبال إلا بعد ربط سيرفر مشترك.
+
           files: |
-            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm64.apk
-            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-arm32.apk
-            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}-universal.apk
-            app/dist/dar-el-omouma-v0.1.0-build-${{ github.run_number }}.aab
+            app/dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}-arm64.apk
+            app/dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}-arm32.apk
+            app/dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}-universal.apk
+            app/dist/dar-el-omouma-v1.0.0-build-${{ github.run_number }}.aab
 
       - name: رفع ملف APK
         uses: actions/upload-artifact@v4

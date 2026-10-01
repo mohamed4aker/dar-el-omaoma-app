@@ -1,0 +1,10675 @@
+{
+ "schema": 1,
+ "clinics": [
+  {
+   "id": "clinic-01",
+   "name": {
+    "ar": "عيادة الجراحة العامة"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-001",
+    "doc-002",
+    "doc-003",
+    "doc-004",
+    "doc-005",
+    "doc-006",
+    "doc-007",
+    "doc-008"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-02",
+   "name": {
+    "ar": "عيادة جراحات الاورام"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-009",
+    "doc-010",
+    "doc-011",
+    "doc-012"
+   ],
+   "workingDays": [
+    2,
+    3,
+    6
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-03",
+   "name": {
+    "ar": "عيادة جراحة التجميل"
+   },
+   "note": "خارج التعاقد",
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-013"
+   ],
+   "workingDays": [
+    3
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-04",
+   "name": {
+    "ar": "عيادة المسالك"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-014",
+    "doc-015",
+    "doc-016",
+    "doc-017",
+    "doc-018"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-05",
+   "name": {
+    "ar": "عيادة العظام"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-019",
+    "doc-020",
+    "doc-021",
+    "doc-022",
+    "doc-023",
+    "doc-024",
+    "doc-025",
+    "doc-026",
+    "doc-027",
+    "doc-028",
+    "doc-029",
+    "doc-030"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-06",
+   "name": {
+    "ar": "عيادة عظام اطفال"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-031",
+    "doc-032"
+   ],
+   "workingDays": [
+    3,
+    4
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-07",
+   "name": {
+    "ar": "عيادة جراحة المخ والاعصاب"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-033",
+    "doc-034",
+    "doc-035",
+    "doc-036",
+    "doc-037",
+    "doc-038"
+   ],
+   "workingDays": [
+    1,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-08",
+   "name": {
+    "ar": "عيادة المخ والاعصاب (اطفال)"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-039",
+    "doc-040"
+   ],
+   "workingDays": [
+    1,
+    6
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-09",
+   "name": {
+    "ar": "عيادة النفسية والعصبية"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-041",
+    "doc-042"
+   ],
+   "workingDays": [
+    1,
+    3,
+    4,
+    6
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-10",
+   "name": {
+    "ar": "عيادة الاورام (مركز هوب)"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-043",
+    "doc-044"
+   ],
+   "workingDays": [
+    1,
+    2
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-11",
+   "name": {
+    "ar": "عيادة الغدد الصماء"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-045",
+    "doc-046",
+    "doc-047",
+    "doc-048"
+   ],
+   "workingDays": [
+    1,
+    2
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-12",
+   "name": {
+    "ar": "عيادة امراض الدم والمناعة"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-047",
+    "doc-049",
+    "doc-050"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-13",
+   "name": {
+    "ar": "عيادة الباطنة"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-051",
+    "doc-052",
+    "doc-053",
+    "doc-045",
+    "doc-054",
+    "doc-055",
+    "doc-056",
+    "doc-049",
+    "doc-057",
+    "doc-058",
+    "doc-059"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-14",
+   "name": {
+    "ar": "عيادة الصدر"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-060",
+    "doc-061",
+    "doc-062"
+   ],
+   "workingDays": [
+    2,
+    3,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-15",
+   "name": {
+    "ar": "عيادة الانف والاذن"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-063",
+    "doc-064",
+    "doc-065",
+    "doc-066",
+    "doc-067",
+    "doc-068",
+    "doc-069"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-16",
+   "name": {
+    "ar": "عيادة الاطفال"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-070",
+    "doc-071",
+    "doc-072",
+    "doc-073",
+    "doc-074",
+    "doc-075",
+    "doc-076"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-17",
+   "name": {
+    "ar": "عيادة جراحة مناظير الجهاز الهضمي"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-077",
+    "doc-078",
+    "doc-079"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-18",
+   "name": {
+    "ar": "عيادة مركز ivein"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-080",
+    "doc-081",
+    "doc-082"
+   ],
+   "workingDays": [],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-19",
+   "name": {
+    "ar": "عيادة تغذية وجهاز هضمي اطفال"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-083"
+   ],
+   "workingDays": [
+    2
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-20",
+   "name": {
+    "ar": "عيادة الاسنان"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-084",
+    "doc-085",
+    "doc-086",
+    "doc-087"
+   ],
+   "workingDays": [
+    1,
+    2,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-21",
+   "name": {
+    "ar": "عيادة تقويم الاسنان"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-088"
+   ],
+   "workingDays": [
+    3,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-22",
+   "name": {
+    "ar": "عيادة جراحة الوجه والفكين"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-089",
+    "doc-090",
+    "doc-091"
+   ],
+   "workingDays": [
+    1,
+    3,
+    6
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-23",
+   "name": {
+    "ar": "عيادة الجلدية"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-092",
+    "doc-093",
+    "doc-094",
+    "doc-095"
+   ],
+   "workingDays": [
+    1,
+    2,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-24",
+   "name": {
+    "ar": "عيادة الاوعية الدموية"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-096",
+    "doc-097",
+    "doc-098"
+   ],
+   "workingDays": [
+    2,
+    3,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-25",
+   "name": {
+    "ar": "عيادة النسا الاخصائي"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-099",
+    "doc-100",
+    "doc-101",
+    "doc-102",
+    "doc-103",
+    "doc-104",
+    "doc-105",
+    "doc-106",
+    "doc-107",
+    "doc-108",
+    "doc-109",
+    "doc-110",
+    "doc-111",
+    "doc-112"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-26",
+   "name": {
+    "ar": "عيادة النسا الاستشاري"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-113",
+    "doc-114",
+    "doc-115",
+    "doc-116",
+    "doc-117",
+    "doc-118",
+    "doc-119",
+    "doc-120",
+    "doc-121",
+    "doc-122",
+    "doc-123",
+    "doc-061",
+    "doc-124"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-27",
+   "name": {
+    "ar": "عيادة النسا التجميلية"
+   },
+   "note": "خارج التعاقد",
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-125",
+    "doc-126"
+   ],
+   "workingDays": [
+    2,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-28",
+   "name": {
+    "ar": "عيادة التغذية"
+   },
+   "note": "تعاقدات خاصه",
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-127",
+    "doc-128",
+    "doc-129",
+    "doc-130",
+    "doc-131"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-29",
+   "name": {
+    "ar": "عيادات جراحات السمنة والمناظير"
+   },
+   "note": "خارج التعاقد",
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-001",
+    "doc-003",
+    "doc-002",
+    "doc-132",
+    "doc-133",
+    "doc-134",
+    "doc-135"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-30",
+   "name": {
+    "ar": "عيادة امراض الذكورة"
+   },
+   "note": "خارج التعاقد",
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-095",
+    "doc-014",
+    "doc-015",
+    "doc-016",
+    "doc-017"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-31",
+   "name": {
+    "ar": "عيادة الرضاعة الطبيعية"
+   },
+   "note": "خارج التعاقد",
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-136",
+    "doc-137"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-32",
+   "name": {
+    "ar": "عيادة الامراض الوراثية"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-138"
+   ],
+   "workingDays": [],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-33",
+   "name": {
+    "ar": "عيادة فحص الايكو"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-139",
+    "doc-140",
+    "doc-052",
+    "doc-141",
+    "doc-142",
+    "doc-143"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-34",
+   "name": {
+    "ar": "عيادات امراض القلب"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-052",
+    "doc-142",
+    "doc-141",
+    "doc-056",
+    "doc-144"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-35",
+   "name": {
+    "ar": "عيادة العلاج الطبيعي"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-145",
+    "doc-146",
+    "doc-147"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-36",
+   "name": {
+    "ar": "عيادة جراحات الاطفال"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-148"
+   ],
+   "workingDays": [
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-37",
+   "name": {
+    "ar": "عيادة الاشعة"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-149",
+    "doc-150"
+   ],
+   "workingDays": [
+    1,
+    2,
+    4,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-38",
+   "name": {
+    "ar": "عيادة اطباء الحمل الحرج بـ وحده حياه"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-115",
+    "doc-123"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-39",
+   "name": {
+    "ar": "عيادة مسالك الأطفال"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-151"
+   ],
+   "workingDays": [
+    2
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-40",
+   "name": {
+    "ar": "عيادة رسم الاعصاب والعضلات"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-152"
+   ],
+   "workingDays": [
+    2,
+    4,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-41",
+   "name": {
+    "ar": "عيادة الحقن المجهري"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-113",
+    "doc-114",
+    "doc-123",
+    "doc-115",
+    "doc-116",
+    "doc-118",
+    "doc-120",
+    "doc-121",
+    "doc-119",
+    "doc-122",
+    "doc-117",
+    "doc-061",
+    "doc-099",
+    "doc-101",
+    "doc-102",
+    "doc-104",
+    "doc-105",
+    "doc-106",
+    "doc-107",
+    "doc-108",
+    "doc-109",
+    "doc-124",
+    "doc-112"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-42",
+   "name": {
+    "ar": "عيادة الالم والعمود الفقري"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-153"
+   ],
+   "workingDays": [],
+   "slotMinutes": 15
+  },
+  {
+   "id": "clinic-43",
+   "name": {
+    "ar": "عيادة السونار"
+   },
+   "note": null,
+   "consultationFee": 0,
+   "followUpFee": 0,
+   "doctorIds": [
+    "doc-154",
+    "doc-155"
+   ],
+   "workingDays": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "slotMinutes": 15
+  }
+ ],
+ "doctors": [
+  {
+   "id": "doc-001",
+   "name": {
+    "ar": "د/ وليد علام"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والأحد والإثنين والأربعاء والخميس 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-002",
+   "name": {
+    "ar": "د/ حسين عزب"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 3 مساءً\nالاربعاء 3 مساءً\nعيادات جراحات السمنة والمناظير: الاثنين والأربعاء 3 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-003",
+   "name": {
+    "ar": "د/ احمد الفقي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد والثلاثاء والخميس\n4 مساءً\nعيادات جراحات السمنة والمناظير: الاحد والثلاثاء والخميس 4 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-004",
+   "name": {
+    "ar": "د/ ندي وسيم"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 10 ص",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-005",
+   "name": {
+    "ar": "د/ محمود سعد"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت والثلاثاء\n1 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-006",
+   "name": {
+    "ar": "د/ محمد مشالي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد والاربعاء\n5 مساء",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-007",
+   "name": {
+    "ar": "د/ حسن القزاز"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين\n6 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-008",
+   "name": {
+    "ar": "د/ احمد جابر"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الجراحة العامة"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والثلاثاء 6مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-009",
+   "name": {
+    "ar": "أ.د/ عيد الجمال"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "جراحات الاورام"
+   },
+   "seniority": 4,
+   "scheduleNote": "السبت 2 ظهراً\nالثلاثاء 2ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-010",
+   "name": {
+    "ar": "د/ رجب الشريف"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحات الاورام"
+   },
+   "seniority": 3,
+   "scheduleNote": "الثلاثاء 5 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-011",
+   "name": {
+    "ar": "أ.د/ اشرف مسعود"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "جراحات الاورام"
+   },
+   "seniority": 4,
+   "scheduleNote": "الثلاثاء 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-012",
+   "name": {
+    "ar": "د/ محمود خليل"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحات الاورام"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاربعاء 2 ظهراً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-013",
+   "name": {
+    "ar": "د/ احمد النمر"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحة التجميل"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاربعاء 2 ظهراً\nخارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-014",
+   "name": {
+    "ar": "د/ سامح نصار"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "المسالك"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 8.30 مساءً\nالاثنين ١٠ صباحاً\nالاربعاء 8.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1230,
+     "endsAt": 1350,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1230,
+     "endsAt": 1350,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-015",
+   "name": {
+    "ar": "د/ حافظ مناع"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "المسالك"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 10 مساءً\nالاثنين 10 مساءً\nالثلاثاء 12 ظهراً و 10 مساءً\nالخميس 12ظهرا\nعيادة امراض الذكورة: الاحد 10 مساءً · الاثنين 10 مساءً · الثلاثاء 1.30 ظهراً و 10 مساءً · الخميس 12ظ",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 2,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-016",
+   "name": {
+    "ar": "د/ ياسر الالفي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "المسالك"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 2 ظهراً\nالخميس 6.30 مساءً\nعيادة امراض الذكورة: السبت 2 ظهراً / الخميس 7 مساءً",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 1110,
+     "endsAt": 1230,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-017",
+   "name": {
+    "ar": "د/ فايز العسكري"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "المسالك"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والأربعاء\n11.30 ظهراً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 690,
+     "endsAt": 810,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 690,
+     "endsAt": 810,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-018",
+   "name": {
+    "ar": "د/ احمد عصام"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "المسالك"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 7.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1170,
+     "endsAt": 1290,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-019",
+   "name": {
+    "ar": "أ.د/ حامد الجوهري"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 4,
+   "scheduleNote": "الاربعاء 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-020",
+   "name": {
+    "ar": "د/ عاطف مهدي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 1 ظهراً\nالثلاثاء 12 ظهرا",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-021",
+   "name": {
+    "ar": "د/ عمر شلبي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاربعاء 4مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-022",
+   "name": {
+    "ar": "د/ احمد غانم"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 9.30مساءً",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-023",
+   "name": {
+    "ar": "د/ مصطفى البردان"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 2 ظهراً\nالثلاثاء 2 ظهراً و8 مساءً\nالخميس 2 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-024",
+   "name": {
+    "ar": "د/ محمد الشريف"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 4ظهراً\nالاربعاء 10 مساءً\nالخميس 10 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-025",
+   "name": {
+    "ar": "د/ عادل ابو غنيمة"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 5 مساء\nالاربعاء 6مساء",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-026",
+   "name": {
+    "ar": "د/ عمرو الشيشيني"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت\n8.30 مساء",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 1230,
+     "endsAt": 1350,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-027",
+   "name": {
+    "ar": "د/ محمود البلتاجي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والاثنين 7مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-028",
+   "name": {
+    "ar": "د/ احمد زيد"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 1.30 ظهرا",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 810,
+     "endsAt": 930,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-029",
+   "name": {
+    "ar": "د/ شريف ايهاب صدقي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 8 مساء\nالخميس 4 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-030",
+   "name": {
+    "ar": "د/ محمد ابو علو"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "العظام"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 12 ظ\nالخميس 12 ظ",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-031",
+   "name": {
+    "ar": "د/ محمد اسامة"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "عظام اطفال"
+   },
+   "seniority": 3,
+   "scheduleNote": "الخميس 5 مساء",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-032",
+   "name": {
+    "ar": "د/ محمود نصر عبد التواب"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "عظام اطفال"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاربعاء 5 مساء",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-033",
+   "name": {
+    "ar": "د/ نبيل ناصف"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحة المخ والاعصاب"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 7 مساءً",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-034",
+   "name": {
+    "ar": "د/ محمد السباعي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحة المخ والاعصاب"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاربعاء 9مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-035",
+   "name": {
+    "ar": "د/ احمد عبده"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحة المخ والاعصاب"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 11 مساءً",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1380,
+     "endsAt": 1440,
+     "maxPatients": 4
+    }
+   ]
+  },
+  {
+   "id": "doc-036",
+   "name": {
+    "ar": "د/ حازم رمضان"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "جراحة المخ والاعصاب"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 8 مساءً\nالخميس 8 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-037",
+   "name": {
+    "ar": "د/ احمد مسلم"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "جراحة المخ والاعصاب"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 2 ظهرا\nالاثنين 2 ظهرا",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-038",
+   "name": {
+    "ar": "د/ محمد العبد"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "جراحة المخ والاعصاب"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 12 ظهرا\nالاربعاء 3 مساء",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-039",
+   "name": {
+    "ar": "د/ اشرف القلفاط"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "نفسية وعصبية"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 2:30 م",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 870,
+     "endsAt": 990,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-040",
+   "name": {
+    "ar": "د/ مروة رجب عباس"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "نفسية فقط"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 2 مساءا",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-041",
+   "name": {
+    "ar": "د/ محمد عقده"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "نفسية وعصبية"
+   },
+   "seniority": 2,
+   "scheduleNote": "يوم الاثنين 9.30 مساء\nوالخميس9.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-042",
+   "name": {
+    "ar": "د/ احمد سمير عبد القادر"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "نفسية وعصبية"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 6 مساء\nالاربعاء 6 مساء",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-043",
+   "name": {
+    "ar": "د/ محمد محيسن"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "اورام"
+   },
+   "seniority": 3,
+   "scheduleNote": "الثلاثاء 1 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-044",
+   "name": {
+    "ar": "د/ علا صقر"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الاورام (مركز هوب)"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 11 ظهراً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-045",
+   "name": {
+    "ar": "د/ اماني عوض فريد"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الغدد الصماء"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 6 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-046",
+   "name": {
+    "ar": "د/ حسام دعبيس"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الغدد الصماء"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 10.30 ص",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 630,
+     "endsAt": 750,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-047",
+   "name": {
+    "ar": "د/ نغم صفوت"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "امراض مناعه وروماتيزم وغدد"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 4 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-048",
+   "name": {
+    "ar": "د/ احمد جمال بسيوني"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الغدد الصماء"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 4 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-049",
+   "name": {
+    "ar": "د/ عمر احمد اسامه"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الباطنة والمناعة والروماتيزم"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 11 ظهراً\nالإثنين 11 ظهراً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-050",
+   "name": {
+    "ar": "د/ شروق سعيد شمس الدين"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "امراض مناعه وروماتيزم والمفاصل والعمود الفقري"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاربعاء والخميس 6م",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-051",
+   "name": {
+    "ar": "د/ محمد صبري"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الباطنة"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد والاثنين والثلاثاء والخميس\n8 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 2,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-052",
+   "name": {
+    "ar": "د/ اسامة القاضي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "امراض الباطنة والقلب"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 5 مساءً\nالاثنين 1 ظهراً\nالاربعاء 11 ظهراً\nالخميس 10 صباحا (حالات الايكو فقط)\nعيادة فحص الايكو: الخميس 10 صباحا · كبار — كشوفات + ايكو\nعيادات امراض القلب: السبت 5 مساءً · الاثنين 1 ظـهراً · الاربعاء 11 ظـهراً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-053",
+   "name": {
+    "ar": "د/ محمد عبد السلام"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "امراض وزراعه الكلي وامراض ارتفاع ضغط الدم"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 10 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-054",
+   "name": {
+    "ar": "د/ احمد محمد عويضه"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "امراض الباطنة والكلي"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 6.30 مساءً\nالخميس 1.30 ظهراً\nكشف ب سونار",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 810,
+     "endsAt": 930,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1110,
+     "endsAt": 1230,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-055",
+   "name": {
+    "ar": "د/ احمد وجيه المغربي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "باطنة وكلي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 2 ظهراً\nالثلاثاء 2 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-056",
+   "name": {
+    "ar": "د/ محمد السقا"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الباطنة"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 12 : 2 ظهرا\nالثلاثاء و الخميس\n6 : 8 مساء\nكشف بدون سونار",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-057",
+   "name": {
+    "ar": "د/ محمد عاطف بسيوني"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الباطنة والسكر"
+   },
+   "seniority": 2,
+   "scheduleNote": "الأربعاء 5 مساءً\nالخميس 5 مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-058",
+   "name": {
+    "ar": "د/ احمد فوزي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الباطنة"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين\n10صباحاً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-059",
+   "name": {
+    "ar": "د/ اميرة سلطان"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "باطنة وكلي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاربعاء 8 مساء",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-060",
+   "name": {
+    "ar": "أ.د/ ايمن الديب"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "الصدر"
+   },
+   "seniority": 4,
+   "scheduleNote": "السبت 9.30 مساءً\nالثلاثاء 9.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-061",
+   "name": {
+    "ar": "د/ محمد عماره"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الصدر"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 7 مساءً\nالاربعاء 7 مساءً\nعيادة النسا الاستشاري: متواجد يومياً لحالاته فقط · السبت والثلاثاء والخميس 9 صباحا : 12 مساءً\nعيادة الحقن المجهري: متواجد يومياً لحالاته فقط · السبت والثلاثاء والخميس 9 :12صباحاً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 540,
+     "endsAt": 720,
+     "maxPatients": 12
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 540,
+     "endsAt": 720,
+     "maxPatients": 12
+    },
+    {
+     "weekday": 6,
+     "startsAt": 540,
+     "endsAt": 720,
+     "maxPatients": 12
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-062",
+   "name": {
+    "ar": "د/ محمود غلوش"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الصدر"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 7 مساءً",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-063",
+   "name": {
+    "ar": "د/ اسلام الحوشي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 9 مساءً\nالاحد 9 مساءً",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-064",
+   "name": {
+    "ar": "د/ سامح ثابت"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين8.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1230,
+     "endsAt": 1350,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-065",
+   "name": {
+    "ar": "د/ احمد ابو علو"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء والاربعاء والخميس\n9.30مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-066",
+   "name": {
+    "ar": "د/ محمود فوزي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 5 مساءً\nالثلاثاء 12.30ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 750,
+     "endsAt": 870,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-067",
+   "name": {
+    "ar": "د/ محمد السكري"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 2 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-068",
+   "name": {
+    "ar": "د/ احمد ابو يمن"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 2 مساء",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-069",
+   "name": {
+    "ar": "د/ اسراء ابراهيم جودة"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الانف والاذن"
+   },
+   "seniority": 3,
+   "scheduleNote": "الثلاثاء 2 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-070",
+   "name": {
+    "ar": "د/ محمد هاني"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 3 إلي 5 مساءً\nالاربعاء 5.30 إلي 7.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1050,
+     "endsAt": 1170,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-071",
+   "name": {
+    "ar": "د/ صلاح الكومي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 1:30 الي 2:30ظهراً\nالاربعاء 1:30 الي 2:30 ظهراً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 810,
+     "endsAt": 870,
+     "maxPatients": 4
+    },
+    {
+     "weekday": 7,
+     "startsAt": 810,
+     "endsAt": 870,
+     "maxPatients": 4
+    }
+   ]
+  },
+  {
+   "id": "doc-072",
+   "name": {
+    "ar": "د/ محمد جوده"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 3 :4 مساءً",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 900,
+     "endsAt": 960,
+     "maxPatients": 4
+    }
+   ]
+  },
+  {
+   "id": "doc-073",
+   "name": {
+    "ar": "د/ احمد نعيم"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 3:2 مساءً",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 900,
+     "maxPatients": 4
+    }
+   ]
+  },
+  {
+   "id": "doc-074",
+   "name": {
+    "ar": "د/ صفاء بشير"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 8:7 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1140,
+     "endsAt": 1200,
+     "maxPatients": 4
+    }
+   ]
+  },
+  {
+   "id": "doc-075",
+   "name": {
+    "ar": "د/ محمد خليفة"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 8 مساءً\nالاحد (حالاته فقط) 8.30 مساء\nالخميس (حالاته فقط) 8 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-076",
+   "name": {
+    "ar": "د/ مني الكردي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "الخميس 3:2 مساءً",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 840,
+     "endsAt": 900,
+     "maxPatients": 4
+    }
+   ]
+  },
+  {
+   "id": "doc-077",
+   "name": {
+    "ar": "د/ اسماء ماضي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحة مناظير الجهاز الهضمي"
+   },
+   "seniority": 3,
+   "scheduleNote": "الخميس 2 ظهرا",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-078",
+   "name": {
+    "ar": "أ.د/ انور يسري"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "جراحة مناظير الجهاز الهضمي"
+   },
+   "seniority": 4,
+   "scheduleNote": "الثلاثاء 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-079",
+   "name": {
+    "ar": "د/ احمد شومان"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "جراحة مناظير الجهاز الهضمي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 1 ظهراً\nالاربعاء 1 ظهراً\nالخميس 12 ظهرا",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-080",
+   "name": {
+    "ar": "د/ جورج إبراهيم"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "مركز ivein"
+   },
+   "seniority": 2,
+   "scheduleNote": "يتم تحديدها من قبل المركز",
+   "shifts": []
+  },
+  {
+   "id": "doc-081",
+   "name": {
+    "ar": "د/ وليد مبروك"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "مركز ivein"
+   },
+   "seniority": 2,
+   "scheduleNote": null,
+   "shifts": []
+  },
+  {
+   "id": "doc-082",
+   "name": {
+    "ar": "د/ هشام سمير"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "مركز ivein"
+   },
+   "seniority": 2,
+   "scheduleNote": null,
+   "shifts": []
+  },
+  {
+   "id": "doc-083",
+   "name": {
+    "ar": "د/ ايمان عادل الحداد"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "تغذية وجهاز هضمي اطفال"
+   },
+   "seniority": 2,
+   "scheduleNote": "االثلاثاء 6.30م\nاطفال جهاز هضمي فقط",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1110,
+     "endsAt": 1230,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-084",
+   "name": {
+    "ar": "د/ معتز عاصم"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاسنان"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 2 ظهراً\nالاثنين2 ظهراً\nالثلاثاء 1 ظهراً\nالاربعاء 1ظهرا حالاته فقط",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 2,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-085",
+   "name": {
+    "ar": "د/ دنيا سليم"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاسنان"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 6 مساء\nالخميس 6 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-086",
+   "name": {
+    "ar": "د/ باسم برهام"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاسنان"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 2 ظهراً\nالخميس 2 ظهراً",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-087",
+   "name": {
+    "ar": "د/ رويدا هشام سعد"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاسنان"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 6 مساء\nالثلاثاء 6 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-088",
+   "name": {
+    "ar": "د/ زياد عبدالله"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "تقويم الاسنان"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 7 مساءً\nالاربعاء 7 مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-089",
+   "name": {
+    "ar": "د/ سامي قمح"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحة الوجه والفكين"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 10 مساءً\nالاثنين 9مساءً\nالأربعاء 9 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-090",
+   "name": {
+    "ar": "د/ محمد فياض"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحة الوجه والفكين"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 2ظ",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-091",
+   "name": {
+    "ar": "د/ هيثم ابو العينين"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحة الوجه والفكين"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت12 ظهرا",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-092",
+   "name": {
+    "ar": "د/ داليا محسن"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الجلدية"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 6 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-093",
+   "name": {
+    "ar": "د/ هند الشيخ"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الجلدية"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 12.30 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 750,
+     "endsAt": 870,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-094",
+   "name": {
+    "ar": "د/ اسراء طارق"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الجلدية"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 7.30 مساءً",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1170,
+     "endsAt": 1290,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-095",
+   "name": {
+    "ar": "د/ طارق حسين"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "الجلدية"
+   },
+   "seniority": 4,
+   "scheduleNote": "الثلاثاء 12 ظهرا\nعيادة امراض الذكورة: الثلاثاء 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-096",
+   "name": {
+    "ar": "د/ اسلام العصار"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاوعية الدموية"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 7 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-097",
+   "name": {
+    "ar": "د/ محمد نوح"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "الاوعية الدموية"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 3 مساءً\nالاربعاء 3 مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-098",
+   "name": {
+    "ar": "د/ احمد المحلاوي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "الاوعية الدموية"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 7.30مساء",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1170,
+     "endsAt": 1290,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-099",
+   "name": {
+    "ar": "د/ باهي السماديسي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 4 مساءً\nالاحد 5 مساءً\nالاثنين 4 مساءً\nالخميس 5 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-100",
+   "name": {
+    "ar": "د/ هبة الخولي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 2 ظهراً\nالاربعاء 2 ظهراً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-101",
+   "name": {
+    "ar": "د/ عمرو عوض"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 8 مساءً\nالثلاثاء 6 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-102",
+   "name": {
+    "ar": "د/ مصطفي دعبيس"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 6 مساء : 8 مساء\nالاربعاء 6 مساء : 8 مساء\nعيادة الحقن المجهري: الاحد 2 ظهراً · الاربعاء 5 مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-103",
+   "name": {
+    "ar": "د/ اميرة كراوية"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين والخميس 3 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-104",
+   "name": {
+    "ar": "د/ محمد ابوسنه"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 7 مساءً\nعيادة الحقن المجهري: الاثنين 8 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-105",
+   "name": {
+    "ar": "د/ حامد لطفي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الخميس 10 صباحاً",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-106",
+   "name": {
+    "ar": "د/ ايمن زغلول"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 10 صباحا\nعيادة الحقن المجهري: الاثنين 5 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-107",
+   "name": {
+    "ar": "د/ عمرو العبد"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 4 مساءً / الاثنين 8 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-108",
+   "name": {
+    "ar": "د/ محمد عتمان"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 6 مساءً / الثلاثاء 7 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-109",
+   "name": {
+    "ar": "د/ احمد العصار"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الأربعاء 4 مساءً\nالخميس 6 مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-110",
+   "name": {
+    "ar": "د/ احمد فتحي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 3 : 5مساء\nالخميس 5:3 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-111",
+   "name": {
+    "ar": "د/ احمد الدمنهوري"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 9 مساء\nالخميس 8 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-112",
+   "name": {
+    "ar": "د/ عمرو البدراوي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا الاخصائي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 10 مساء\nالاربعاء مساء\nعيادة الحقن المجهري: السبت 4ع · الاحد 12 م",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 960,
+     "endsAt": 1080,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-113",
+   "name": {
+    "ar": "د/ محمد السماديسي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "من السبت الي الخميس 9 صباحاً\nعيادة الحقن المجهري: من السبت الي الخميس 9 صباحاً · خارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 2,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-114",
+   "name": {
+    "ar": "د/ محمد فوزي امين"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والاثنين 11 ظهراً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-115",
+   "name": {
+    "ar": "د/ هشام سعد"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والثلاثاء والاربعاء\n11 ظهراً\nعيادة اطباء الحمل الحرج بـ وحده حياه: السبت والثلاثاء والاربعاء · 11 صباحاً · داخل التعاقد\nعيادة الحقن المجهري: السبت والثلاثاء والاربعاء · 11 ظهراً · خارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-116",
+   "name": {
+    "ar": "د/ منال عثمان"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 3.30 مساءً\nعيادة الحقن المجهري: الاحد 3.30 مساءً · خارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 930,
+     "endsAt": 1050,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-117",
+   "name": {
+    "ar": "د/ رجب عميش"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاثنين 7 مساءً\nالخميس 5 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1020,
+     "endsAt": 1140,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-118",
+   "name": {
+    "ar": "د/ ايمان عمارة"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الأربعاء 9.30 مساءً\nعيادة الحقن المجهري: السبت والأربعاء .9.30مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1290,
+     "endsAt": 1410,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-119",
+   "name": {
+    "ar": "د/ غادة طعيمة"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الثلاثاء 1.30 ظهراً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 810,
+     "endsAt": 930,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-120",
+   "name": {
+    "ar": "د/ داليا المشد"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الأربعاء 11 صباحاً\nعيادة الحقن المجهري: الأربعاء 10 صباحاً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 660,
+     "endsAt": 780,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-121",
+   "name": {
+    "ar": "د/ علاء الدين سيد القديم"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الخميس 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-122",
+   "name": {
+    "ar": "د/ عمرو عاصم"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد والثلاثاء والخميس 8 لـ 10 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-123",
+   "name": {
+    "ar": "د/ عاصم مبروك"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد والاثنين والخميس 12 ظهراً\nعيادة اطباء الحمل الحرج بـ وحده حياه: الاحد والاثنين والخميس · 12 ظهراً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-124",
+   "name": {
+    "ar": "د/ احمد صبري خيرالله"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا الاستشاري"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت والاثنين 2-4 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-125",
+   "name": {
+    "ar": "د/ كريمة سعد مقلد"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "النسا التجميلية"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت 7.30 : 9.30 مساء\nالثلاثاء 7.30 : 9.30 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1170,
+     "endsAt": 1290,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1170,
+     "endsAt": 1290,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-126",
+   "name": {
+    "ar": "د/ رضوي فوزي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "النسا التجميلية"
+   },
+   "seniority": 2,
+   "scheduleNote": "الأحد 1 ظهراً",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-127",
+   "name": {
+    "ar": "د/ نيرفانا"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "التغذية"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاربعاء 3 مساءً",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-128",
+   "name": {
+    "ar": "د/ مها عسل"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "التغذية"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 10 : 12 ظهراً\nالخميس 10 : 1 ظهراً",
+   "shifts": [
+    {
+     "weekday": 4,
+     "startsAt": 600,
+     "endsAt": 780,
+     "maxPatients": 12
+    },
+    {
+     "weekday": 7,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-129",
+   "name": {
+    "ar": "د/ هبه الحمامي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "التغذية"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 9 : 12 ظهراً\nخارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 6,
+     "startsAt": 540,
+     "endsAt": 720,
+     "maxPatients": 12
+    }
+   ]
+  },
+  {
+   "id": "doc-130",
+   "name": {
+    "ar": "د/ هاجر فتحي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "التغذية"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين والخميس 2 : 4 مساء\nالثلاثاء 10 : 12 ظهراً\nخارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 2,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-131",
+   "name": {
+    "ar": "د/ محمد النوام"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "التغذية"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 7: 9 مساءً\nالإثنين 6 : 9 مساءً\nالأربعاء 12: 2 ظهرا\nخارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1260,
+     "maxPatients": 12
+    },
+    {
+     "weekday": 3,
+     "startsAt": 720,
+     "endsAt": 840,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1140,
+     "endsAt": 1260,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-132",
+   "name": {
+    "ar": "د/ احمد حسني درويش"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحات السمنة والمناظير"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 3 مساءً\nحالاته فقط",
+   "shifts": []
+  },
+  {
+   "id": "doc-133",
+   "name": {
+    "ar": "د/ محمد عمار"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحات السمنة والمناظير"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 10 صباحا\nحالاته فقط",
+   "shifts": []
+  },
+  {
+   "id": "doc-134",
+   "name": {
+    "ar": "د/ محمد مختار"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحات السمنة والمناظير"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاربعاء 3 مساءً\nحالاته فقط",
+   "shifts": []
+  },
+  {
+   "id": "doc-135",
+   "name": {
+    "ar": "د/ احمد جاد"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "جراحات السمنة والمناظير"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 10 صباحا\nحالاته فقط",
+   "shifts": []
+  },
+  {
+   "id": "doc-136",
+   "name": {
+    "ar": "د/ ابراهيم سليمان ابراهيم"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "رضاعه طبيعية"
+   },
+   "seniority": 3,
+   "scheduleNote": "السبت / الثلاثاء / الخميس\nمن الساعة 1.30 الي 3 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 810,
+     "endsAt": 900,
+     "maxPatients": 6
+    },
+    {
+     "weekday": 4,
+     "startsAt": 810,
+     "endsAt": 900,
+     "maxPatients": 6
+    },
+    {
+     "weekday": 6,
+     "startsAt": 810,
+     "endsAt": 900,
+     "maxPatients": 6
+    }
+   ]
+  },
+  {
+   "id": "doc-137",
+   "name": {
+    "ar": "د/ نانسي نبيل لحظي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "رضاعه طبيعية"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد / الاتنين / الاربعاء\nمن الساعه 1 الي 3مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 780,
+     "endsAt": 900,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-138",
+   "name": {
+    "ar": "د/ محمد الامام"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "الامراض الوراثية"
+   },
+   "seniority": 2,
+   "scheduleNote": "يتم التحديد بموعد مسبق\nعزت السبكي — خارج التعاقد",
+   "shifts": []
+  },
+  {
+   "id": "doc-139",
+   "name": {
+    "ar": "د/ احمد يحيي حافظ"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "فحص الايكو"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد 8 مساءً\nكبار — ايكو فقط",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 1200,
+     "endsAt": 1320,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-140",
+   "name": {
+    "ar": "د/ شريف العبد"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "فحص الايكو"
+   },
+   "seniority": 2,
+   "scheduleNote": "الثلاثاء 9 مساءً\nكبار — ايكو فقط",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-141",
+   "name": {
+    "ar": "د/ خالد احمد الشرنوبي"
+   },
+   "title": {
+    "ar": "أخصائي"
+   },
+   "specialty": {
+    "ar": "فحص الايكو"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 10 مساءً\nالاثنين 9 مساءً\nبداية من سن 5 سنوات",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-142",
+   "name": {
+    "ar": "د/ محمد إبراهيم عبد الجليل"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "امراض القلب للأطفال"
+   },
+   "seniority": 3,
+   "scheduleNote": "الأربعاء 5.30 مساءً\nعيادات امراض القلب: الاحد 6 مساءً · الاثنين 6 مساء · الأربعاء 6 مساءً · فحص ايكو اطفال",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1050,
+     "endsAt": 1170,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-143",
+   "name": {
+    "ar": "د/ ممدوح الغندور"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "فحص الايكو"
+   },
+   "seniority": 2,
+   "scheduleNote": "استدعاء يومي الاثنين والجمعة\nايكو اطفال",
+   "shifts": []
+  },
+  {
+   "id": "doc-144",
+   "name": {
+    "ar": "د/ محمد الصعيدي"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "امراض القلب"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 2:4 مساء\nالاربعاء7: 8 مساء\nامراض قلب فقط",
+   "shifts": [
+    {
+     "weekday": 3,
+     "startsAt": 1140,
+     "endsAt": 1200,
+     "maxPatients": 4
+    },
+    {
+     "weekday": 7,
+     "startsAt": 840,
+     "endsAt": 960,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-145",
+   "name": {
+    "ar": "د/ محمد وافي"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "العلاج الطبيعي"
+   },
+   "seniority": 2,
+   "scheduleNote": "يومياً من 5 : 9 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1020,
+     "endsAt": 1260,
+     "maxPatients": 16
+    },
+    {
+     "weekday": 2,
+     "startsAt": 1020,
+     "endsAt": 1260,
+     "maxPatients": 16
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1020,
+     "endsAt": 1260,
+     "maxPatients": 16
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1020,
+     "endsAt": 1260,
+     "maxPatients": 16
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1020,
+     "endsAt": 1260,
+     "maxPatients": 16
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1020,
+     "endsAt": 1260,
+     "maxPatients": 16
+    }
+   ]
+  },
+  {
+   "id": "doc-146",
+   "name": {
+    "ar": "د/ منه الله مصطفي"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "العلاج الطبيعي"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت من 6 : 9 مساءً\nالاثنين والاربعاء من 2 : 9 مساءً",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 840,
+     "endsAt": 1260,
+     "maxPatients": 28
+    },
+    {
+     "weekday": 3,
+     "startsAt": 840,
+     "endsAt": 1260,
+     "maxPatients": 28
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1080,
+     "endsAt": 1260,
+     "maxPatients": 12
+    }
+   ]
+  },
+  {
+   "id": "doc-147",
+   "name": {
+    "ar": "د/ محمد ابو زيد"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "العلاج الطبيعي"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد والثلاثاء والخميس من 2 : 9 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 840,
+     "endsAt": 1260,
+     "maxPatients": 28
+    },
+    {
+     "weekday": 4,
+     "startsAt": 840,
+     "endsAt": 1260,
+     "maxPatients": 28
+    },
+    {
+     "weekday": 7,
+     "startsAt": 840,
+     "endsAt": 1260,
+     "maxPatients": 28
+    }
+   ]
+  },
+  {
+   "id": "doc-148",
+   "name": {
+    "ar": "د/ هبة الشريف"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "جراحات الاطفال"
+   },
+   "seniority": 3,
+   "scheduleNote": "الاحد 3 م",
+   "shifts": [
+    {
+     "weekday": 7,
+     "startsAt": 900,
+     "endsAt": 1020,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-149",
+   "name": {
+    "ar": "د/ هشام الجمال"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "الاشعة"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد والثلاثاء\n8 صـباحاً\nخارج التعاقد",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 480,
+     "endsAt": 600,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 480,
+     "endsAt": 600,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-150",
+   "name": {
+    "ar": "د/ جمال السيد"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "الاشعة"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاثنين 9 صباحا\nالخميس 9صباحا",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 540,
+     "endsAt": 660,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-151",
+   "name": {
+    "ar": "د/ وليد داود"
+   },
+   "title": {
+    "ar": "أستاذ دكتور"
+   },
+   "specialty": {
+    "ar": "مسالك الأطفال"
+   },
+   "seniority": 4,
+   "scheduleNote": "الثلاثاء الساعة 10 صباحاً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 600,
+     "endsAt": 720,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-152",
+   "name": {
+    "ar": "د/ عبد العزيز شريف"
+   },
+   "title": {
+    "ar": "استشاري"
+   },
+   "specialty": {
+    "ar": "رسم الاعصاب والعضلات"
+   },
+   "seniority": 3,
+   "scheduleNote": "الأحد 10 مساءً\nالثلاثاء 9 مساءً\nالخميس 9 مساءً",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1260,
+     "endsAt": 1380,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1320,
+     "endsAt": 1440,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-153",
+   "name": {
+    "ar": "د/ محمد غريب"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "الالم والعمود الفقري"
+   },
+   "seniority": 2,
+   "scheduleNote": null,
+   "shifts": []
+  },
+  {
+   "id": "doc-154",
+   "name": {
+    "ar": "د/ احمد محمود عبد الرافع"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "السونار"
+   },
+   "seniority": 2,
+   "scheduleNote": "الاحد والاثنين والاربعاء والخميس 6 مساء",
+   "shifts": [
+    {
+     "weekday": 1,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 3,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 4,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    },
+    {
+     "weekday": 7,
+     "startsAt": 1080,
+     "endsAt": 1200,
+     "maxPatients": 8
+    }
+   ]
+  },
+  {
+   "id": "doc-155",
+   "name": {
+    "ar": "د/ الاء سعد محمد ابو غنيم"
+   },
+   "title": {
+    "ar": ""
+   },
+   "specialty": {
+    "ar": "السونار"
+   },
+   "seniority": 2,
+   "scheduleNote": "السبت 6: 9 مساء\nالثلاثاء 6: 9 مساء",
+   "shifts": [
+    {
+     "weekday": 2,
+     "startsAt": 1080,
+     "endsAt": 1260,
+     "maxPatients": 12
+    },
+    {
+     "weekday": 6,
+     "startsAt": 1080,
+     "endsAt": 1260,
+     "maxPatients": 12
+    }
+   ]
+  }
+ ],
+ "labTests": [
+  {
+   "id": "lab-001",
+   "code": "18",
+   "name": {
+    "ar": "Carbamazepine (Tegretol)",
+    "en": "Carbamazepine (Tegretol)"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-002",
+   "code": "14",
+   "name": {
+    "ar": "Theophylline",
+    "en": "Theophylline"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 420
+  },
+  {
+   "id": "lab-003",
+   "code": "16",
+   "name": {
+    "ar": "Valproic acid (Depakene)",
+    "en": "Valproic acid (Depakene)"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-004",
+   "code": "15",
+   "name": {
+    "ar": "Digoxin ( Lanoxin )",
+    "en": "Digoxin ( Lanoxin )"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-005",
+   "code": "17",
+   "name": {
+    "ar": "Phenytoin (Epanutin)",
+    "en": "Phenytoin (Epanutin)"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-006",
+   "code": "704",
+   "name": {
+    "ar": "(Quantitaitve) Cannabinoids",
+    "en": "(Quantitaitve) Cannabinoids"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-007",
+   "code": "248",
+   "name": {
+    "ar": "Pro BNP",
+    "en": "Pro BNP"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 850
+  },
+  {
+   "id": "lab-008",
+   "code": "243",
+   "name": {
+    "ar": "LDH",
+    "en": "LDH"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 70
+  },
+  {
+   "id": "lab-009",
+   "code": "246",
+   "name": {
+    "ar": "Troponin (T)",
+    "en": "Troponin (T)"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-010",
+   "code": "244",
+   "name": {
+    "ar": "Creatine Kinase (CPK)",
+    "en": "Creatine Kinase (CPK)"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 80
+  },
+  {
+   "id": "lab-011",
+   "code": "245",
+   "name": {
+    "ar": "CK MB",
+    "en": "CK MB"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-012",
+   "code": "745",
+   "name": {
+    "ar": "BNP",
+    "en": "BNP"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 360
+  },
+  {
+   "id": "lab-013",
+   "code": "247",
+   "name": {
+    "ar": "Troponin (I)",
+    "en": "Troponin (I)"
+   },
+   "category": {
+    "ar": "إنزيمات القلب",
+    "en": "Cardiac enzymes"
+   },
+   "price": 380
+  },
+  {
+   "id": "lab-014",
+   "code": "206",
+   "name": {
+    "ar": "Ammonia",
+    "en": "Ammonia"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 450
+  },
+  {
+   "id": "lab-015",
+   "code": "205",
+   "name": {
+    "ar": "GGT",
+    "en": "GGT"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 75
+  },
+  {
+   "id": "lab-016",
+   "code": "196",
+   "name": {
+    "ar": "Albumin",
+    "en": "Albumin"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-017",
+   "code": "201",
+   "name": {
+    "ar": "(TSB) Bilirubin Totall",
+    "en": "(TSB) Bilirubin Totall"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 65
+  },
+  {
+   "id": "lab-018",
+   "code": "183",
+   "name": {
+    "ar": "Fructoseamine",
+    "en": "Fructoseamine"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-019",
+   "code": "207",
+   "name": {
+    "ar": "Bile acids",
+    "en": "Bile acids"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-020",
+   "code": "177",
+   "name": {
+    "ar": "Random Blood Glucose",
+    "en": "Random Blood Glucose"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 25
+  },
+  {
+   "id": "lab-021",
+   "code": "203",
+   "name": {
+    "ar": "Bilirubin indirect",
+    "en": "Bilirubin indirect"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 25
+  },
+  {
+   "id": "lab-022",
+   "code": "Lab3",
+   "name": {
+    "ar": "Glycosylated Haemoglobin (HbA1c)",
+    "en": "Glycosylated Haemoglobin (HbA1c)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-023",
+   "code": "218",
+   "name": {
+    "ar": "Protein/Creatinine ratio",
+    "en": "Protein/Creatinine ratio"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 90
+  },
+  {
+   "id": "lab-024",
+   "code": "23",
+   "name": {
+    "ar": "Folic Acid in serum",
+    "en": "Folic Acid in serum"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 209
+  },
+  {
+   "id": "lab-025",
+   "code": "208",
+   "name": {
+    "ar": "Urea",
+    "en": "Urea"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-026",
+   "code": "219",
+   "name": {
+    "ar": "Calcium/Creatinine ratio",
+    "en": "Calcium/Creatinine ratio"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 61
+  },
+  {
+   "id": "lab-027",
+   "code": "188",
+   "name": {
+    "ar": "LDL",
+    "en": "LDL"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 80
+  },
+  {
+   "id": "lab-028",
+   "code": "195",
+   "name": {
+    "ar": "Total Protein",
+    "en": "Total Protein"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-029",
+   "code": "259",
+   "name": {
+    "ar": "G6PD",
+    "en": "G6PD"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-030",
+   "code": "264",
+   "name": {
+    "ar": "Fibrinogen",
+    "en": "Fibrinogen"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-031",
+   "code": "238",
+   "name": {
+    "ar": "Amylase",
+    "en": "Amylase"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-032",
+   "code": "240",
+   "name": {
+    "ar": "Pancreatic amylase",
+    "en": "Pancreatic amylase"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-033",
+   "code": "271",
+   "name": {
+    "ar": "Lupus anticoagulant",
+    "en": "Lupus anticoagulant"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 500
+  },
+  {
+   "id": "lab-034",
+   "code": "211",
+   "name": {
+    "ar": "Urine Uric acid",
+    "en": "Urine Uric acid"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 30
+  },
+  {
+   "id": "lab-035",
+   "code": "242",
+   "name": {
+    "ar": "Lipase",
+    "en": "Lipase"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 185
+  },
+  {
+   "id": "lab-036",
+   "code": "252",
+   "name": {
+    "ar": "Ferritin",
+    "en": "Ferritin"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-037",
+   "code": "239",
+   "name": {
+    "ar": "Amylase in urine",
+    "en": "Amylase in urine"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-038",
+   "code": "265",
+   "name": {
+    "ar": "Fibrinogen degradation products (FDP)",
+    "en": "Fibrinogen degradation products (FDP)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-039",
+   "code": "209",
+   "name": {
+    "ar": "Creatinine",
+    "en": "Creatinine"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-040",
+   "code": "249",
+   "name": {
+    "ar": "Occult blood 1 sample",
+    "en": "Occult blood 1 sample"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-041",
+   "code": "213",
+   "name": {
+    "ar": "Creatinine Clearance",
+    "en": "Creatinine Clearance"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-042",
+   "code": "424",
+   "name": {
+    "ar": "Lactate",
+    "en": "Lactate"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-043",
+   "code": "409",
+   "name": {
+    "ar": "TIBC",
+    "en": "TIBC"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-044",
+   "code": "429",
+   "name": {
+    "ar": "Alkaline phosphatase (ALP)",
+    "en": "Alkaline phosphatase (ALP)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 65
+  },
+  {
+   "id": "lab-045",
+   "code": "425",
+   "name": {
+    "ar": "Aldolase",
+    "en": "Aldolase"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-046",
+   "code": "553",
+   "name": {
+    "ar": "Lipid Profile",
+    "en": "Lipid Profile"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 335
+  },
+  {
+   "id": "lab-047",
+   "code": "562",
+   "name": {
+    "ar": "BUN",
+    "en": "BUN"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-048",
+   "code": "484",
+   "name": {
+    "ar": "Protein 24hr ( in Urine)",
+    "en": "Protein 24hr ( in Urine)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 115
+  },
+  {
+   "id": "lab-049",
+   "code": "313",
+   "name": {
+    "ar": "Homocysteine",
+    "en": "Homocysteine"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 950
+  },
+  {
+   "id": "lab-050",
+   "code": "591",
+   "name": {
+    "ar": "Pyruvate",
+    "en": "Pyruvate"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-051",
+   "code": "533",
+   "name": {
+    "ar": "GFR by Cystatin C",
+    "en": "GFR by Cystatin C"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 115
+  },
+  {
+   "id": "lab-052",
+   "code": "Lab2",
+   "name": {
+    "ar": "2H postprandial Blood Glucose(PPBS)",
+    "en": "2H postprandial Blood Glucose(PPBS)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 25
+  },
+  {
+   "id": "lab-053",
+   "code": "683",
+   "name": {
+    "ar": "uric acid",
+    "en": "uric acid"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-054",
+   "code": "682",
+   "name": {
+    "ar": "oral glucose test 100 gm",
+    "en": "oral glucose test 100 gm"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-055",
+   "code": "691",
+   "name": {
+    "ar": "Microalbuminuria/24hr",
+    "en": "Microalbuminuria/24hr"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-056",
+   "code": "662",
+   "name": {
+    "ar": "PH in stool",
+    "en": "PH in stool"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 15
+  },
+  {
+   "id": "lab-057",
+   "code": "672",
+   "name": {
+    "ar": "G6PD Qunatitative",
+    "en": "G6PD Qunatitative"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-058",
+   "code": "693",
+   "name": {
+    "ar": "HDL",
+    "en": "HDL"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 70
+  },
+  {
+   "id": "lab-059",
+   "code": "692",
+   "name": {
+    "ar": "Triglycerids (TG)",
+    "en": "Triglycerids (TG)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 45
+  },
+  {
+   "id": "lab-060",
+   "code": "712",
+   "name": {
+    "ar": "Bilirubin Direct (DSB)",
+    "en": "Bilirubin Direct (DSB)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 45
+  },
+  {
+   "id": "lab-061",
+   "code": "664",
+   "name": {
+    "ar": "SGPT (ALT)",
+    "en": "SGPT (ALT)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-062",
+   "code": "719",
+   "name": {
+    "ar": "Albumin/Creatinine ratio",
+    "en": "Albumin/Creatinine ratio"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-063",
+   "code": "689",
+   "name": {
+    "ar": "HOMA2-IR",
+    "en": "HOMA2-IR"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-064",
+   "code": "686",
+   "name": {
+    "ar": "cholestrol",
+    "en": "cholestrol"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-065",
+   "code": "Lab1",
+   "name": {
+    "ar": "Fasting Blood Glucose (FBS)",
+    "en": "Fasting Blood Glucose (FBS)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 20
+  },
+  {
+   "id": "lab-066",
+   "code": "663",
+   "name": {
+    "ar": "SGOT (AST)",
+    "en": "SGOT (AST)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-067",
+   "code": "690",
+   "name": {
+    "ar": "Microalbuminuria (Micral)",
+    "en": "Microalbuminuria (Micral)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-068",
+   "code": "694",
+   "name": {
+    "ar": "VLDL",
+    "en": "VLDL"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 70
+  },
+  {
+   "id": "lab-069",
+   "code": "773",
+   "name": {
+    "ar": "Procollagen (PINP)",
+    "en": "Procollagen (PINP)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-070",
+   "code": "1114",
+   "name": {
+    "ar": "oral glucose test 75 gm",
+    "en": "oral glucose test 75 gm"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-071",
+   "code": "1145",
+   "name": {
+    "ar": "HIV",
+    "en": "HIV"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-072",
+   "code": "1147",
+   "name": {
+    "ar": "(.CA 19.9 (Aspirated f",
+    "en": "(.CA 19.9 (Aspirated f"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-073",
+   "code": "1155",
+   "name": {
+    "ar": "(LDH (CSF",
+    "en": "(LDH (CSF"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 75
+  },
+  {
+   "id": "lab-074",
+   "code": "1157",
+   "name": {
+    "ar": "PCR prothrombin gene mutation",
+    "en": "PCR prothrombin gene mutation"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 980
+  },
+  {
+   "id": "lab-075",
+   "code": "1159",
+   "name": {
+    "ar": "uric acid (24h)",
+    "en": "uric acid (24h)"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 32
+  },
+  {
+   "id": "lab-076",
+   "code": "1176",
+   "name": {
+    "ar": "EGFR",
+    "en": "EGFR"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-077",
+   "code": "1177",
+   "name": {
+    "ar": "CULTURE SENSITIVITY",
+    "en": "CULTURE SENSITIVITY"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 700
+  },
+  {
+   "id": "lab-078",
+   "code": "1180",
+   "name": {
+    "ar": "تحاليل الفحوص الاساسيه",
+    "en": "تحاليل الفحوص الاساسيه"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 570
+  },
+  {
+   "id": "lab-079",
+   "code": "1181",
+   "name": {
+    "ar": "تحاليل الخصوبه ودلالات الاورام للسيدات",
+    "en": "تحاليل الخصوبه ودلالات الاورام للسيدات"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 2150
+  },
+  {
+   "id": "lab-080",
+   "code": "1182",
+   "name": {
+    "ar": "تحاليل تنظيم الوزن والعنايه بالشعر",
+    "en": "تحاليل تنظيم الوزن والعنايه بالشعر"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 1400
+  },
+  {
+   "id": "lab-081",
+   "code": "1183",
+   "name": {
+    "ar": "تحاليل صحه الطفل 535",
+    "en": "تحاليل صحه الطفل 535"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 535
+  },
+  {
+   "id": "lab-082",
+   "code": "1184",
+   "name": {
+    "ar": "تحاليل صحه الطفل 290",
+    "en": "تحاليل صحه الطفل 290"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 290
+  },
+  {
+   "id": "lab-083",
+   "code": "1185",
+   "name": {
+    "ar": "تحاليل صحه الطفل 245",
+    "en": "تحاليل صحه الطفل 245"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 245
+  },
+  {
+   "id": "lab-084",
+   "code": "1186",
+   "name": {
+    "ar": "تحاليل فحص الغده الدرقيه",
+    "en": "تحاليل فحص الغده الدرقيه"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 345
+  },
+  {
+   "id": "lab-085",
+   "code": "1187",
+   "name": {
+    "ar": "تحاليل الخصوبه للرجال",
+    "en": "تحاليل الخصوبه للرجال"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 1200
+  },
+  {
+   "id": "lab-086",
+   "code": "1188",
+   "name": {
+    "ar": "تحاليل صحه الرجال ودلالات الاورام",
+    "en": "تحاليل صحه الرجال ودلالات الاورام"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 1420
+  },
+  {
+   "id": "lab-087",
+   "code": "1189",
+   "name": {
+    "ar": "تحاليل وظائف الكلى",
+    "en": "تحاليل وظائف الكلى"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-088",
+   "code": "1190",
+   "name": {
+    "ar": "تحاليل صحه المرأه",
+    "en": "تحاليل صحه المرأه"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 1790
+  },
+  {
+   "id": "lab-089",
+   "code": "1192",
+   "name": {
+    "ar": "تحاليل ما قبل العمليات",
+    "en": "تحاليل ما قبل العمليات"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 1260
+  },
+  {
+   "id": "lab-090",
+   "code": "1193",
+   "name": {
+    "ar": "تحليل فيتامين D + كالسيوم",
+    "en": "تحليل فيتامين D + كالسيوم"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 330
+  },
+  {
+   "id": "lab-091",
+   "code": "1204",
+   "name": {
+    "ar": "HBA1C OFFER",
+    "en": "HBA1C OFFER"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-092",
+   "code": "1205",
+   "name": {
+    "ar": "تحليل حقن بديل التكميم",
+    "en": "تحليل حقن بديل التكميم"
+   },
+   "category": {
+    "ar": "الكيمياء",
+    "en": "Chemistry"
+   },
+   "price": 2500
+  },
+  {
+   "id": "lab-093",
+   "code": "747",
+   "name": {
+    "ar": "Potassium K in urine",
+    "en": "Potassium K in urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 20
+  },
+  {
+   "id": "lab-094",
+   "code": "667",
+   "name": {
+    "ar": "Phosphorus (Ph)",
+    "en": "Phosphorus (Ph)"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 65
+  },
+  {
+   "id": "lab-095",
+   "code": "84",
+   "name": {
+    "ar": "Zinc",
+    "en": "Zinc"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-096",
+   "code": "741",
+   "name": {
+    "ar": "Chloride",
+    "en": "Chloride"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-097",
+   "code": "738",
+   "name": {
+    "ar": "Calcium Total",
+    "en": "Calcium Total"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-098",
+   "code": "744",
+   "name": {
+    "ar": "Magnesium (Mg) in urine",
+    "en": "Magnesium (Mg) in urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 1
+  },
+  {
+   "id": "lab-099",
+   "code": "230",
+   "name": {
+    "ar": "Phosphorus (Ph) in urine",
+    "en": "Phosphorus (Ph) in urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-100",
+   "code": "225",
+   "name": {
+    "ar": "Sodium Na in urine",
+    "en": "Sodium Na in urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 90
+  },
+  {
+   "id": "lab-101",
+   "code": "743",
+   "name": {
+    "ar": "Magnesium (Mg)",
+    "en": "Magnesium (Mg)"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 155
+  },
+  {
+   "id": "lab-102",
+   "code": "739",
+   "name": {
+    "ar": "Calcium Total in urine",
+    "en": "Calcium Total in urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-103",
+   "code": "757",
+   "name": {
+    "ar": "Bicarbonate",
+    "en": "Bicarbonate"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 310
+  },
+  {
+   "id": "lab-104",
+   "code": "577",
+   "name": {
+    "ar": "Osmolality in Urine",
+    "en": "Osmolality in Urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 850
+  },
+  {
+   "id": "lab-105",
+   "code": "224",
+   "name": {
+    "ar": "Sodium Na",
+    "en": "Sodium Na"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-106",
+   "code": "658",
+   "name": {
+    "ar": "Osmolality",
+    "en": "Osmolality"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 1
+  },
+  {
+   "id": "lab-107",
+   "code": "226",
+   "name": {
+    "ar": "Potassium K",
+    "en": "Potassium K"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 105
+  },
+  {
+   "id": "lab-108",
+   "code": "236",
+   "name": {
+    "ar": "Chloride in urine",
+    "en": "Chloride in urine"
+   },
+   "category": {
+    "ar": "الأملاح والمعادن",
+    "en": "Electrolytes"
+   },
+   "price": 85
+  },
+  {
+   "id": "lab-109",
+   "code": "399",
+   "name": {
+    "ar": "PTT",
+    "en": "PTT"
+   },
+   "category": {
+    "ar": "تجلط الدم",
+    "en": "Coagulation"
+   },
+   "price": 80
+  },
+  {
+   "id": "lab-110",
+   "code": "281",
+   "name": {
+    "ar": "Thrombin time",
+    "en": "Thrombin time"
+   },
+   "category": {
+    "ar": "تجلط الدم",
+    "en": "Coagulation"
+   },
+   "price": 110
+  },
+  {
+   "id": "lab-111",
+   "code": "199",
+   "name": {
+    "ar": "PT",
+    "en": "PT"
+   },
+   "category": {
+    "ar": "تجلط الدم",
+    "en": "Coagulation"
+   },
+   "price": 70
+  },
+  {
+   "id": "lab-112",
+   "code": "154",
+   "name": {
+    "ar": "LH",
+    "en": "LH"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 140
+  },
+  {
+   "id": "lab-113",
+   "code": "155",
+   "name": {
+    "ar": "FSH",
+    "en": "FSH"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 140
+  },
+  {
+   "id": "lab-114",
+   "code": "165",
+   "name": {
+    "ar": "17 OH Progesterone",
+    "en": "17 OH Progesterone"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-115",
+   "code": "164",
+   "name": {
+    "ar": "Progesterone",
+    "en": "Progesterone"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-116",
+   "code": "163",
+   "name": {
+    "ar": "DHEA",
+    "en": "DHEA"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-117",
+   "code": "153",
+   "name": {
+    "ar": "Prolactin",
+    "en": "Prolactin"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-118",
+   "code": "158",
+   "name": {
+    "ar": "Androstenedione",
+    "en": "Androstenedione"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-119",
+   "code": "157",
+   "name": {
+    "ar": "Free Testosterone",
+    "en": "Free Testosterone"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 550
+  },
+  {
+   "id": "lab-120",
+   "code": "160",
+   "name": {
+    "ar": "Estradiol",
+    "en": "Estradiol"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-121",
+   "code": "162",
+   "name": {
+    "ar": "DHEA s",
+    "en": "DHEA s"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 240
+  },
+  {
+   "id": "lab-122",
+   "code": "156",
+   "name": {
+    "ar": "TOTAL Testosterone",
+    "en": "TOTAL Testosterone"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-123",
+   "code": "715",
+   "name": {
+    "ar": "Inhibin A",
+    "en": "Inhibin A"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 2500
+  },
+  {
+   "id": "lab-124",
+   "code": "566",
+   "name": {
+    "ar": "Anti Mullerian Hormone",
+    "en": "Anti Mullerian Hormone"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 850
+  },
+  {
+   "id": "lab-125",
+   "code": "526",
+   "name": {
+    "ar": "Inhibin B",
+    "en": "Inhibin B"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 2000
+  },
+  {
+   "id": "lab-126",
+   "code": "737",
+   "name": {
+    "ar": "free androgen index",
+    "en": "free androgen index"
+   },
+   "category": {
+    "ar": "هرمونات الخصوبة",
+    "en": "Fertility hormones"
+   },
+   "price": 600
+  },
+  {
+   "id": "lab-127",
+   "code": "310",
+   "name": {
+    "ar": "Protein Electrophoresis",
+    "en": "Protein Electrophoresis"
+   },
+   "category": {
+    "ar": "الفصل الكهربائي",
+    "en": "Electrophoresis"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-128",
+   "code": "310",
+   "name": {
+    "ar": "Protein Electrophoresis",
+    "en": "Protein Electrophoresis"
+   },
+   "category": {
+    "ar": "الفصل الكهربائي",
+    "en": "Electrophoresis"
+   },
+   "price": 1
+  },
+  {
+   "id": "lab-129",
+   "code": "569",
+   "name": {
+    "ar": "Hb Electrophoresis cellulose",
+    "en": "Hb Electrophoresis cellulose"
+   },
+   "category": {
+    "ar": "الفصل الكهربائي",
+    "en": "Electrophoresis"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-130",
+   "code": "771",
+   "name": {
+    "ar": "Hb Electrophoresis capillary",
+    "en": "Hb Electrophoresis capillary"
+   },
+   "category": {
+    "ar": "الفصل الكهربائي",
+    "en": "Electrophoresis"
+   },
+   "price": 380
+  },
+  {
+   "id": "lab-131",
+   "code": "274",
+   "name": {
+    "ar": "Factor VII",
+    "en": "Factor VII"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 450
+  },
+  {
+   "id": "lab-132",
+   "code": "267",
+   "name": {
+    "ar": "Anti Thrombin III",
+    "en": "Anti Thrombin III"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 265
+  },
+  {
+   "id": "lab-133",
+   "code": "280",
+   "name": {
+    "ar": "Factor XIII",
+    "en": "Factor XIII"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 1260
+  },
+  {
+   "id": "lab-134",
+   "code": "266",
+   "name": {
+    "ar": "D-dimer",
+    "en": "D-dimer"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 550
+  },
+  {
+   "id": "lab-135",
+   "code": "260",
+   "name": {
+    "ar": "Osmotic fragility",
+    "en": "Osmotic fragility"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-136",
+   "code": "22",
+   "name": {
+    "ar": "Vitamin B12",
+    "en": "Vitamin B12"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-137",
+   "code": "284",
+   "name": {
+    "ar": "Cryoglobulin",
+    "en": "Cryoglobulin"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-138",
+   "code": "285",
+   "name": {
+    "ar": "C3 (Complement 3)",
+    "en": "C3 (Complement 3)"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-139",
+   "code": "262",
+   "name": {
+    "ar": "Coomb's test Direct",
+    "en": "Coomb's test Direct"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-140",
+   "code": "253",
+   "name": {
+    "ar": "Transferrin",
+    "en": "Transferrin"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-141",
+   "code": "269",
+   "name": {
+    "ar": "Protein S",
+    "en": "Protein S"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 800
+  },
+  {
+   "id": "lab-142",
+   "code": "255",
+   "name": {
+    "ar": "Transferrin Saturation",
+    "en": "Transferrin Saturation"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-143",
+   "code": "282",
+   "name": {
+    "ar": "(Activity) Von-willebrand factor",
+    "en": "(Activity) Von-willebrand factor"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 1000
+  },
+  {
+   "id": "lab-144",
+   "code": "401",
+   "name": {
+    "ar": "WBCs",
+    "en": "WBCs"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-145",
+   "code": "26",
+   "name": {
+    "ar": "CBC",
+    "en": "CBC"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 140
+  },
+  {
+   "id": "lab-146",
+   "code": "303",
+   "name": {
+    "ar": "B2 microglobulin",
+    "en": "B2 microglobulin"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 135
+  },
+  {
+   "id": "lab-147",
+   "code": "275",
+   "name": {
+    "ar": "Factor VIII",
+    "en": "Factor VIII"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-148",
+   "code": "402",
+   "name": {
+    "ar": "Hb",
+    "en": "Hb"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-149",
+   "code": "583",
+   "name": {
+    "ar": "Coomb's test Indirect",
+    "en": "Coomb's test Indirect"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-150",
+   "code": "268",
+   "name": {
+    "ar": "Protein C",
+    "en": "Protein C"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 700
+  },
+  {
+   "id": "lab-151",
+   "code": "648",
+   "name": {
+    "ar": "Vitamin D (25-OH vitamin total)",
+    "en": "Vitamin D (25-OH vitamin total)"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 420
+  },
+  {
+   "id": "lab-152",
+   "code": "816",
+   "name": {
+    "ar": "Free Kappa light chain",
+    "en": "Free Kappa light chain"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-153",
+   "code": "639",
+   "name": {
+    "ar": "Dysmorphic RBCs in Urine",
+    "en": "Dysmorphic RBCs in Urine"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 80
+  },
+  {
+   "id": "lab-154",
+   "code": "696",
+   "name": {
+    "ar": "Blood group",
+    "en": "Blood group"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-155",
+   "code": "697",
+   "name": {
+    "ar": "RH",
+    "en": "RH"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-156",
+   "code": "718",
+   "name": {
+    "ar": "Von-willebrand factor (Concentration)",
+    "en": "Von-willebrand factor (Concentration)"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 700
+  },
+  {
+   "id": "lab-157",
+   "code": "848",
+   "name": {
+    "ar": "Blood group & RH",
+    "en": "Blood group & RH"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 60
+  },
+  {
+   "id": "lab-158",
+   "code": "958",
+   "name": {
+    "ar": "C4 (Complement 4)",
+    "en": "C4 (Complement 4)"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-159",
+   "code": "1117",
+   "name": {
+    "ar": "Bleeding, Clotting Time",
+    "en": "Bleeding, Clotting Time"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 35
+  },
+  {
+   "id": "lab-160",
+   "code": "1194",
+   "name": {
+    "ar": "تحاليل د.محمد مختار",
+    "en": "تحاليل د.محمد مختار"
+   },
+   "category": {
+    "ar": "أمراض الدم",
+    "en": "Haematology"
+   },
+   "price": 850
+  },
+  {
+   "id": "lab-161",
+   "code": "134",
+   "name": {
+    "ar": "β-HCG",
+    "en": "β-HCG"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 195
+  },
+  {
+   "id": "lab-162",
+   "code": "436",
+   "name": {
+    "ar": "Growth hormone ( after exercise )",
+    "en": "Growth hormone ( after exercise )"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-163",
+   "code": "167",
+   "name": {
+    "ar": "Cortisol 9 Pm",
+    "en": "Cortisol 9 Pm"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-164",
+   "code": "171",
+   "name": {
+    "ar": "TSH",
+    "en": "TSH"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-165",
+   "code": "152",
+   "name": {
+    "ar": "parathormone",
+    "en": "parathormone"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 1
+  },
+  {
+   "id": "lab-166",
+   "code": "149",
+   "name": {
+    "ar": "freet4",
+    "en": "freet4"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 115
+  },
+  {
+   "id": "lab-167",
+   "code": "65",
+   "name": {
+    "ar": "(AFP (Alpha-fetoprotein",
+    "en": "(AFP (Alpha-fetoprotein"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 165
+  },
+  {
+   "id": "lab-168",
+   "code": "169",
+   "name": {
+    "ar": "ACTH Pm",
+    "en": "ACTH Pm"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-169",
+   "code": "74",
+   "name": {
+    "ar": "Free PSA",
+    "en": "Free PSA"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-170",
+   "code": "146",
+   "name": {
+    "ar": "T3",
+    "en": "T3"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 95
+  },
+  {
+   "id": "lab-171",
+   "code": "73",
+   "name": {
+    "ar": "Prostatic specific antigen (PSA)",
+    "en": "Prostatic specific antigen (PSA)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 320
+  },
+  {
+   "id": "lab-172",
+   "code": "166",
+   "name": {
+    "ar": "Cortisol 9Am",
+    "en": "Cortisol 9Am"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-173",
+   "code": "147",
+   "name": {
+    "ar": "T4",
+    "en": "T4"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 95
+  },
+  {
+   "id": "lab-174",
+   "code": "168",
+   "name": {
+    "ar": "ACTH Am",
+    "en": "ACTH Am"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-175",
+   "code": "148",
+   "name": {
+    "ar": "free t3",
+    "en": "free t3"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 115
+  },
+  {
+   "id": "lab-176",
+   "code": "443",
+   "name": {
+    "ar": "Aldosterone",
+    "en": "Aldosterone"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-177",
+   "code": "438",
+   "name": {
+    "ar": "insulin - like growth factor-1",
+    "en": "insulin - like growth factor-1"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 555
+  },
+  {
+   "id": "lab-178",
+   "code": "546",
+   "name": {
+    "ar": "C-Peptide (P.P)",
+    "en": "C-Peptide (P.P)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-179",
+   "code": "455",
+   "name": {
+    "ar": "Serum Pregnancy",
+    "en": "Serum Pregnancy"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-180",
+   "code": "545",
+   "name": {
+    "ar": "C-Peptide (Fasting)",
+    "en": "C-Peptide (Fasting)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-181",
+   "code": "442",
+   "name": {
+    "ar": "Renin",
+    "en": "Renin"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-182",
+   "code": "461",
+   "name": {
+    "ar": "IgE ( Total )",
+    "en": "IgE ( Total )"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-183",
+   "code": "543",
+   "name": {
+    "ar": "Insulin (Fasting)",
+    "en": "Insulin (Fasting)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-184",
+   "code": "544",
+   "name": {
+    "ar": "Insulin (2hrs P.P)",
+    "en": "Insulin (2hrs P.P)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-185",
+   "code": "435",
+   "name": {
+    "ar": "Growth hormone",
+    "en": "Growth hormone"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-186",
+   "code": "784",
+   "name": {
+    "ar": "Anti-diuretic hormone (ADH)",
+    "en": "Anti-diuretic hormone (ADH)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 950
+  },
+  {
+   "id": "lab-187",
+   "code": "963",
+   "name": {
+    "ar": "Intact Parathormone (PTH 1-84)",
+    "en": "Intact Parathormone (PTH 1-84)"
+   },
+   "category": {
+    "ar": "الهرمونات",
+    "en": "Hormones"
+   },
+   "price": 230
+  },
+  {
+   "id": "lab-188",
+   "code": "88",
+   "name": {
+    "ar": "Amyloid A protein",
+    "en": "Amyloid A protein"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 500
+  },
+  {
+   "id": "lab-189",
+   "code": "119",
+   "name": {
+    "ar": "Tissue transglutaminase IgG",
+    "en": "Tissue transglutaminase IgG"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 600
+  },
+  {
+   "id": "lab-190",
+   "code": "86",
+   "name": {
+    "ar": "(ANA (ELISA",
+    "en": "(ANA (ELISA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 360
+  },
+  {
+   "id": "lab-191",
+   "code": "111",
+   "name": {
+    "ar": "(Anti DNA s.s (ELISA",
+    "en": "(Anti DNA s.s (ELISA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 650
+  },
+  {
+   "id": "lab-192",
+   "code": "118",
+   "name": {
+    "ar": "ASCA IgA",
+    "en": "ASCA IgA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 610
+  },
+  {
+   "id": "lab-193",
+   "code": "107",
+   "name": {
+    "ar": "Anti cardiolipin IgG",
+    "en": "Anti cardiolipin IgG"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-194",
+   "code": "97",
+   "name": {
+    "ar": "ANCA P & C",
+    "en": "ANCA P & C"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 780
+  },
+  {
+   "id": "lab-195",
+   "code": "90",
+   "name": {
+    "ar": "ASMA",
+    "en": "ASMA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-196",
+   "code": "142",
+   "name": {
+    "ar": "RF latex",
+    "en": "RF latex"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 95
+  },
+  {
+   "id": "lab-197",
+   "code": "117",
+   "name": {
+    "ar": "ASCA-IgG",
+    "en": "ASCA-IgG"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 610
+  },
+  {
+   "id": "lab-198",
+   "code": "109",
+   "name": {
+    "ar": "Anti Phospholipid Ab IgG",
+    "en": "Anti Phospholipid Ab IgG"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-199",
+   "code": "114",
+   "name": {
+    "ar": "Insulin Ab",
+    "en": "Insulin Ab"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-200",
+   "code": "600",
+   "name": {
+    "ar": "B2-Glycoprotein IgG",
+    "en": "B2-Glycoprotein IgG"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-201",
+   "code": "397",
+   "name": {
+    "ar": "ESR",
+    "en": "ESR"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-202",
+   "code": "108",
+   "name": {
+    "ar": "Anti Cardiolipin IgM",
+    "en": "Anti Cardiolipin IgM"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-203",
+   "code": "144",
+   "name": {
+    "ar": "C-reactive protien (CRP)",
+    "en": "C-reactive protien (CRP)"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-204",
+   "code": "601",
+   "name": {
+    "ar": "B2-Glycoprotein IgM",
+    "en": "B2-Glycoprotein IgM"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-205",
+   "code": "141",
+   "name": {
+    "ar": "ASOT",
+    "en": "ASOT"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-206",
+   "code": "138",
+   "name": {
+    "ar": "Anti TSH receptor Ab (TRAb)",
+    "en": "Anti TSH receptor Ab (TRAb)"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 600
+  },
+  {
+   "id": "lab-207",
+   "code": "120",
+   "name": {
+    "ar": "Tissue transglutaminase IgA",
+    "en": "Tissue transglutaminase IgA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 600
+  },
+  {
+   "id": "lab-208",
+   "code": "110",
+   "name": {
+    "ar": "Anti Phospholipid Ab IgM",
+    "en": "Anti Phospholipid Ab IgM"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-209",
+   "code": "635",
+   "name": {
+    "ar": "Anti DGP IgG",
+    "en": "Anti DGP IgG"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 730
+  },
+  {
+   "id": "lab-210",
+   "code": "666",
+   "name": {
+    "ar": "Rose waller",
+    "en": "Rose waller"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-211",
+   "code": "769",
+   "name": {
+    "ar": "C-reactive protien (CRP)Latex",
+    "en": "C-reactive protien (CRP)Latex"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 115
+  },
+  {
+   "id": "lab-212",
+   "code": "735",
+   "name": {
+    "ar": "Anti DNA d.s",
+    "en": "Anti DNA d.s"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-213",
+   "code": "783",
+   "name": {
+    "ar": "ASOT (Latex)",
+    "en": "ASOT (Latex)"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 85
+  },
+  {
+   "id": "lab-214",
+   "code": "774",
+   "name": {
+    "ar": "Rheumatoid factor (RF)",
+    "en": "Rheumatoid factor (RF)"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 140
+  },
+  {
+   "id": "lab-215",
+   "code": "847",
+   "name": {
+    "ar": "Anti DGP IgA",
+    "en": "Anti DGP IgA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 750
+  },
+  {
+   "id": "lab-216",
+   "code": "727",
+   "name": {
+    "ar": "Atypical ANCA",
+    "en": "Atypical ANCA"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 365
+  },
+  {
+   "id": "lab-217",
+   "code": "776",
+   "name": {
+    "ar": "Thyroid Anti thyroglobulin Ab",
+    "en": "Thyroid Anti thyroglobulin Ab"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-218",
+   "code": "775",
+   "name": {
+    "ar": "Thyroid anti microsomal Ab",
+    "en": "Thyroid anti microsomal Ab"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-219",
+   "code": "777",
+   "name": {
+    "ar": "Thyroid Anti Peroxidase Ab",
+    "en": "Thyroid Anti Peroxidase Ab"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 215
+  },
+  {
+   "id": "lab-220",
+   "code": "726",
+   "name": {
+    "ar": "(ANA (Immnuoblot technique",
+    "en": "(ANA (Immnuoblot technique"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 500
+  },
+  {
+   "id": "lab-221",
+   "code": "853",
+   "name": {
+    "ar": "Anti DNA d.s (IFA)",
+    "en": "Anti DNA d.s (IFA)"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-222",
+   "code": "1051",
+   "name": {
+    "ar": "Kappa",
+    "en": "Kappa"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-223",
+   "code": "1178",
+   "name": {
+    "ar": "anti-CCP",
+    "en": "anti-CCP"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-224",
+   "code": "181",
+   "name": {
+    "ar": "Glucose 2hr P-50g",
+    "en": "Glucose 2hr P-50g"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-225",
+   "code": "175",
+   "name": {
+    "ar": "FBS",
+    "en": "FBS"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 20
+  },
+  {
+   "id": "lab-226",
+   "code": "112",
+   "name": {
+    "ar": "Anti Thyroglobulin Ab",
+    "en": "Anti Thyroglobulin Ab"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 270
+  },
+  {
+   "id": "lab-227",
+   "code": "82",
+   "name": {
+    "ar": "Zinc Blood",
+    "en": "Zinc Blood"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-228",
+   "code": "215",
+   "name": {
+    "ar": "CSF protein",
+    "en": "CSF protein"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-229",
+   "code": "222",
+   "name": {
+    "ar": "Stone analysis",
+    "en": "Stone analysis"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-230",
+   "code": "217",
+   "name": {
+    "ar": "Alb/Creat R",
+    "en": "Alb/Creat R"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-231",
+   "code": "214",
+   "name": {
+    "ar": "Protein 24hr ( in urine )",
+    "en": "Protein 24hr ( in urine )"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 80
+  },
+  {
+   "id": "lab-232",
+   "code": "178",
+   "name": {
+    "ar": "Glucose (1hr PP)",
+    "en": "Glucose (1hr PP)"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 25
+  },
+  {
+   "id": "lab-233",
+   "code": "228",
+   "name": {
+    "ar": "Ca",
+    "en": "Ca"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-234",
+   "code": "180",
+   "name": {
+    "ar": "2H (After 75 g Glucose)",
+    "en": "2H (After 75 g Glucose)"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 30
+  },
+  {
+   "id": "lab-235",
+   "code": "190",
+   "name": {
+    "ar": "Triglycerides (TG)",
+    "en": "Triglycerides (TG)"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 60
+  },
+  {
+   "id": "lab-236",
+   "code": "179",
+   "name": {
+    "ar": "O Sullivan",
+    "en": "O Sullivan"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 30
+  },
+  {
+   "id": "lab-237",
+   "code": "366",
+   "name": {
+    "ar": "Semen Alpha glucosidase",
+    "en": "Semen Alpha glucosidase"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 650
+  },
+  {
+   "id": "lab-238",
+   "code": "330",
+   "name": {
+    "ar": "Herpis simplex 1+2 IgG",
+    "en": "Herpis simplex 1+2 IgG"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-239",
+   "code": "237",
+   "name": {
+    "ar": "Ca Ionized",
+    "en": "Ca Ionized"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 135
+  },
+  {
+   "id": "lab-240",
+   "code": "237",
+   "name": {
+    "ar": "Ca Ionized",
+    "en": "Ca Ionized"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 125
+  },
+  {
+   "id": "lab-241",
+   "code": "263",
+   "name": {
+    "ar": "Rh Ab",
+    "en": "Rh Ab"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 55
+  },
+  {
+   "id": "lab-242",
+   "code": "331",
+   "name": {
+    "ar": "Herpis simplex 1+2 IgM",
+    "en": "Herpis simplex 1+2 IgM"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-243",
+   "code": "356",
+   "name": {
+    "ar": "Schistosomal Ab (ELISA)",
+    "en": "Schistosomal Ab (ELISA)"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 235
+  },
+  {
+   "id": "lab-244",
+   "code": "251",
+   "name": {
+    "ar": "PH",
+    "en": "PH"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-245",
+   "code": "365",
+   "name": {
+    "ar": "Semen Fructose test Qualitative",
+    "en": "Semen Fructose test Qualitative"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 80
+  },
+  {
+   "id": "lab-246",
+   "code": "379",
+   "name": {
+    "ar": "PR",
+    "en": "PR"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 1
+  },
+  {
+   "id": "lab-247",
+   "code": "400",
+   "name": {
+    "ar": "RBCs",
+    "en": "RBCs"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 25
+  },
+  {
+   "id": "lab-248",
+   "code": "377",
+   "name": {
+    "ar": "Cytology Fluids",
+    "en": "Cytology Fluids"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-249",
+   "code": "398",
+   "name": {
+    "ar": "Proth",
+    "en": "Proth"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 70
+  },
+  {
+   "id": "lab-250",
+   "code": "444",
+   "name": {
+    "ar": "ADH",
+    "en": "ADH"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 910
+  },
+  {
+   "id": "lab-251",
+   "code": "403",
+   "name": {
+    "ar": "Retic",
+    "en": "Retic"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 70
+  },
+  {
+   "id": "lab-252",
+   "code": "",
+   "name": {
+    "ar": "Urine Creatinine",
+    "en": "Urine Creatinine"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-253",
+   "code": "458",
+   "name": {
+    "ar": "Anti Peroxidase Ab ( Anti -TPO )",
+    "en": "Anti Peroxidase Ab ( Anti -TPO )"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-254",
+   "code": "482",
+   "name": {
+    "ar": "BT",
+    "en": "BT"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 35
+  },
+  {
+   "id": "lab-255",
+   "code": "481",
+   "name": {
+    "ar": "Factor V leiden",
+    "en": "Factor V leiden"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-256",
+   "code": "474",
+   "name": {
+    "ar": "TB Film",
+    "en": "TB Film"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-257",
+   "code": "516",
+   "name": {
+    "ar": "Semen Analysis",
+    "en": "Semen Analysis"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 170
+  },
+  {
+   "id": "lab-258",
+   "code": "522",
+   "name": {
+    "ar": "Herpis simplex I IgG",
+    "en": "Herpis simplex I IgG"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-259",
+   "code": "492",
+   "name": {
+    "ar": "ABG",
+    "en": "ABG"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 500
+  },
+  {
+   "id": "lab-260",
+   "code": "519",
+   "name": {
+    "ar": "Culture TB",
+    "en": "Culture TB"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 440
+  },
+  {
+   "id": "lab-261",
+   "code": "537",
+   "name": {
+    "ar": "Beta 2 Glycoprotein IgG",
+    "en": "Beta 2 Glycoprotein IgG"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 395
+  },
+  {
+   "id": "lab-262",
+   "code": "491",
+   "name": {
+    "ar": "Culture",
+    "en": "Culture"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 450
+  },
+  {
+   "id": "lab-263",
+   "code": "408",
+   "name": {
+    "ar": "Serum Iron",
+    "en": "Serum Iron"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 90
+  },
+  {
+   "id": "lab-264",
+   "code": "487",
+   "name": {
+    "ar": "CASA",
+    "en": "CASA"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 210
+  },
+  {
+   "id": "lab-265",
+   "code": "550",
+   "name": {
+    "ar": "Drugs in urine",
+    "en": "Drugs in urine"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-266",
+   "code": "567",
+   "name": {
+    "ar": "Urine creat",
+    "en": "Urine creat"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-267",
+   "code": "564",
+   "name": {
+    "ar": "PAP smear",
+    "en": "PAP smear"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 550
+  },
+  {
+   "id": "lab-268",
+   "code": "560",
+   "name": {
+    "ar": "Alb in Urine",
+    "en": "Alb in Urine"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 35
+  },
+  {
+   "id": "lab-269",
+   "code": "565",
+   "name": {
+    "ar": "Anti Tpo",
+    "en": "Anti Tpo"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-270",
+   "code": "559",
+   "name": {
+    "ar": "Sugar & Acetone in Urine",
+    "en": "Sugar & Acetone in Urine"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 20
+  },
+  {
+   "id": "lab-271",
+   "code": "551",
+   "name": {
+    "ar": "HCV Ab ( Elisa )",
+    "en": "HCV Ab ( Elisa )"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 180
+  },
+  {
+   "id": "lab-272",
+   "code": "574",
+   "name": {
+    "ar": "Vitamin D",
+    "en": "Vitamin D"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-273",
+   "code": "538",
+   "name": {
+    "ar": "Beta 2 Glycioprotein IgM",
+    "en": "Beta 2 Glycioprotein IgM"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 395
+  },
+  {
+   "id": "lab-274",
+   "code": "547",
+   "name": {
+    "ar": "Semen Culture",
+    "en": "Semen Culture"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 370
+  },
+  {
+   "id": "lab-275",
+   "code": "576",
+   "name": {
+    "ar": "HBsAg ( Elisa )",
+    "en": "HBsAg ( Elisa )"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-276",
+   "code": "629",
+   "name": {
+    "ar": "Albumin in Fluid",
+    "en": "Albumin in Fluid"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 60
+  },
+  {
+   "id": "lab-277",
+   "code": "630",
+   "name": {
+    "ar": "Cortisol 8 Am",
+    "en": "Cortisol 8 Am"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 135
+  },
+  {
+   "id": "lab-278",
+   "code": "602",
+   "name": {
+    "ar": "Calprotectin (Blood)",
+    "en": "Calprotectin (Blood)"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 500
+  },
+  {
+   "id": "lab-279",
+   "code": "610",
+   "name": {
+    "ar": "VBG",
+    "en": "VBG"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 500
+  },
+  {
+   "id": "lab-280",
+   "code": "614",
+   "name": {
+    "ar": "lepto IgG",
+    "en": "lepto IgG"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 420
+  },
+  {
+   "id": "lab-281",
+   "code": "613",
+   "name": {
+    "ar": "lepto IgM",
+    "en": "lepto IgM"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 420
+  },
+  {
+   "id": "lab-282",
+   "code": "571",
+   "name": {
+    "ar": "Fluid",
+    "en": "Fluid"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-283",
+   "code": "665",
+   "name": {
+    "ar": "Kryo typing",
+    "en": "Kryo typing"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 1000
+  },
+  {
+   "id": "lab-284",
+   "code": "655",
+   "name": {
+    "ar": "CK-Mb (FIA)",
+    "en": "CK-Mb (FIA)"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-285",
+   "code": "640",
+   "name": {
+    "ar": "VDRL",
+    "en": "VDRL"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-286",
+   "code": "1134",
+   "name": {
+    "ar": "cells in CSF",
+    "en": "cells in CSF"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-287",
+   "code": "1162",
+   "name": {
+    "ar": "oligo clonal band in csf",
+    "en": "oligo clonal band in csf"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 2846
+  },
+  {
+   "id": "lab-288",
+   "code": "1179",
+   "name": {
+    "ar": "Ramadan Package",
+    "en": "Ramadan Package"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 450
+  },
+  {
+   "id": "lab-289",
+   "code": "1191",
+   "name": {
+    "ar": "خدمه سحب منزلي",
+    "en": "خدمه سحب منزلي"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-290",
+   "code": "1195",
+   "name": {
+    "ar": "Ferritin - Offer1",
+    "en": "Ferritin - Offer1"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-291",
+   "code": "1196",
+   "name": {
+    "ar": "Ferritin - Offer2",
+    "en": "Ferritin - Offer2"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-292",
+   "code": "1197",
+   "name": {
+    "ar": "حساسية الجهاز الهضمي",
+    "en": "حساسية الجهاز الهضمي"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 3100
+  },
+  {
+   "id": "lab-293",
+   "code": "1198",
+   "name": {
+    "ar": "PAP smear 2",
+    "en": "PAP smear 2"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 900
+  },
+  {
+   "id": "lab-294",
+   "code": "1199",
+   "name": {
+    "ar": "PAP smear 3",
+    "en": "PAP smear 3"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 2300
+  },
+  {
+   "id": "lab-295",
+   "code": "1200",
+   "name": {
+    "ar": "PAP smear 4",
+    "en": "PAP smear 4"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 13000
+  },
+  {
+   "id": "lab-296",
+   "code": "1201",
+   "name": {
+    "ar": "PAP smear 5",
+    "en": "PAP smear 5"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 14000
+  },
+  {
+   "id": "lab-297",
+   "code": "1202",
+   "name": {
+    "ar": "PAP smear 6",
+    "en": "PAP smear 6"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 19000
+  },
+  {
+   "id": "lab-298",
+   "code": "1203",
+   "name": {
+    "ar": "PAP smear 7",
+    "en": "PAP smear 7"
+   },
+   "category": {
+    "ar": "تحاليل عامة",
+    "en": "General tests"
+   },
+   "price": 1900
+  },
+  {
+   "id": "lab-299",
+   "code": "329",
+   "name": {
+    "ar": "CMV IgM",
+    "en": "CMV IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-300",
+   "code": "325",
+   "name": {
+    "ar": "Rubella IgG",
+    "en": "Rubella IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-301",
+   "code": "333",
+   "name": {
+    "ar": "EBV IgG",
+    "en": "EBV IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-302",
+   "code": "322",
+   "name": {
+    "ar": "H Pylori IgA",
+    "en": "H Pylori IgA"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-303",
+   "code": "321",
+   "name": {
+    "ar": "H Pylori IgM",
+    "en": "H Pylori IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-304",
+   "code": "320",
+   "name": {
+    "ar": "H pylori IgG",
+    "en": "H pylori IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-305",
+   "code": "328",
+   "name": {
+    "ar": "CMV IgG",
+    "en": "CMV IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-306",
+   "code": "332",
+   "name": {
+    "ar": "HIV Ab",
+    "en": "HIV Ab"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-307",
+   "code": "494",
+   "name": {
+    "ar": "Vaginal swab",
+    "en": "Vaginal swab"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-308",
+   "code": "497",
+   "name": {
+    "ar": "CSF Culture",
+    "en": "CSF Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-309",
+   "code": "450",
+   "name": {
+    "ar": "Monospot test",
+    "en": "Monospot test"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 180
+  },
+  {
+   "id": "lab-310",
+   "code": "493",
+   "name": {
+    "ar": "Pus culture",
+    "en": "Pus culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-311",
+   "code": "496",
+   "name": {
+    "ar": "Cervical Discharge Culture",
+    "en": "Cervical Discharge Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-312",
+   "code": "452",
+   "name": {
+    "ar": "Widal test",
+    "en": "Widal test"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-313",
+   "code": "513",
+   "name": {
+    "ar": "Pus swab culture",
+    "en": "Pus swab culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 390
+  },
+  {
+   "id": "lab-314",
+   "code": "495",
+   "name": {
+    "ar": "Sputum Culture",
+    "en": "Sputum Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-315",
+   "code": "326",
+   "name": {
+    "ar": "Rubella IgM",
+    "en": "Rubella IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-316",
+   "code": "334",
+   "name": {
+    "ar": "EBV IgM",
+    "en": "EBV IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 260
+  },
+  {
+   "id": "lab-317",
+   "code": "335",
+   "name": {
+    "ar": "EBV EA IgG",
+    "en": "EBV EA IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 300
+  },
+  {
+   "id": "lab-318",
+   "code": "605",
+   "name": {
+    "ar": "Brucella IgM (ELISA)",
+    "en": "Brucella IgM (ELISA)"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-319",
+   "code": "508",
+   "name": {
+    "ar": "Stool culture",
+    "en": "Stool culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 370
+  },
+  {
+   "id": "lab-320",
+   "code": "512",
+   "name": {
+    "ar": "Urine Culture",
+    "en": "Urine Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-321",
+   "code": "507",
+   "name": {
+    "ar": "Pleural Fluid Culture",
+    "en": "Pleural Fluid Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 390
+  },
+  {
+   "id": "lab-322",
+   "code": "604",
+   "name": {
+    "ar": "Brucella IgG (ELISA)",
+    "en": "Brucella IgG (ELISA)"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-323",
+   "code": "510",
+   "name": {
+    "ar": "Blood culture",
+    "en": "Blood culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 600
+  },
+  {
+   "id": "lab-324",
+   "code": "589",
+   "name": {
+    "ar": "Ziehl Neelsen stain",
+    "en": "Ziehl Neelsen stain"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-325",
+   "code": "502",
+   "name": {
+    "ar": "Ear swab Culture",
+    "en": "Ear swab Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 1
+  },
+  {
+   "id": "lab-326",
+   "code": "617",
+   "name": {
+    "ar": "Automated Blood Culture",
+    "en": "Automated Blood Culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 440
+  },
+  {
+   "id": "lab-327",
+   "code": "914",
+   "name": {
+    "ar": "Parvovirus IgM",
+    "en": "Parvovirus IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 700
+  },
+  {
+   "id": "lab-328",
+   "code": "642",
+   "name": {
+    "ar": "Varicella IgM",
+    "en": "Varicella IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 330
+  },
+  {
+   "id": "lab-329",
+   "code": "695",
+   "name": {
+    "ar": "EBV Ab",
+    "en": "EBV Ab"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 550
+  },
+  {
+   "id": "lab-330",
+   "code": "909",
+   "name": {
+    "ar": "Herpes simplex IgM",
+    "en": "Herpes simplex IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-331",
+   "code": "913",
+   "name": {
+    "ar": "Parvovirus IgG",
+    "en": "Parvovirus IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 700
+  },
+  {
+   "id": "lab-332",
+   "code": "641",
+   "name": {
+    "ar": "Varicella IgG",
+    "en": "Varicella IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 330
+  },
+  {
+   "id": "lab-333",
+   "code": "922",
+   "name": {
+    "ar": "Brucella test (Slide agglutination)",
+    "en": "Brucella test (Slide agglutination)"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 120
+  },
+  {
+   "id": "lab-334",
+   "code": "938",
+   "name": {
+    "ar": "Salmonella typhi IgM",
+    "en": "Salmonella typhi IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-335",
+   "code": "970",
+   "name": {
+    "ar": "Wound swab culture",
+    "en": "Wound swab culture"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 390
+  },
+  {
+   "id": "lab-336",
+   "code": "937",
+   "name": {
+    "ar": "Salmonella typhi IgG",
+    "en": "Salmonella typhi IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 280
+  },
+  {
+   "id": "lab-337",
+   "code": "931",
+   "name": {
+    "ar": "Leptospira IgM",
+    "en": "Leptospira IgM"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 420
+  },
+  {
+   "id": "lab-338",
+   "code": "930",
+   "name": {
+    "ar": "Leptospira IgG",
+    "en": "Leptospira IgG"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 420
+  },
+  {
+   "id": "lab-339",
+   "code": "1164",
+   "name": {
+    "ar": "H. Pylori Ag in stool",
+    "en": "H. Pylori Ag in stool"
+   },
+   "category": {
+    "ar": "الميكروبيولوجي",
+    "en": "Microbiology"
+   },
+   "price": 290
+  },
+  {
+   "id": "lab-340",
+   "code": "323",
+   "name": {
+    "ar": "H pylori Ag",
+    "en": "H pylori Ag"
+   },
+   "category": {
+    "ar": "الطفيليات",
+    "en": "Parasitology"
+   },
+   "price": 180
+  },
+  {
+   "id": "lab-341",
+   "code": "808",
+   "name": {
+    "ar": "Toxoplasma IgM",
+    "en": "Toxoplasma IgM"
+   },
+   "category": {
+    "ar": "الطفيليات",
+    "en": "Parasitology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-342",
+   "code": "807",
+   "name": {
+    "ar": "Toxoplasma IgG",
+    "en": "Toxoplasma IgG"
+   },
+   "category": {
+    "ar": "الطفيليات",
+    "en": "Parasitology"
+   },
+   "price": 250
+  },
+  {
+   "id": "lab-343",
+   "code": "456",
+   "name": {
+    "ar": "Urine Analysis",
+    "en": "Urine Analysis"
+   },
+   "category": {
+    "ar": "الطفيليات",
+    "en": "Parasitology"
+   },
+   "price": 30
+  },
+  {
+   "id": "lab-344",
+   "code": "457",
+   "name": {
+    "ar": "Stool analysis",
+    "en": "Stool analysis"
+   },
+   "category": {
+    "ar": "الطفيليات",
+    "en": "Parasitology"
+   },
+   "price": 30
+  },
+  {
+   "id": "lab-345",
+   "code": "40",
+   "name": {
+    "ar": "PCR for HCV Quantitative",
+    "en": "PCR for HCV Quantitative"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 900
+  },
+  {
+   "id": "lab-346",
+   "code": "38",
+   "name": {
+    "ar": "PCR for HBV DNA Quantitative",
+    "en": "PCR for HBV DNA Quantitative"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 950
+  },
+  {
+   "id": "lab-347",
+   "code": "631",
+   "name": {
+    "ar": "PCR for JAK II gene mutation",
+    "en": "PCR for JAK II gene mutation"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 1350
+  },
+  {
+   "id": "lab-348",
+   "code": "54",
+   "name": {
+    "ar": "PCR for CMV",
+    "en": "PCR for CMV"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 1000
+  },
+  {
+   "id": "lab-349",
+   "code": "58",
+   "name": {
+    "ar": "PCR for FMF",
+    "en": "PCR for FMF"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 2100
+  },
+  {
+   "id": "lab-350",
+   "code": "62",
+   "name": {
+    "ar": "PCR for Prothrombin Gene mutation",
+    "en": "PCR for Prothrombin Gene mutation"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 1500
+  },
+  {
+   "id": "lab-351",
+   "code": "61",
+   "name": {
+    "ar": "PCR Factor V leiden gene mutation",
+    "en": "PCR Factor V leiden gene mutation"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 1450
+  },
+  {
+   "id": "lab-352",
+   "code": "448",
+   "name": {
+    "ar": "PCR for HCV Qualitative",
+    "en": "PCR for HCV Qualitative"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 575
+  },
+  {
+   "id": "lab-353",
+   "code": "49",
+   "name": {
+    "ar": "PCR for Y chromosome",
+    "en": "PCR for Y chromosome"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 2000
+  },
+  {
+   "id": "lab-354",
+   "code": "638",
+   "name": {
+    "ar": "PCR for MTHFR",
+    "en": "PCR for MTHFR"
+   },
+   "category": {
+    "ar": "PCR",
+    "en": "PCR"
+   },
+   "price": 1500
+  },
+  {
+   "id": "lab-355",
+   "code": "573",
+   "name": {
+    "ar": "Procalcitonin PCT-Q",
+    "en": "Procalcitonin PCT-Q"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 850
+  },
+  {
+   "id": "lab-356",
+   "code": "64",
+   "name": {
+    "ar": "CEA",
+    "en": "CEA"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-357",
+   "code": "67",
+   "name": {
+    "ar": "CA15.3",
+    "en": "CA15.3"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-358",
+   "code": "68",
+   "name": {
+    "ar": "CA19.9",
+    "en": "CA19.9"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 190
+  },
+  {
+   "id": "lab-359",
+   "code": "69",
+   "name": {
+    "ar": "CA125",
+    "en": "CA125"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-360",
+   "code": "432",
+   "name": {
+    "ar": "Double test (PAPP-A + Free-BHCG)",
+    "en": "Double test (PAPP-A + Free-BHCG)"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 275
+  },
+  {
+   "id": "lab-361",
+   "code": "75",
+   "name": {
+    "ar": "Calcitonin",
+    "en": "Calcitonin"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 950
+  },
+  {
+   "id": "lab-362",
+   "code": "521",
+   "name": {
+    "ar": "T.PSA/F.PSA",
+    "en": "T.PSA/F.PSA"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 170
+  },
+  {
+   "id": "lab-363",
+   "code": "173",
+   "name": {
+    "ar": "BHCG Free",
+    "en": "BHCG Free"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 170
+  },
+  {
+   "id": "lab-364",
+   "code": "669",
+   "name": {
+    "ar": "Interlukin 6 (IL-6)",
+    "en": "Interlukin 6 (IL-6)"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 530
+  },
+  {
+   "id": "lab-365",
+   "code": "722",
+   "name": {
+    "ar": "Acid phosphatase",
+    "en": "Acid phosphatase"
+   },
+   "category": {
+    "ar": "دلالات الأورام",
+    "en": "Tumour markers"
+   },
+   "price": 185
+  },
+  {
+   "id": "lab-366",
+   "code": "26",
+   "name": {
+    "ar": "HBs Ag",
+    "en": "HBs Ag"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 180
+  },
+  {
+   "id": "lab-367",
+   "code": "25",
+   "name": {
+    "ar": "HAV Ab",
+    "en": "HAV Ab"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 240
+  },
+  {
+   "id": "lab-368",
+   "code": "36",
+   "name": {
+    "ar": "HEV Ab IgM",
+    "en": "HEV Ab IgM"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 160
+  },
+  {
+   "id": "lab-369",
+   "code": "24",
+   "name": {
+    "ar": "HAV Ab IgM",
+    "en": "HAV Ab IgM"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 240
+  },
+  {
+   "id": "lab-370",
+   "code": "27",
+   "name": {
+    "ar": "HBs Ab",
+    "en": "HBs Ab"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-371",
+   "code": "29",
+   "name": {
+    "ar": "HBc Ab",
+    "en": "HBc Ab"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 180
+  },
+  {
+   "id": "lab-372",
+   "code": "37",
+   "name": {
+    "ar": "HCV Ab IgM",
+    "en": "HCV Ab IgM"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-373",
+   "code": "32",
+   "name": {
+    "ar": "HCV Ab",
+    "en": "HCV Ab"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 220
+  },
+  {
+   "id": "lab-374",
+   "code": "28",
+   "name": {
+    "ar": "HBe Ab",
+    "en": "HBe Ab"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 130
+  },
+  {
+   "id": "lab-375",
+   "code": "35",
+   "name": {
+    "ar": "HEV Ab total",
+    "en": "HEV Ab total"
+   },
+   "category": {
+    "ar": "الفيروسات",
+    "en": "Virology"
+   },
+   "price": 200
+  },
+  {
+   "id": "lab-376",
+   "code": "140",
+   "name": {
+    "ar": "Calprotectin in stool",
+    "en": "Calprotectin in stool"
+   },
+   "category": {
+    "ar": "المناعة",
+    "en": "Immunology"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-377",
+   "code": "1116",
+   "name": {
+    "ar": "مستهلكات معمل 1",
+    "en": "مستهلكات معمل 1"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 5
+  },
+  {
+   "id": "lab-378",
+   "code": "1136",
+   "name": {
+    "ar": "مستهلكات معمل 2",
+    "en": "مستهلكات معمل 2"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 10
+  },
+  {
+   "id": "lab-379",
+   "code": "1137",
+   "name": {
+    "ar": "مستهلكات معمل 3",
+    "en": "مستهلكات معمل 3"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 15
+  },
+  {
+   "id": "lab-380",
+   "code": "1138",
+   "name": {
+    "ar": "مستهلكات معمل 4",
+    "en": "مستهلكات معمل 4"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 20
+  },
+  {
+   "id": "lab-381",
+   "code": "1139",
+   "name": {
+    "ar": "مستهلكات معمل 5",
+    "en": "مستهلكات معمل 5"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 50
+  },
+  {
+   "id": "lab-382",
+   "code": "1140",
+   "name": {
+    "ar": "مستهلكات معمل 6",
+    "en": "مستهلكات معمل 6"
+   },
+   "category": {
+    "ar": "مستوى الأدوية",
+    "en": "Drug levels"
+   },
+   "price": 100
+  },
+  {
+   "id": "lab-383",
+   "code": "1118",
+   "name": {
+    "ar": "DNA Fragmentation Index(DFI)(By manual Microscopic)",
+    "en": "DNA Fragmentation Index(DFI)(By manual Microscopic)"
+   },
+   "category": {
+    "ar": "تحليل السائل المنوي",
+    "en": "Semen analysis"
+   },
+   "price": 1600
+  },
+  {
+   "id": "lab-384",
+   "code": "1125",
+   "name": {
+    "ar": "sperm oxidative stress",
+    "en": "sperm oxidative stress"
+   },
+   "category": {
+    "ar": "تحليل السائل المنوي",
+    "en": "Semen analysis"
+   },
+   "price": 450
+  },
+  {
+   "id": "lab-385",
+   "code": "1126",
+   "name": {
+    "ar": "semen fluid fructose",
+    "en": "semen fluid fructose"
+   },
+   "category": {
+    "ar": "تحليل السائل المنوي",
+    "en": "Semen analysis"
+   },
+   "price": 150
+  },
+  {
+   "id": "lab-386",
+   "code": "1120",
+   "name": {
+    "ar": "pathology 400",
+    "en": "pathology 400"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 400
+  },
+  {
+   "id": "lab-387",
+   "code": "1165",
+   "name": {
+    "ar": "Pathology 600",
+    "en": "Pathology 600"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 600
+  },
+  {
+   "id": "lab-388",
+   "code": "1166",
+   "name": {
+    "ar": "Pathology 650",
+    "en": "Pathology 650"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 650
+  },
+  {
+   "id": "lab-389",
+   "code": "1168",
+   "name": {
+    "ar": "Pathology 750",
+    "en": "Pathology 750"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 750
+  },
+  {
+   "id": "lab-390",
+   "code": "1169",
+   "name": {
+    "ar": "Pathology 800",
+    "en": "Pathology 800"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 800
+  },
+  {
+   "id": "lab-391",
+   "code": "1170",
+   "name": {
+    "ar": "Pathology 850",
+    "en": "Pathology 850"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 850
+  },
+  {
+   "id": "lab-392",
+   "code": "1171",
+   "name": {
+    "ar": "Pathology 900",
+    "en": "Pathology 900"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 900
+  },
+  {
+   "id": "lab-393",
+   "code": "1172",
+   "name": {
+    "ar": "Pathology 950",
+    "en": "Pathology 950"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 950
+  },
+  {
+   "id": "lab-394",
+   "code": "1173",
+   "name": {
+    "ar": "Pathology 1000",
+    "en": "Pathology 1000"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 1000
+  },
+  {
+   "id": "lab-395",
+   "code": "1174",
+   "name": {
+    "ar": "Pathology 1200",
+    "en": "Pathology 1200"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 1200
+  },
+  {
+   "id": "lab-396",
+   "code": "1121",
+   "name": {
+    "ar": "pathology 350",
+    "en": "pathology 350"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-397",
+   "code": "1122",
+   "name": {
+    "ar": "pathology 450",
+    "en": "pathology 450"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 450
+  },
+  {
+   "id": "lab-398",
+   "code": "1123",
+   "name": {
+    "ar": "pathology 550",
+    "en": "pathology 550"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 550
+  },
+  {
+   "id": "lab-399",
+   "code": "1124",
+   "name": {
+    "ar": "pathology 700",
+    "en": "pathology 700"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 700
+  },
+  {
+   "id": "lab-400",
+   "code": "1175",
+   "name": {
+    "ar": "Pathology 2000",
+    "en": "Pathology 2000"
+   },
+   "category": {
+    "ar": "الباثولوجي",
+    "en": "Pathology"
+   },
+   "price": 2000
+  },
+  {
+   "id": "lab-401",
+   "code": "1127",
+   "name": {
+    "ar": "whole exam sequencing",
+    "en": "whole exam sequencing"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 2000
+  },
+  {
+   "id": "lab-402",
+   "code": "1129",
+   "name": {
+    "ar": "PRF",
+    "en": "PRF"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 75
+  },
+  {
+   "id": "lab-403",
+   "code": "1130",
+   "name": {
+    "ar": "PRP",
+    "en": "PRP"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 350
+  },
+  {
+   "id": "lab-404",
+   "code": "1131",
+   "name": {
+    "ar": "Free Fatty Acids",
+    "en": "Free Fatty Acids"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 550
+  },
+  {
+   "id": "lab-405",
+   "code": "1132",
+   "name": {
+    "ar": "Lactate In Blood",
+    "en": "Lactate In Blood"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 320
+  },
+  {
+   "id": "lab-406",
+   "code": "1133",
+   "name": {
+    "ar": "Beta-Hydroxy-Butyrate",
+    "en": "Beta-Hydroxy-Butyrate"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 1100
+  },
+  {
+   "id": "lab-407",
+   "code": "1161",
+   "name": {
+    "ar": "thrompophilia factors",
+    "en": "thrompophilia factors"
+   },
+   "category": {
+    "ar": "باقات متخصصة",
+    "en": "Specialised panels"
+   },
+   "price": 2783
+  },
+  {
+   "id": "lab-408",
+   "code": "1158",
+   "name": {
+    "ar": "porphobilinogen",
+    "en": "porphobilinogen"
+   },
+   "category": {
+    "ar": "ELISA",
+    "en": "ELISA"
+   },
+   "price": 1006
+  }
+ ],
+ "labPackages": [
+  {
+   "id": "pkg-01",
+   "name": {
+    "ar": "تحاليل صحة المرأة",
+    "en": "Women's health"
+   },
+   "tests": [
+    "CBC",
+    "VIT D",
+    "HOMA IR",
+    "FERRITIN",
+    "TSH",
+    "Total testosterone",
+    "Free testosterone",
+    "ZINC"
+   ],
+   "price": 1790,
+   "priceBefore": 2100,
+   "preparation": {
+    "ar": "صيام 8 - 10 ساعات"
+   }
+  },
+  {
+   "id": "pkg-02",
+   "name": {
+    "ar": "تحاليل وظائف الكلى",
+    "en": "Kidney function"
+   },
+   "tests": [
+    "Urine analysis",
+    "Uric acid",
+    "Albumin/Creat ratio",
+    "Urea",
+    "Creatinine"
+   ],
+   "price": 300,
+   "priceBefore": 350,
+   "preparation": {
+    "ar": "ثاني عينة بول صباحي"
+   }
+  },
+  {
+   "id": "pkg-03",
+   "name": {
+    "ar": "تحاليل ما قبل العمليات (POP)",
+    "en": "Pre-operative profile"
+   },
+   "tests": [
+    "CBC",
+    "Urea",
+    "Creatinine",
+    "SGPT",
+    "SGOT",
+    "PT",
+    "PTT",
+    "INR",
+    "Bleeding & clotting time",
+    "HBsAg",
+    "HCV Ab",
+    "HIV",
+    "TSH",
+    "HbA1c"
+   ],
+   "price": 1260,
+   "priceBefore": 1530,
+   "preparation": null
+  },
+  {
+   "id": "pkg-04",
+   "name": {
+    "ar": "تحاليل الفحوص الأساسية",
+    "en": "Basic check-up"
+   },
+   "tests": [
+    "FBS",
+    "Cholesterol",
+    "TGs",
+    "HbA1c",
+    "ALT",
+    "Creat",
+    "CBC",
+    "TSH"
+   ],
+   "price": 570,
+   "priceBefore": 700,
+   "preparation": {
+    "ar": "صيام 10 ساعات"
+   }
+  },
+  {
+   "id": "pkg-05",
+   "name": {
+    "ar": "تحاليل الخصوبة ودلالات الأورام للسيدات",
+    "en": "Women's fertility & tumour markers"
+   },
+   "tests": [
+    "E2",
+    "PRL",
+    "AMH",
+    "TSH",
+    "FSH",
+    "LH",
+    "CA 15.3",
+    "CA 125",
+    "CEA",
+    "AFP"
+   ],
+   "price": 2150,
+   "priceBefore": 2440,
+   "preparation": null
+  },
+  {
+   "id": "pkg-06",
+   "name": {
+    "ar": "تحاليل تنظيم الوزن والعناية بالشعر",
+    "en": "Weight management & hair care"
+   },
+   "tests": [
+    "CBC",
+    "VIT D",
+    "TSH",
+    "HOMA IR",
+    "Ferritin",
+    "Lipid profile",
+    "Zinc"
+   ],
+   "price": 1400,
+   "priceBefore": 1600,
+   "preparation": {
+    "ar": "صيام 10 ساعات"
+   }
+  },
+  {
+   "id": "pkg-07",
+   "name": {
+    "ar": "تحاليل صحة الطفل — شاملة",
+    "en": "Child health — full"
+   },
+   "tests": [
+    "CBC",
+    "CRP",
+    "RBS",
+    "Urine analysis",
+    "Stool analysis",
+    "Calcium",
+    "Ferritin"
+   ],
+   "price": 535,
+   "priceBefore": 630,
+   "preparation": null
+  },
+  {
+   "id": "pkg-08",
+   "name": {
+    "ar": "تحاليل صحة الطفل — متوسطة",
+    "en": "Child health — standard"
+   },
+   "tests": [
+    "CBC",
+    "CRP",
+    "RBS",
+    "Urine analysis",
+    "Stool analysis"
+   ],
+   "price": 290,
+   "priceBefore": 340,
+   "preparation": null
+  },
+  {
+   "id": "pkg-09",
+   "name": {
+    "ar": "تحاليل صحة الطفل — أساسية",
+    "en": "Child health — basic"
+   },
+   "tests": [
+    "CBC",
+    "CRP",
+    "RBS"
+   ],
+   "price": 245,
+   "priceBefore": 275,
+   "preparation": null
+  },
+  {
+   "id": "pkg-10",
+   "name": {
+    "ar": "تحاليل فحص الغدة الدرقية",
+    "en": "Thyroid check"
+   },
+   "tests": [
+    "TSH",
+    "Free T3",
+    "Free T4"
+   ],
+   "price": 345,
+   "priceBefore": 400,
+   "preparation": null
+  },
+  {
+   "id": "pkg-11",
+   "name": {
+    "ar": "تحاليل الخصوبة للرجال",
+    "en": "Men's fertility"
+   },
+   "tests": [
+    "CASA",
+    "FSH",
+    "LH",
+    "PRL",
+    "Free testosterone",
+    "Total testosterone"
+   ],
+   "price": 1200,
+   "priceBefore": 1420,
+   "preparation": null
+  },
+  {
+   "id": "pkg-12",
+   "name": {
+    "ar": "تحاليل صحة الرجال ودلالات الأورام",
+    "en": "Men's health & tumour markers"
+   },
+   "tests": [
+    "CBC",
+    "PSA total",
+    "PSA free",
+    "CEA",
+    "AFP",
+    "CA19.9",
+    "ALT",
+    "AST",
+    "Lipid profile",
+    "Urea",
+    "Creat",
+    "HbA1c"
+   ],
+   "price": 1420,
+   "priceBefore": 1660,
+   "preparation": {
+    "ar": "صيام 12 ساعة"
+   }
+  },
+  {
+   "id": "pkg-13",
+   "name": {
+    "ar": "تحاليل حقن بديل التكميم",
+    "en": "Gastric-sleeve alternative injection"
+   },
+   "tests": [
+    "CBC",
+    "Urea",
+    "Creatinine",
+    "SGPT",
+    "SGOT",
+    "Lipid profile",
+    "Ferritin",
+    "Amylase",
+    "Lipase",
+    "TSH",
+    "HbA1c",
+    "Calcitonin",
+    "Vit D"
+   ],
+   "price": 2500,
+   "priceBefore": 3050,
+   "preparation": null
+  },
+  {
+   "id": "pkg-14",
+   "name": {
+    "ar": "تحاليل د/ محمد مختار",
+    "en": "Dr Mohamed Mokhtar panel"
+   },
+   "tests": [
+    "CBC",
+    "Urea",
+    "Creatinine",
+    "SGPT",
+    "SGOT",
+    "PT",
+    "RBS",
+    "TSH",
+    "T3",
+    "T4",
+    "HbA1c"
+   ],
+   "price": 850,
+   "priceBefore": 1020,
+   "preparation": null
+  }
+ ]
+}

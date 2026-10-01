@@ -379,7 +379,7 @@ class AdminListScaffold extends StatelessWidget {
         onPressed: onAdd,
         icon: const Icon(Icons.add),
         label: Text(addLabel),
-        backgroundColor: AppColors.pink,
+        backgroundColor: AppColors.accent,
         foregroundColor: Colors.white,
       ),
     );
@@ -388,3 +388,151 @@ class AdminListScaffold extends StatelessWidget {
 
 int parseIntOr(String text, int fallback) =>
     int.tryParse(text.trim()) ?? fallback;
+
+/// A searchable multi-select over a long list (150 doctors, 40 clinics).
+/// Returns the new selection, or null if dismissed.
+Future<List<String>?> showMultiPicker({
+  required BuildContext context,
+  required String title,
+  required List<(String id, String label)> options,
+  required List<String> selected,
+}) {
+  return showModalBottomSheet<List<String>>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => _MultiPicker(title: title, options: options, selected: selected),
+  );
+}
+
+class _MultiPicker extends StatefulWidget {
+  const _MultiPicker({
+    required this.title,
+    required this.options,
+    required this.selected,
+  });
+
+  final String title;
+  final List<(String, String)> options;
+  final List<String> selected;
+
+  @override
+  State<_MultiPicker> createState() => _MultiPickerState();
+}
+
+class _MultiPickerState extends State<_MultiPicker> {
+  late final Set<String> _chosen = {...widget.selected};
+  final _query = TextEditingController();
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
+
+  static String _fold(String t) => t
+      .replaceAll(RegExp('[أإآ]'), 'ا')
+      .replaceAll('ة', 'ه')
+      .replaceAll('ى', 'ي')
+      .toLowerCase();
+
+  @override
+  Widget build(BuildContext context) {
+    final q = _fold(_query.text.trim());
+    final shown = widget.options
+        .where((o) => q.isEmpty || _fold(o.$2).contains(q))
+        .toList()
+      ..sort((a, b) {
+        final sa = _chosen.contains(a.$1), sb = _chosen.contains(b.$1);
+        if (sa != sb) return sa ? -1 : 1;
+        return 0;
+      });
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height * 0.85,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.lg, Gap.lg, Gap.sm),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text('${widget.title} (${_chosen.length})',
+                      style: Theme.of(context).textTheme.titleLarge),
+                ),
+                FilledButton(
+                  style: FilledButton.styleFrom(minimumSize: const Size(0, 40)),
+                  onPressed: () => Navigator.of(context).pop(_chosen.toList()),
+                  child: Text(context.s.commonSave),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+            child: TextField(
+              controller: _query,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: shown.length,
+              itemBuilder: (context, i) {
+                final (id, label) = shown[i];
+                return CheckboxListTile(
+                  value: _chosen.contains(id),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  title: Text(label),
+                  onChanged: (v) => setState(
+                      () => (v ?? false) ? _chosen.add(id) : _chosen.remove(id)),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The chosen items as removable chips, with an "edit" button that opens
+/// [showMultiPicker].
+class SelectionField extends StatelessWidget {
+  const SelectionField({
+    required this.labels,
+    required this.onEdit,
+    required this.onRemove,
+    required this.addLabel,
+    super.key,
+  });
+
+  final List<(String id, String label)> labels;
+  final VoidCallback onEdit;
+  final ValueChanged<String> onRemove;
+  final String addLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: Gap.sm,
+          runSpacing: Gap.sm,
+          children: [
+            for (final (id, label) in labels)
+              InputChip(label: Text(label), onDeleted: () => onRemove(id)),
+          ],
+        ),
+        const SizedBox(height: Gap.sm),
+        OutlinedButton.icon(
+          onPressed: onEdit,
+          icon: const Icon(Icons.playlist_add),
+          label: Text(addLabel),
+        ),
+        const SizedBox(height: Gap.lg),
+      ],
+    );
+  }
+}

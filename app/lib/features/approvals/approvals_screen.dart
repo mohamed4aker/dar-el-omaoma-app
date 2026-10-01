@@ -129,7 +129,7 @@ class _ApprovalCard extends StatelessWidget {
           const SizedBox(height: Gap.xs),
           StatusChip(
             request.isFromDoctor ? s.requestFromDoctor : s.requestFromPatient,
-            color: request.isFromDoctor ? AppColors.navy : AppColors.pink,
+            color: request.isFromDoctor ? AppColors.primary : AppColors.accent,
             icon: request.isFromDoctor
                 ? Icons.medical_services_outlined
                 : Icons.person_outline,
@@ -164,7 +164,7 @@ class _ApprovalCard extends StatelessWidget {
             FilledButton.icon(
               onPressed: () => showScheduleSheet(context, request),
               style: FilledButton.styleFrom(
-                backgroundColor: AppColors.navy,
+                backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
               ),
               icon: const Icon(Icons.event_available_outlined),

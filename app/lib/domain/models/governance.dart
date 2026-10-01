@@ -68,12 +68,34 @@ class StaffUser {
     required this.roles,
     this.doctorId,
     this.isActive = true,
+    this.username = '',
+    this.passwordHash = '',
   });
 
   final String id;
   final String name;
   final String phone;
   final Set<UserRole> roles;
+
+  /// Staff sign in with a username and password set by the administrator.
+  final String username;
+
+  /// SHA-256 of a per-account salt and the password; never the password.
+  final String passwordHash;
+
+  /// The role the app opens in: the most senior one held.
+  UserRole get primaryRole {
+    for (final role in const [
+      UserRole.admin,
+      UserRole.surgeryApprover,
+      UserRole.orScheduler,
+      UserRole.reception,
+      UserRole.doctor,
+    ]) {
+      if (roles.contains(role)) return role;
+    }
+    return UserRole.doctor;
+  }
 
   /// Set when this account is also a practising doctor, linking the login to
   /// the schedule and the theatre list.
@@ -91,6 +113,8 @@ class StaffUser {
     Set<UserRole>? roles,
     String? doctorId,
     bool? isActive,
+    String? username,
+    String? passwordHash,
   }) =>
       StaffUser(
         id: id,
@@ -99,6 +123,8 @@ class StaffUser {
         roles: roles ?? this.roles,
         doctorId: doctorId ?? this.doctorId,
         isActive: isActive ?? this.isActive,
+        username: username ?? this.username,
+        passwordHash: passwordHash ?? this.passwordHash,
       );
 }
 

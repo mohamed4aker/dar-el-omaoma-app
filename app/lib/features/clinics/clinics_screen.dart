@@ -6,33 +6,103 @@ import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/utils/format.dart';
+import '../../core/utils/launch.dart';
 import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../../domain/models/catalog.dart';
-import '../../domain/models/enums.dart';
-import '../admin/admin_governance_screens.dart' show paymentPolicyLabel;
+import '../bookings/patient_picker.dart';
 
-/// Deck slide 5: اختر عيادة → احجز الآن.
-class ClinicsScreen extends StatelessWidget {
+/// Deck slide 5: اختر عيادة → اختر الطبيب → احجز.
+///
+/// With 40+ clinics and 150 doctors, the list is searchable by clinic and by
+/// doctor: most patients arrive knowing the doctor's name, not the clinic.
+class ClinicsScreen extends StatefulWidget {
   const ClinicsScreen({super.key});
+
+  @override
+  State<ClinicsScreen> createState() => _ClinicsScreenState();
+}
+
+class _ClinicsScreenState extends State<ClinicsScreen> {
+  final _query = TextEditingController();
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final s = context.s;
+    context.watch<AppState>();
+    final q = foldArabic(_query.text.trim());
+
+    final clinics = q.isEmpty
+        ? Seed.clinics
+        : Seed.clinics
+            .where((c) => foldArabic(c.name(s.localeName)).contains(q))
+            .toList();
+    final doctors = q.length < 2
+        ? const <Doctor>[]
+        : Seed.doctors
+            .where((d) =>
+                foldArabic(d.name(s.localeName)).contains(q) &&
+                Seed.clinicsOf(d.id).isNotEmpty)
+            .toList();
+
     return Scaffold(
       appBar: AppBar(title: Text(s.clinicsTitle)),
       body: ListView(
         padding: const EdgeInsets.all(Gap.lg),
         children: [
-          SectionHeader(s.clinicsChoose),
-          for (final clinic in Seed.clinics)
+          TextField(
+            controller: _query,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: context.tr('ابحث باسم العيادة أو الطبيب',
+                  'Search by clinic or doctor'),
+              suffixIcon: _query.text.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: context.tr('مسح', 'Clear'),
+                      onPressed: () => setState(_query.clear),
+                      icon: const Icon(Icons.close),
+                    ),
+            ),
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: Gap.lg),
+          if (doctors.isNotEmpty) ...[
+            SectionHeader(context.tr('الأطباء', 'Doctors')),
+            for (final d in doctors)
+              for (final c in Seed.clinicsOf(d.id))
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Gap.md),
+                  child: _DoctorCard(clinic: c, doctor: d, showClinic: true),
+                ),
+            const SizedBox(height: Gap.md),
+          ],
+          if (clinics.isNotEmpty) SectionHeader(s.clinicsChoose),
+          for (final clinic in clinics)
             Padding(
               padding: const EdgeInsets.only(bottom: Gap.md),
               child: AppCard(
                 onTap: () => context.push('/clinics/${clinic.id}'),
                 child: Row(
                   children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primaryTint,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.local_hospital_outlined,
+                          color: AppColors.primary),
+                    ),
+                    const SizedBox(width: Gap.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,10 +110,19 @@ class ClinicsScreen extends StatelessWidget {
                           Text(clinic.name(s.localeName),
                               style: Theme.of(context).textTheme.titleMedium),
                           const SizedBox(height: Gap.xs),
-                          Text(
-                            '${s.clinicConsultationFee}: '
-                            '${Fmt.money(clinic.consultationFee, s)}',
-                            style: Theme.of(context).textTheme.bodySmall,
+                          Wrap(
+                            spacing: Gap.sm,
+                            runSpacing: Gap.xs,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text(
+                                doctorCount(context, clinic.doctorIds.length),
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              if (clinic.note != null)
+                                StatusChip(clinic.note!,
+                                    color: AppColors.warning),
+                            ],
                           ),
                         ],
                       ),
@@ -53,30 +132,51 @@ class ClinicsScreen extends StatelessWidget {
                 ),
               ),
             ),
+          if (clinics.isEmpty && doctors.isEmpty)
+            EmptyState(
+              message: context.tr('مفيش نتايج', 'No results'),
+              icon: Icons.search_off,
+            ),
         ],
       ),
     );
   }
 }
 
-class ClinicDetailScreen extends StatefulWidget {
+/// Spelling-insensitive Arabic matching: أ/إ/آ → ا, ة → ه, ى → ي.
+String foldArabic(String text) => text
+    .replaceAll(RegExp('[أإآ]'), 'ا')
+    .replaceAll('ة', 'ه')
+    .replaceAll('ى', 'ي')
+    .toLowerCase();
+
+/// "طبيب واحد" / "طبيبان" / "5 أطباء" / "12 طبيب".
+String doctorCount(BuildContext context, int n) {
+  if (context.s.localeName == 'en') return '$n ${n == 1 ? 'doctor' : 'doctors'}';
+  if (n == 1) return 'طبيب واحد';
+  if (n == 2) return 'طبيبان';
+  if (n <= 10) return '$n أطباء';
+  return '$n طبيب';
+}
+
+/// A clinic and its doctors, each with their timetable and a booking button.
+class ClinicDetailScreen extends StatelessWidget {
   const ClinicDetailScreen({required this.clinicId, super.key});
 
   final String clinicId;
 
   @override
-  State<ClinicDetailScreen> createState() => _ClinicDetailScreenState();
-}
-
-class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
-  DateTime _day = Seed.today;
-
-  @override
   Widget build(BuildContext context) {
     final s = context.s;
-    final state = context.watch<AppState>();
-    final clinic = Seed.clinics.firstWhere((c) => c.id == widget.clinicId);
-    final slots = state.clinicSlots(clinic, _day);
+    context.watch<AppState>();
+    final clinic = Seed.clinicById(clinicId);
+    if (clinic == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: EmptyState(
+            message: context.tr('العيادة غير متاحة', 'Clinic unavailable')),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(clinic.name(s.localeName))),
@@ -84,85 +184,266 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
         padding: const EdgeInsets.all(Gap.lg),
         children: [
           AppCard(
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _Fee(
-                    label: s.clinicConsultationFee,
-                    amount: clinic.consultationFee,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(s.clinicConsultationFee,
+                          style: Theme.of(context).textTheme.bodySmall),
+                    ),
+                    if (clinic.consultationFee > 0)
+                      PriceText(clinic.consultationFee, currency: s.commonEgp)
+                    else
+                      Text(context.tr('يُحدد في الاستقبال', 'Set at reception'),
+                          style: Theme.of(context).textTheme.bodyMedium),
+                  ],
                 ),
-                Container(
-                  width: 1,
-                  height: 36,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-                Expanded(
-                  child: _Fee(
-                    label: s.clinicFollowUpFee,
-                    amount: clinic.followUpFee,
-                  ),
-                ),
+                if (clinic.note != null) ...[
+                  const SizedBox(height: Gap.sm),
+                  StatusChip(clinic.note!, color: AppColors.warning),
+                ],
               ],
             ),
           ),
           const SizedBox(height: Gap.xl),
           SectionHeader(s.clinicChooseDoctor),
           for (final id in clinic.doctorIds)
-            Builder(builder: (context) {
-              final doctor = Seed.doctorById(id);
-              return Padding(
-                padding: const EdgeInsets.only(bottom: Gap.md),
-                child: AppCard(
-                  child: Row(
+            Padding(
+              padding: const EdgeInsets.only(bottom: Gap.md),
+              child: _DoctorCard(clinic: clinic, doctor: Seed.doctorById(id)),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DoctorCard extends StatelessWidget {
+  const _DoctorCard({
+    required this.clinic,
+    required this.doctor,
+    this.showClinic = false,
+  });
+
+  final Clinic clinic;
+  final Doctor doctor;
+  final bool showClinic;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.s;
+    final title = doctor.title(s.localeName);
+    final specialty = doctor.specialty(s.localeName);
+    final subtitle = [
+      if (title.isNotEmpty) title,
+      if (specialty.isNotEmpty) specialty,
+    ].join(' · ');
+    final shifts = [...doctor.shifts]
+      ..sort((a, b) => weekOrder(a.weekday).compareTo(weekOrder(b.weekday)));
+    final note = doctor.scheduleNote;
+    // The hospital's own wording is shown whenever it says something the
+    // day chips cannot: own patients only, by appointment, two sessions.
+    final showNote = note != null &&
+        (!doctor.isBookableOnline || note.contains('فقط'));
+
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CircleAvatar(
+                backgroundColor: AppColors.primaryTint,
+                child: Icon(Icons.person, color: AppColors.primary),
+              ),
+              const SizedBox(width: Gap.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(doctor.name(s.localeName),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    if (subtitle.isNotEmpty)
+                      Text(subtitle,
+                          style: Theme.of(context).textTheme.bodySmall),
+                    if (showClinic)
+                      Text(clinic.name(s.localeName),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.accent)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (shifts.isNotEmpty) ...[
+            const SizedBox(height: Gap.md),
+            Wrap(
+              spacing: Gap.sm,
+              runSpacing: Gap.sm,
+              children: [
+                for (final sh in shifts)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Gap.sm, vertical: Gap.xs),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentTint,
+                      borderRadius: BorderRadius.circular(Radii.input),
+                    ),
+                    child: Text(
+                      '${Fmt.weekdayName(sh.weekday, s)} '
+                      '${Fmt.minutesClock(sh.startsAt, s)}',
+                      style: const TextStyle(
+                          fontSize: 12, color: AppColors.accentDark),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+          if (showNote) ...[
+            const SizedBox(height: Gap.md),
+            Text(note, style: Theme.of(context).textTheme.bodySmall),
+          ],
+          const SizedBox(height: Gap.md),
+          if (doctor.isBookableOnline)
+            FilledButton.icon(
+              onPressed: () =>
+                  context.push('/clinics/${clinic.id}/doctor/${doctor.id}'),
+              icon: const Icon(Icons.event_available),
+              label: Text(context.tr('احجز مع الدكتور', 'Book with this doctor')),
+            )
+          else
+            OutlinedButton.icon(
+              onPressed: () => Launch.call(context, Seed.emergencyPhone),
+              icon: const Icon(Icons.call_outlined),
+              label: Text(context.tr('الحجز بالتليفون', 'Book by phone')),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Saturday first: the Egyptian working week.
+int weekOrder(int isoWeekday) => (isoWeekday + 1) % 7;
+
+/// Choose a day and a time with one doctor.
+class DoctorBookingScreen extends StatefulWidget {
+  const DoctorBookingScreen({
+    required this.clinicId,
+    required this.doctorId,
+    super.key,
+  });
+
+  final String clinicId;
+  final String doctorId;
+
+  @override
+  State<DoctorBookingScreen> createState() => _DoctorBookingScreenState();
+}
+
+class _DoctorBookingScreenState extends State<DoctorBookingScreen> {
+  DateTime? _day;
+  bool _busy = false;
+
+  static const _horizon = 28;
+
+  List<DateTime> _workingDays(Doctor doctor) {
+    final today = Seed.today;
+    return [
+      for (var i = 0; i < _horizon; i++)
+        if (doctor.worksOn(today.add(Duration(days: i)).weekday))
+          today.add(Duration(days: i)),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.s;
+    final state = context.watch<AppState>();
+    final clinic = Seed.clinicById(widget.clinicId);
+    final doctor = Seed.doctorById(widget.doctorId);
+    if (clinic == null || !doctor.isBookableOnline) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: EmptyState(
+            message: context.tr('الحجز غير متاح', 'Booking unavailable')),
+      );
+    }
+
+    final days = _workingDays(doctor);
+    // First day that still has a slot, so the screen never opens on a full
+    // or already-finished day.
+    _day ??= days.firstWhere(
+      (d) => state.clinicSlots(clinic, d, doctorId: doctor.id).isNotEmpty,
+      orElse: () => days.isEmpty ? Seed.today : days.first,
+    );
+    final day = _day!;
+    final slots = state.clinicSlots(clinic, day, doctorId: doctor.id);
+    final remaining = state.remainingCapacity(doctor, day);
+
+    return Scaffold(
+      appBar: AppBar(title: Text(doctor.name(s.localeName))),
+      body: ListView(
+        padding: const EdgeInsets.all(Gap.lg),
+        children: [
+          AppCard(
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 26,
+                  backgroundColor: AppColors.primaryTint,
+                  child: Icon(Icons.person, color: AppColors.primary),
+                ),
+                const SizedBox(width: Gap.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: AppColors.navyTint,
-                        child: Icon(Icons.person, color: AppColors.navy),
-                      ),
-                      const SizedBox(width: Gap.md),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(doctor.name(s.localeName),
-                                style:
-                                    Theme.of(context).textTheme.titleMedium),
-                            Text(
-                              '${doctor.title(s.localeName)} · '
-                              '${doctor.specialty(s.localeName)}',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ),
+                      Text(doctor.name(s.localeName),
+                          style: Theme.of(context).textTheme.titleMedium),
+                      Text(clinic.name(s.localeName),
+                          style: Theme.of(context).textTheme.bodySmall),
+                      if (doctor.title(s.localeName).isNotEmpty)
+                        Text(doctor.title(s.localeName),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(color: AppColors.accent)),
                     ],
                   ),
                 ),
-              );
-            }),
-          const SizedBox(height: Gap.lg),
-          SectionHeader(s.clinicChooseSlot),
+              ],
+            ),
+          ),
+          const SizedBox(height: Gap.xl),
+          SectionHeader(context.tr('اختر اليوم', 'Choose a day')),
           SizedBox(
-            height: 62,
+            height: 66,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: 14,
+              itemCount: days.length,
               separatorBuilder: (_, _) => const SizedBox(width: Gap.sm),
-              itemBuilder: (context, index) {
-                final day = Seed.today.add(Duration(days: index));
-                final selected = Fmt.isSameDay(day, _day);
-                final open = clinic.workingDays.contains(day.weekday);
-                return GestureDetector(
-                  onTap: () => setState(() => _day = day),
+              itemBuilder: (context, i) {
+                final d = days[i];
+                final selected = Fmt.isSameDay(d, day);
+                final full =
+                    state.clinicSlots(clinic, d, doctorId: doctor.id).isEmpty;
+                return InkWell(
+                  borderRadius: BorderRadius.circular(Radii.input),
+                  onTap: () => setState(() => _day = d),
                   child: Container(
-                    width: 70,
+                    width: 76,
                     decoration: BoxDecoration(
-                      color: selected ? AppColors.navy : Colors.transparent,
+                      color: selected ? AppColors.primary : null,
                       borderRadius: BorderRadius.circular(Radii.input),
                       border: Border.all(
                         color: selected
-                            ? AppColors.navy
+                            ? AppColors.primary
                             : Theme.of(context).colorScheme.outline,
                       ),
                     ),
@@ -170,27 +451,25 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          Fmt.weekday(day, s),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          Fmt.weekday(d, s),
                           style: TextStyle(
                             fontSize: 11,
-                            color: selected
-                                ? Colors.white70
-                                : open
-                                    ? AppColors.muted
-                                    : AppColors.muted
-                                        .withValues(alpha: 0.4),
+                            color: selected ? Colors.white70 : AppColors.muted,
                           ),
                         ),
                         Text(
-                          Fmt.shortDate(day, s),
+                          Fmt.shortDate(d, s),
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
+                            decoration: full && !selected
+                                ? TextDecoration.lineThrough
+                                : null,
                             color: selected
                                 ? Colors.white
-                                : Theme.of(context).colorScheme.onSurface,
+                                : full
+                                    ? AppColors.muted
+                                    : Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                       ],
@@ -201,16 +480,8 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
             ),
           ),
           const SizedBox(height: Gap.lg),
-          // Remaining capacity, so a patient sees the clinic filling up
-          // rather than just finding no slots.
-          Builder(builder: (context) {
-            final remaining = clinic.doctorIds
-                .map(Seed.doctorById)
-                .map((d) => state.remainingCapacity(d, _day))
-                .whereType<int>()
-                .fold<int?>(null, (a, b) => (a ?? 0) + b);
-            if (remaining == null) return const SizedBox.shrink();
-            return Padding(
+          if (remaining != null)
+            Padding(
               padding: const EdgeInsets.only(bottom: Gap.md),
               child: InfoNote(
                 remaining == 0
@@ -221,8 +492,8 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
                     : Icons.groups_outlined,
                 color: remaining == 0 ? AppColors.danger : AppColors.success,
               ),
-            );
-          }),
+            ),
+          SectionHeader(context.tr('اختر الميعاد', 'Choose a time')),
           if (slots.isEmpty)
             EmptyState(message: s.clinicNoSlots, icon: Icons.event_busy)
           else
@@ -232,165 +503,153 @@ class _ClinicDetailScreenState extends State<ClinicDetailScreen> {
               children: [
                 for (final slot in slots)
                   OutlinedButton(
-                    onPressed: () => _book(clinic, slot),
+                    onPressed:
+                        _busy ? null : () => _book(clinic, doctor, slot),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, kMinTouchTarget),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: Gap.lg),
+                      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
                     ),
-                    child: Text(Fmt.time(slot)),
+                    child: Text(Fmt.clock(slot, s)),
                   ),
               ],
             ),
           const SizedBox(height: Gap.xl),
-          // Clinic booking is immediate for patients; only theatre bookings
-          // require approval (PROMPT.md 6.13.6).
           InfoNote(
-            s.localeName == 'en'
-                ? 'Clinic appointments are confirmed immediately.'
-                : 'حجز العيادة يتم فورًا بدون انتظار موافقة.',
+            context.tr(
+                'الحجز بيتأكد فورًا. الدفع في الاستقبال، ومفيش دفع مسبق.',
+                'Bookings are confirmed immediately. Payment is at reception; nothing is paid in advance.'),
             icon: Icons.bolt_outlined,
             color: AppColors.success,
           ),
-          const SizedBox(height: Gap.md),
-          // Payment never blocks the booking; it is only ever an option.
-          InfoNote(
-            clinic.paymentPolicy.requiresDeposit
-                ? '${s.bookingDepositNote} '
-                    '${Fmt.money(clinic.depositAmount, s)}'
-                : s.bookingFreeNote,
-            icon: Icons.payments_outlined,
-            color: clinic.paymentPolicy.requiresDeposit
-                ? AppColors.warning
-                : AppColors.navy,
-          ),
+          if (doctor.scheduleNote != null) ...[
+            const SizedBox(height: Gap.md),
+            InfoNote(
+              '${context.tr('مواعيد الطبيب حسب المستشفى', "The hospital's timetable for this doctor")}:\n'
+              '${doctor.scheduleNote}',
+              icon: Icons.schedule,
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Future<void> _book(Clinic clinic, DateTime slot) async {
+  Future<void> _book(Clinic clinic, Doctor doctor, DateTime slot) async {
     final s = context.s;
-    final state = context.read<AppState>();
-    final patient = state.session.patient;
-    if (patient == null) {
-      context.push('/login');
-      return;
-    }
+    final patient = await resolveBookingPatient(context);
+    if (patient == null || !mounted) return;
 
-    var deposit = 0;
-    if (clinic.paymentPolicy.allowsOnlinePayment) {
-      final choice = await _askPayment(clinic);
-      if (choice == null) return;
-      deposit = choice;
-    }
-
-    if (!mounted) return;
-    state.bookClinicAppointment(
-      patientId: patient.id,
-      clinicId: clinic.id,
-      doctorId: clinic.doctorIds.first,
-      start: slot,
-      depositPaid: deposit,
-    );
-    if (!mounted) return;
-    await showDialog<void>(
+    final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(Icons.check_circle,
-            color: AppColors.success, size: 40),
-        title: Text(s.bookingConfirmedTitle),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(context.tr('تأكيد الحجز', 'Confirm booking')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${clinic.name(s.localeName)}\n'
-              '${Fmt.weekday(slot, s)} ${Fmt.date(slot, s)} · ${Fmt.time(slot)}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: Gap.md),
-            Text(s.bookingConfirmedBody,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: Gap.md),
-            StatusChip(paymentPolicyLabel(clinic.paymentPolicy, s),
-                color: AppColors.warning),
+            _line(Icons.person_outline, patient.fullName),
+            _line(Icons.local_hospital_outlined, clinic.name(s.localeName)),
+            _line(Icons.medical_services_outlined, doctor.name(s.localeName)),
+            _line(Icons.event, '${Fmt.weekday(slot, s)} ${Fmt.date(slot, s)}'),
+            _line(Icons.schedule, Fmt.clock(slot, s)),
+            if (clinic.consultationFee > 0)
+              _line(Icons.payments_outlined,
+                  '${Fmt.money(clinic.consultationFee, s)} — ${context.tr('في الاستقبال', 'at reception')}'),
           ],
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(s.commonClose),
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(s.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+            child: Text(context.tr('تأكيد', 'Confirm')),
           ),
         ],
       ),
     );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _busy = true);
+    final state = context.read<AppState>();
+    final outcome = state.bookClinicAppointment(
+      patientId: patient.id,
+      clinicId: clinic.id,
+      doctorId: doctor.id,
+      start: slot,
+    );
+    setState(() => _busy = false);
+    if (!mounted) return;
+
+    switch (outcome) {
+      case AppointmentBooked(:final appointment):
+        await showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            icon: const Icon(Icons.check_circle,
+                color: AppColors.success, size: 44),
+            title: Text(s.bookingConfirmedTitle),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '${doctor.name(s.localeName)}\n'
+                  '${Fmt.weekday(slot, s)} ${Fmt.date(slot, s)} · ${Fmt.clock(slot, s)}',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: Gap.md),
+                Text(
+                    '${context.tr('رقم الحجز', 'Booking number')}: ${appointment.reference}',
+                    style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: Gap.sm),
+                Text(
+                  context.tr('احضر قبل الميعاد بربع ساعة ومعاك البطاقة.',
+                      'Please arrive 15 minutes early with your ID card.'),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(s.commonClose),
+              ),
+              if (!state.session.isStaff)
+                FilledButton(
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                    context.push('/bookings');
+                  },
+                  style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+                  child: Text(s.bookingsTitle),
+                ),
+            ],
+          ),
+        );
+      case AppointmentSlotGone():
+        _snack(context.tr('الميعاد ده اتحجز حالًا، اختار ميعاد تاني.',
+            'That time was just taken — please pick another.'));
+      case AppointmentDuplicate():
+        _snack(context.tr('فيه حجز بالفعل مع نفس الطبيب في نفس اليوم.',
+            'There is already a booking with this doctor on this day.'));
+    }
   }
-}
 
-extension on _ClinicDetailScreenState {
-  /// Offers payment, never demands it. Choosing "pay at reception" is always
-  /// available, including where a deposit is configured — the hospital can
-  /// then chase it, but the patient still leaves with a booking.
-  Future<int?> _askPayment(Clinic clinic) async {
-    final s = context.s;
-    final amount = clinic.paymentPolicy.requiresDeposit
-        ? clinic.depositAmount
-        : clinic.consultationFee;
+  void _snack(String message) => ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(message)));
 
-    return showModalBottomSheet<int>(
-      context: context,
-      useSafeArea: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(Gap.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget _line(IconData icon, String text) => Padding(
+        padding: const EdgeInsets.only(bottom: Gap.sm),
+        child: Row(
           children: [
-            Text(paymentPolicyLabel(clinic.paymentPolicy, s),
-                style: Theme.of(context).textTheme.headlineMedium),
-            const SizedBox(height: Gap.md),
-            InfoNote(
-              clinic.paymentPolicy.requiresDeposit
-                  ? s.bookingDepositNote
-                  : s.bookingFreeNote,
-              icon: Icons.info_outline,
-            ),
-            const SizedBox(height: Gap.xl),
-            FilledButton.icon(
-              onPressed: () => Navigator.of(context).pop(amount),
-              icon: const Icon(Icons.credit_card),
-              label: Text('${s.bookingPayNow} — ${Fmt.money(amount, s)}'),
-            ),
-            const SizedBox(height: Gap.md),
-            OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(0),
-              child: Text(s.bookingPayLater),
-            ),
-            const SizedBox(height: Gap.sm),
+            Icon(icon, size: 18, color: AppColors.primary),
+            const SizedBox(width: Gap.sm),
+            Expanded(child: Text(text)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _Fee extends StatelessWidget {
-  const _Fee({required this.label, required this.amount});
-
-  final String label;
-  final int amount;
-
-  @override
-  Widget build(BuildContext context) {
-    final s = context.s;
-    return Column(
-      children: [
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: Gap.xs),
-        PriceText(amount, currency: s.commonEgp),
-      ],
-    );
-  }
+      );
 }

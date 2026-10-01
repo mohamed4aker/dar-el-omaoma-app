@@ -15,7 +15,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "eg.daralomouma.dar_el_omouma"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -25,11 +24,34 @@ android {
         versionName = flutter.versionName
     }
 
+    // Every build must carry the same signature, or a new APK will not install
+    // over the old one — and uninstalling would erase what the app has saved.
+    //
+    // The hospital's own key is used when CI provides it (GitHub secrets, see
+    // .github/workflows/android.yml); that is the key for Google Play.
+    // Otherwise the committed development key is used. It is not secret — the
+    // repository is public — so it is only for direct APK distribution during
+    // the trial.
+    signingConfigs {
+        create("release") {
+            val path = System.getenv("ANDROID_KEYSTORE_PATH")
+            if (!path.isNullOrBlank()) {
+                storeFile = file(path)
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            } else {
+                storeFile = file("dev-signing.jks")
+                storePassword = "android"
+                keyAlias = "dev"
+                keyPassword = "android"
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

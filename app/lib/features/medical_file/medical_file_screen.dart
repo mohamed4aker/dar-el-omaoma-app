@@ -77,6 +77,9 @@ class MedicalFileScreen extends StatelessWidget {
                 _Row(
                     label: s.registerDob,
                     value: Fmt.date(patient.dateOfBirth, s)),
+                if (patient.nationalId != null)
+                  _Row(label: s.registerNationalId, value: patient.nationalId!),
+                _Row(label: s.registerPhone, value: patient.phoneLocal),
               ],
             ),
           ),
@@ -84,14 +87,14 @@ class MedicalFileScreen extends StatelessWidget {
             const SizedBox(height: Gap.lg),
             SectionHeader(s.fileMaternity),
             AppCard(
-              borderColor: AppColors.pink.withValues(alpha: 0.45),
+              borderColor: AppColors.accent.withValues(alpha: 0.45),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
                       const Icon(Icons.child_friendly_outlined,
-                          color: AppColors.pink),
+                          color: AppColors.accent),
                       const SizedBox(width: Gap.sm),
                       Text(
                         '${s.fileGestationalAge}: '
@@ -108,8 +111,8 @@ class MedicalFileScreen extends StatelessWidget {
                         .clamp(0.0, 1.0),
                     minHeight: 8,
                     borderRadius: BorderRadius.circular(Radii.pill),
-                    color: AppColors.pink,
-                    backgroundColor: AppColors.pinkTint,
+                    color: AppColors.accent,
+                    backgroundColor: AppColors.accentTint,
                   ),
                   const SizedBox(height: Gap.md),
                   Text(
@@ -135,14 +138,19 @@ class MedicalFileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            Seed.clinics
-                                .firstWhere((c) => c.id == appointment.clinicId)
+                            Seed.doctorById(appointment.doctorId)
                                 .name(s.localeName),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
+                            Seed.clinicById(appointment.clinicId)
+                                    ?.name(s.localeName) ??
+                                '',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
                             '${Fmt.date(appointment.range.start, s)} · '
-                            '${Fmt.time(appointment.range.start)}',
+                            '${Fmt.clock(appointment.range.start, s)}',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
@@ -155,9 +163,9 @@ class MedicalFileScreen extends StatelessWidget {
             ),
           const SizedBox(height: Gap.lg),
           OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.picture_as_pdf_outlined),
-            label: Text(s.fileExport),
+            onPressed: () => context.push('/bookings'),
+            icon: const Icon(Icons.event_note_outlined),
+            label: Text(s.bookingsTitle),
           ),
         ],
       ),

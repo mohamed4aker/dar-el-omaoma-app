@@ -202,7 +202,7 @@ class _RequestCard extends StatelessWidget {
         SurgeryRequestStatus.cancelled =>
           AppColors.danger,
         SurgeryRequestStatus.moreInfoRequired => AppColors.warning,
-        _ => AppColors.navy,
+        _ => AppColors.primary,
       };
 
   static IconData _statusIcon(SurgeryRequestStatus status) => switch (status) {
