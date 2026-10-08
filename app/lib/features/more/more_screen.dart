@@ -102,6 +102,60 @@ class MoreScreen extends StatelessWidget {
               label: Text(context.tr('دخول الموظفين', 'Staff sign-in')),
             ),
           ],
+          const SizedBox(height: Gap.xl),
+          const DeveloperCard(),
+        ],
+      ),
+    );
+  }
+}
+
+/// Who built the app and how to reach them for support.
+class DeveloperCard extends StatelessWidget {
+  const DeveloperCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      borderColor: AppColors.accent.withValues(alpha: 0.35),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(context.tr('تصميم وتطوير التطبيق', 'Designed and developed by'),
+              style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: Gap.xs),
+          Text('${DeveloperInfo.companyName} — ${DeveloperInfo.engineer}',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: AppColors.accent)),
+          Text(DeveloperInfo.supportPhone,
+              textDirection: TextDirection.ltr,
+              style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: Gap.md),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () =>
+                      Launch.call(context, DeveloperInfo.supportPhone),
+                  icon: const Icon(Icons.call_outlined, size: 18),
+                  label: Text(context.tr('اتصال', 'Call')),
+                ),
+              ),
+              const SizedBox(width: Gap.sm),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => Launch.whatsapp(
+                      context, DeveloperInfo.supportPhone,
+                      text: context.tr('السلام عليكم، بخصوص تطبيق مستشفى دار الأمومة',
+                          'Hello, about the Dar El Omouma app')),
+                  icon: const Icon(Icons.chat_outlined, size: 18),
+                  label: Text(context.tr('واتساب', 'WhatsApp')),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -138,69 +192,8 @@ class AboutScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Gap.lg),
-          AppCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(s.aboutDevelopedBy,
-                    style: Theme.of(context).textTheme.bodySmall),
-                const SizedBox(height: Gap.xs),
-                Text(DeveloperInfo.companyName,
-                    style: Theme.of(context).textTheme.titleLarge),
-                Text(DeveloperInfo.engineer,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                const Divider(height: Gap.xl),
-                if (DeveloperInfo.website.isNotEmpty)
-                  _Line(
-                    icon: Icons.language,
-                    value: DeveloperInfo.website,
-                    onTap: () => Launch.url(context, DeveloperInfo.website),
-                  ),
-                _Line(
-                  icon: Icons.support_agent_outlined,
-                  value: DeveloperInfo.supportPhone,
-                  onTap: () => Launch.call(context, DeveloperInfo.supportPhone),
-                ),
-                if (DeveloperInfo.supportEmail.isNotEmpty)
-                  _Line(
-                    icon: Icons.mail_outline,
-                    value: DeveloperInfo.supportEmail,
-                    onTap: () => Launch.url(
-                        context, 'mailto:${DeveloperInfo.supportEmail}'),
-                  ),
-              ],
-            ),
-          ),
+          const DeveloperCard(),
         ],
-      ),
-    );
-  }
-}
-
-class _Line extends StatelessWidget {
-  const _Line({required this.icon, required this.value, required this.onTap});
-
-  final IconData icon;
-  final String value;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: Gap.sm),
-        child: Row(
-          children: [
-            Icon(icon, size: 18, color: AppColors.muted),
-            const SizedBox(width: Gap.md),
-            Expanded(
-              child: Text(value,
-                  textDirection: TextDirection.ltr,
-                  style: Theme.of(context).textTheme.bodyMedium),
-            ),
-          ],
-        ),
       ),
     );
   }

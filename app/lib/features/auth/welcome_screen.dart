@@ -77,7 +77,8 @@ class WelcomeScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () => context.push('/about'),
                     child: Text(
-                      '${s.aboutDevelopedBy} ${DeveloperInfo.companyName}',
+                      '${s.aboutDevelopedBy} ${DeveloperInfo.companyName} — '
+                      '${DeveloperInfo.engineer} — ${DeveloperInfo.supportPhone}',
                       style: TextStyle(
                         fontSize: 11,
                         color: AppColors.muted.withValues(alpha: 0.8),
@@ -94,8 +95,8 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-/// Developer attribution content (PROMPT.md section 2.5), shown in "About"
-/// and as one muted line on this screen — nowhere else.
+/// Developer attribution (PROMPT.md section 2.5): one line on this screen,
+/// and a card with call and WhatsApp in "More" and "About".
 abstract final class DeveloperInfo {
   static const companyName = 'MAS';
   static const engineer = 'م. محمد أحمد شاكر';
