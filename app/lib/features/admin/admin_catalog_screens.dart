@@ -105,6 +105,10 @@ class _ClassificationFormState extends State<_ClassificationForm> {
       text: widget.existing?.defaultAnaesthesia.ar ?? 'كلي');
   late final _anaesthesiaEn = TextEditingController(
       text: widget.existing?.defaultAnaesthesia.en ?? '');
+  late final _theatreFee =
+      TextEditingController(text: '${widget.existing?.theatreFee ?? 0}');
+  late final _overtimeFee =
+      TextEditingController(text: '${widget.existing?.overtimeFee ?? 0}');
   late Color _colour = widget.existing?.colour ?? ColourPicker.options.first;
   late int _seniority = widget.existing?.requiredSeniority ?? 2;
   late int _bloodUnits = widget.existing?.defaultBloodUnits ?? 0;
@@ -113,7 +117,8 @@ class _ClassificationFormState extends State<_ClassificationForm> {
   void dispose() {
     for (final c in [
       _nameAr, _nameEn, _code, _duration, _turnover,
-      _priceMin, _priceMax, _anaesthesiaAr, _anaesthesiaEn,
+      _priceMin, _priceMax, _anaesthesiaAr, _anaesthesiaEn, _theatreFee,
+      _overtimeFee,
     ]) {
       c.dispose();
     }
@@ -173,16 +178,16 @@ class _ClassificationFormState extends State<_ClassificationForm> {
           children: [
             Expanded(
               child: AdminField(
-                controller: _priceMin,
-                label: '${s.adminPriceFrom} (${s.commonEgp})',
+                controller: _theatreFee,
+                label: context.tr('رسوم غرفة العمليات', 'Theatre fee'),
                 digitsOnly: true,
               ),
             ),
             const SizedBox(width: Gap.md),
             Expanded(
               child: AdminField(
-                controller: _priceMax,
-                label: '${s.adminPriceTo} (${s.commonEgp})',
+                controller: _overtimeFee,
+                label: context.tr('كل ساعة إضافية', 'Each extra hour'),
                 digitsOnly: true,
               ),
             ),
@@ -235,6 +240,8 @@ class _ClassificationFormState extends State<_ClassificationForm> {
           defaultAnaesthesia:
               BilingualFields.toLabel(_anaesthesiaAr, _anaesthesiaEn),
           defaultBloodUnits: _bloodUnits,
+          theatreFee: parseIntOr(_theatreFee.text, 0),
+          overtimeFee: parseIntOr(_overtimeFee.text, 0),
           isActive: widget.existing?.isActive ?? true,
         );
     Navigator.of(context).pop();

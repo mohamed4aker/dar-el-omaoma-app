@@ -107,6 +107,22 @@ class AdminHomeScreen extends StatelessWidget {
             route: '/admin/lab-packages',
           ),
           _Section(
+            icon: Icons.receipt_long_outlined,
+            label: context.tr('لائحة الأسعار (أشعة، داخلي، طوارئ…)',
+                'Price list (radiology, inpatient, ER…)'),
+            count: Seed.priceSections
+                .fold<int>(0, (n, s) => n + s.items.where((i) => i.isActive).length),
+            colour: AppColors.accent,
+            route: '/admin/prices',
+          ),
+          _Section(
+            icon: Icons.healing_outlined,
+            label: context.tr('أسعار العمليات الشاملة', 'Surgery packages'),
+            count: Seed.surgeryPackages.where((p) => p.isActive).length,
+            colour: AppColors.warning,
+            route: '/admin/surgery-packages',
+          ),
+          _Section(
             icon: Icons.campaign_outlined,
             label: s.adminOffers,
             count: Seed.offers.length,

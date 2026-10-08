@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/app_state.dart';
+import '../../domain/models/catalog.dart' show PriceService;
 import '../../domain/models/enums.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
@@ -11,6 +12,7 @@ import '../../features/auth/welcome_screen.dart';
 import '../../features/admin/admin_bookings_screen.dart';
 import '../../features/admin/admin_catalog_screens.dart';
 import '../../features/admin/admin_lab_screens.dart';
+import '../../features/admin/admin_price_screens.dart';
 import '../../features/admin/admin_content_screens.dart';
 import '../../features/admin/admin_governance_screens.dart';
 import '../../features/admin/admin_home_screen.dart';
@@ -22,12 +24,13 @@ import '../../features/clinics/clinics_screen.dart';
 import '../../features/contact/contact_screen.dart';
 import '../../features/content/content_screens.dart';
 import '../../features/content/home_care_screen.dart';
-import '../../features/diagnostics/diagnostics_screens.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/lab/lab_screen.dart';
 import '../../features/medical_file/medical_file_screen.dart';
 import '../../features/more/more_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
+import '../../features/prices/price_list_screen.dart';
+import '../../features/prices/surgery_prices_screen.dart';
 import '../../features/services/services_screen.dart';
 import '../../features/shell/app_shell.dart';
 import '../../features/surgery/surgery_request_screen.dart';
@@ -93,7 +96,17 @@ GoRouter buildRouter({required AppState state}) {
           ),
         ],
       ),
-      GoRoute(path: '/radiology', builder: (_, _) => const RadiologyScreen()),
+      GoRoute(
+          path: '/radiology',
+          builder: (_, _) =>
+              const PriceListScreen(service: PriceService.radiology)),
+      GoRoute(
+          path: '/prices/:service',
+          builder: (_, state) =>
+              PriceListScreen(service: state.pathParameters['service']!)),
+      GoRoute(
+          path: '/surgery-prices',
+          builder: (_, _) => const SurgeryPricesScreen()),
       GoRoute(path: '/lab', builder: (_, _) => const LabScreen()),
       GoRoute(
         path: '/surgery',
@@ -190,6 +203,12 @@ GoRouter buildRouter({required AppState state}) {
           GoRoute(
               path: 'lab-packages',
               builder: (_, _) => const AdminLabPackagesScreen()),
+          GoRoute(
+              path: 'prices',
+              builder: (_, _) => const AdminPriceListsScreen()),
+          GoRoute(
+              path: 'surgery-packages',
+              builder: (_, _) => const AdminSurgeryPackagesScreen()),
         ],
       ),
 

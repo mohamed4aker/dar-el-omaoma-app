@@ -132,7 +132,7 @@ class AboutScreen extends StatelessWidget {
                         .bodySmall
                         ?.copyWith(color: AppColors.accent)),
                 const SizedBox(height: Gap.sm),
-                Text('v1.0.0',
+                Text('v1.1.0',
                     style: Theme.of(context).textTheme.labelSmall),
               ],
             ),

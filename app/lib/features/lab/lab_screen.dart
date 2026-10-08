@@ -257,7 +257,7 @@ class _LabScreenState extends State<LabScreen> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => _VisitTimeSheet(
+      builder: (_) => VisitTimeSheet(
         preparation: [
           for (final id in _packages)
             if (Seed.labPackageById(id)?.preparation != null)
@@ -396,21 +396,21 @@ class _PackageCard extends StatelessWidget {
   }
 }
 
-/// Day and arrival time for a lab visit.
-class _VisitTimeSheet extends StatefulWidget {
-  const _VisitTimeSheet({required this.preparation});
+/// Day and arrival time for a walk-in department (the lab, radiology).
+class VisitTimeSheet extends StatefulWidget {
+  const VisitTimeSheet({this.preparation = const [], super.key});
 
   final List<String> preparation;
 
   @override
-  State<_VisitTimeSheet> createState() => _VisitTimeSheetState();
+  State<VisitTimeSheet> createState() => _VisitTimeSheetState();
 }
 
-class _VisitTimeSheetState extends State<_VisitTimeSheet> {
+class _VisitTimeSheetState extends State<VisitTimeSheet> {
   late DateTime _day = _firstDay();
   DateTime? _time;
 
-  /// The lab's published booking hours.
+  /// The published booking hours.
   static const _opens = 8;
   static const _closes = 21;
 

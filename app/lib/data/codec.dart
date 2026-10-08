@@ -188,6 +188,8 @@ abstract final class Codec {
         'requiredSeniority': c.requiredSeniority,
         'defaultAnaesthesia': label(c.defaultAnaesthesia),
         'defaultBloodUnits': c.defaultBloodUnits,
+        'theatreFee': c.theatreFee,
+        'overtimeFee': c.overtimeFee,
         'isActive': c.isActive,
       };
 
@@ -205,8 +207,81 @@ abstract final class Codec {
         requiredSeniority: toInt(j['requiredSeniority'], 1),
         defaultAnaesthesia: toLabel(j['defaultAnaesthesia']),
         defaultBloodUnits: toInt(j['defaultBloodUnits']),
+        theatreFee: toInt(j['theatreFee']),
+        overtimeFee: toInt(j['overtimeFee']),
         isActive: (j['isActive'] as bool?) ?? true,
       );
+
+  static Map<String, dynamic> priceItem(PriceItem i) => {
+        'id': i.id,
+        'name': label(i.name),
+        'price': i.price,
+        'code': i.code,
+        'note': i.note,
+        'isActive': i.isActive,
+      };
+
+  static PriceItem toPriceItem(Map<String, dynamic> j) => PriceItem(
+        id: j['id'] as String,
+        name: toLabel(j['name']),
+        price: toInt(j['price']),
+        code: (j['code'] as String?) ?? '',
+        note: j['note'] as String?,
+        isActive: (j['isActive'] as bool?) ?? true,
+      );
+
+  static Map<String, dynamic> priceSection(PriceSection s) => {
+        'id': s.id,
+        'service': s.service,
+        'title': label(s.title),
+        'note': s.note,
+        'items': s.items.map(priceItem).toList(),
+      };
+
+  static PriceSection toPriceSection(Map<String, dynamic> j) => PriceSection(
+        id: j['id'] as String,
+        service: (j['service'] as String?) ?? '',
+        title: toLabel(j['title']),
+        note: j['note'] as String?,
+        items: list(j['items'], toPriceItem),
+      );
+
+  static Map<String, dynamic> surgeryPackage(SurgeryPackage p) => {
+        'id': p.id,
+        'specialty': label(p.specialty),
+        'category': label(p.category),
+        'name': label(p.name),
+        'classification': p.classification,
+        'rooms': p.rooms,
+        'prices': p.prices,
+        'note': p.note == null ? null : label(p.note!),
+        'isActive': p.isActive,
+      };
+
+  static SurgeryPackage toSurgeryPackage(Map<String, dynamic> j) {
+    final prices = <String, List<int?>>{};
+    final raw = j['prices'];
+    if (raw is Map) {
+      for (final e in raw.entries) {
+        if (e.value is! List) continue;
+        prices['${e.key}'] = [
+          for (final v in e.value as List)
+            v is num && v > 0 ? v.round() : null,
+        ];
+      }
+    }
+    return SurgeryPackage(
+      id: j['id'] as String,
+      specialty: toLabel(j['specialty']),
+      category: toLabel(j['category']),
+      name: toLabel(j['name']),
+      classification: (j['classification'] as String?) ?? '',
+      rooms: toStrings(j['rooms']),
+      prices: prices,
+      note: j['note'] == null ? null : toLabel(j['note']),
+      isActive: (j['isActive'] as bool?) ?? true,
+    );
+  }
 
   static Map<String, dynamic> theatre(OperatingTheatre t) => {
         'id': t.id,
@@ -409,6 +484,8 @@ abstract final class Codec {
         'visitAt': date(b.visitAt),
         'testIds': b.testIds,
         'packageIds': b.packageIds,
+        'service': b.service,
+        'itemNames': b.itemNames,
         'total': b.total,
         'createdAt': date(b.createdAt),
         'status': b.status.name,
@@ -422,6 +499,8 @@ abstract final class Codec {
         visitAt: toDate(j['visitAt']),
         testIds: toStrings(j['testIds']),
         packageIds: toStrings(j['packageIds']),
+        service: (j['service'] as String?) ?? LabBooking.labService,
+        itemNames: toStrings(j['itemNames']),
         total: toInt(j['total']),
         createdAt: toDate(j['createdAt']),
         status: toEnum(AppointmentStatus.values, j['status'],

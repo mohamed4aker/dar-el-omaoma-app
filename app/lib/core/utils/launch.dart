@@ -10,10 +10,15 @@ abstract final class Launch {
       _open(context, Uri(scheme: 'tel', path: number));
 
   /// Egyptian local numbers are rewritten to international form for wa.me.
-  static Future<void> whatsapp(BuildContext context, String number) {
+  /// [text] arrives typed into the chat, ready to send.
+  static Future<void> whatsapp(BuildContext context, String number,
+      {String? text}) {
     final digits = number.replaceAll(RegExp(r'\D'), '');
     final intl = digits.startsWith('0') ? '20${digits.substring(1)}' : digits;
-    return _open(context, Uri.parse('https://wa.me/$intl'));
+    return _open(
+        context,
+        Uri.https('wa.me', '/$intl',
+            text == null || text.isEmpty ? null : {'text': text}));
   }
 
   static Future<void> url(BuildContext context, String url) =>

@@ -65,6 +65,8 @@ class OperationClassification {
     required this.requiredSeniority,
     required this.defaultAnaesthesia,
     required this.defaultBloodUnits,
+    this.theatreFee = 0,
+    this.overtimeFee = 0,
     this.isActive = true,
   });
 
@@ -82,6 +84,11 @@ class OperationClassification {
   final int requiredSeniority;
   final Label defaultAnaesthesia;
   final int defaultBloodUnits;
+
+  /// The hospital's operating-room charge for this class, and the charge for
+  /// each hour beyond it ("خدمات العمليات").
+  final int theatreFee;
+  final int overtimeFee;
   final bool isActive;
 }
 
@@ -320,22 +327,6 @@ class LabPackage {
   int get saving => priceBefore > price ? priceBefore - price : 0;
 }
 
-class RadiologyStudy {
-  const RadiologyStudy({
-    required this.id,
-    required this.modality,
-    required this.name,
-    required this.price,
-    required this.preparation,
-  });
-
-  final String id;
-  final RadiologyModality modality;
-  final Label name;
-  final int price;
-  final Label preparation;
-}
-
 class HomeCareService {
   const HomeCareService({
     required this.id,
@@ -350,4 +341,133 @@ class HomeCareService {
   final Label description;
   final int price;
   final Label duration;
+}
+
+/// The departments a [PriceSection] can belong to. Strings, not an enum, so a
+/// saved catalogue with a department this build does not know still loads.
+abstract final class PriceService {
+  static const outpatient = 'outpatient';
+  static const radiology = 'radiology';
+  static const physio = 'physio';
+  static const inpatient = 'inpatient';
+  static const emergency = 'emergency';
+  static const ambulance = 'ambulance';
+  static const homecare = 'homecare';
+  static const surgery = 'surgery';
+}
+
+/// One line of the hospital's price list.
+class PriceItem {
+  const PriceItem({
+    required this.id,
+    required this.name,
+    required this.price,
+    this.code = '',
+    this.note,
+    this.isActive = true,
+  });
+
+  final String id;
+  final Label name;
+  final int price;
+
+  /// The hospital's own service code.
+  final String code;
+  final String? note;
+  final bool isActive;
+}
+
+/// A titled group of [PriceItem]s within one department — "أشعة مقطعية (CT)",
+/// "العناية المركزة".
+class PriceSection {
+  const PriceSection({
+    required this.id,
+    required this.service,
+    required this.title,
+    required this.items,
+    this.note,
+  });
+
+  final String id;
+  final String service;
+  final Label title;
+  final String? note;
+  final List<PriceItem> items;
+
+  PriceSection withItems(List<PriceItem> items) => PriceSection(
+      id: id, service: service, title: title, note: note, items: items);
+}
+
+/// Who operates, which decides what an all-inclusive surgery price covers.
+abstract final class SurgeryTier {
+  /// The hospital's charges only; the surgeon is paid separately.
+  static const hospital = 'hospital';
+  static const specialist = 'specialist';
+  static const consultant = 'consultant';
+
+  static const all = [hospital, specialist, consultant];
+}
+
+/// An all-inclusive operation price ("الصفقات الشاملة"): one price per room
+/// type, for each [SurgeryTier] the hospital offers it at.
+class SurgeryPackage {
+  const SurgeryPackage({
+    required this.id,
+    required this.specialty,
+    required this.category,
+    required this.name,
+    required this.rooms,
+    required this.prices,
+    this.classification = '',
+    this.note,
+    this.isActive = true,
+  });
+
+  final String id;
+  final Label specialty;
+  final Label category;
+  final Label name;
+
+  /// Classification name as the hospital writes it (كبرى، مهارة…).
+  final String classification;
+
+  /// Room types, in the order of every list in [prices].
+  final List<String> rooms;
+
+  /// [SurgeryTier] → price per room; null where the hospital quotes none.
+  final Map<String, List<int?>> prices;
+  final Label? note;
+  final bool isActive;
+
+  bool get hasPrices =>
+      prices.values.any((row) => row.any((p) => p != null && p > 0));
+
+  int? priceFor(String tier, int room) {
+    final row = prices[tier];
+    if (row == null || room < 0 || room >= row.length) return null;
+    return row[room];
+  }
+
+  /// The cheapest price quoted anywhere in the package.
+  int? get from {
+    int? best;
+    for (final row in prices.values) {
+      for (final p in row) {
+        if (p != null && p > 0 && (best == null || p < best)) best = p;
+      }
+    }
+    return best;
+  }
+
+  SurgeryPackage withPrices(Map<String, List<int?>> prices) => SurgeryPackage(
+        id: id,
+        specialty: specialty,
+        category: category,
+        name: name,
+        rooms: rooms,
+        prices: prices,
+        classification: classification,
+        note: note,
+        isActive: isActive,
+      );
 }

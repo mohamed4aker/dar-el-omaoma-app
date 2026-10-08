@@ -87,14 +87,30 @@ class LabBooking {
     required this.createdAt,
     this.status = AppointmentStatus.confirmed,
     this.cancelReason,
+    this.service = labService,
+    this.itemNames = const [],
   });
+
+  static const labService = 'lab';
+  static const radiologyService = 'radiology';
 
   final String id;
   final String reference;
   final String patientId;
   final DateTime visitAt;
+
+  /// Lab tests, or for a radiology visit the studies' price-list item ids.
   final List<String> testIds;
   final List<String> packageIds;
+
+  /// [labService] or [radiologyService].
+  final String service;
+
+  /// What was booked, by name, as it read when booked. A later price-list
+  /// change cannot alter what a booking says.
+  final List<String> itemNames;
+
+  bool get isRadiology => service == radiologyService;
 
   /// Price at the moment of booking. Later price changes do not alter it.
   final int total;
@@ -107,6 +123,7 @@ class LabBooking {
   LabBooking copyWith({
     AppointmentStatus? status,
     CancellationReason? cancelReason,
+    List<String>? itemNames,
   }) =>
       LabBooking(
         id: id,
@@ -115,6 +132,8 @@ class LabBooking {
         visitAt: visitAt,
         testIds: testIds,
         packageIds: packageIds,
+        service: service,
+        itemNames: itemNames ?? this.itemNames,
         total: total,
         createdAt: createdAt,
         status: status ?? this.status,

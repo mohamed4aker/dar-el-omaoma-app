@@ -53,7 +53,18 @@ class _ClinicsScreenState extends State<ClinicsScreen> {
             .toList();
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.clinicsTitle)),
+      appBar: AppBar(
+        title: Text(s.clinicsTitle),
+        actions: [
+          if (Seed.hasPrices(PriceService.outpatient))
+            TextButton.icon(
+              onPressed: () =>
+                  context.push('/prices/${PriceService.outpatient}'),
+              icon: const Icon(Icons.receipt_long_outlined, size: 18),
+              label: Text(context.tr('الأسعار', 'Prices')),
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(Gap.lg),
         children: [

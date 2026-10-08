@@ -7,6 +7,7 @@ import 'package:dar_el_omouma/data/storage.dart';
 import 'package:dar_el_omouma/domain/models/catalog.dart';
 import 'package:dar_el_omouma/domain/models/enums.dart';
 import 'package:dar_el_omouma/domain/models/operations.dart';
+import 'package:dar_el_omouma/features/services/hospital_services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The app as the hospital receives it: its own catalogue, saved on the
@@ -44,7 +45,7 @@ void main() {
       await fresh();
       expect(Seed.clinics, hasLength(43));
       expect(Seed.doctors, hasLength(155));
-      expect(Seed.labTests.length, greaterThan(400));
+      expect(Seed.labTests.length, greaterThan(380));
       expect(Seed.labPackages, hasLength(14));
       expect(Seed.theatres, isEmpty, reason: 'no invented theatres');
       expect(Seed.procedures, isEmpty, reason: 'no invented procedures');
@@ -317,6 +318,156 @@ void main() {
           id: test.id, name: test.name, category: test.category, price: test.price + 100);
       expect(state.labBookings.single.total, pkg.price + test.price);
       expect(state.allBookings().single.isLab, isTrue);
+    });
+  });
+
+  group('the price list', () {
+    test('every department the hospital priced has its list', () async {
+      await fresh();
+      int lines(String service) => Seed.sectionsFor(service)
+          .fold(0, (n, s) => n + s.items.length);
+      expect(lines(PriceService.radiology), greaterThan(300));
+      expect(Seed.sectionsFor(PriceService.radiology), hasLength(4),
+          reason: 'sonar, X-ray, CT and MRI');
+      expect(lines(PriceService.inpatient), greaterThan(50));
+      expect(lines(PriceService.emergency), greaterThan(20));
+      expect(lines(PriceService.physio), greaterThan(20));
+      expect(lines(PriceService.outpatient), greaterThan(100));
+      expect(lines(PriceService.ambulance), greaterThan(0));
+      expect(lines(PriceService.homecare), greaterThan(0));
+      expect(Seed.classifications, hasLength(7));
+      expect(Seed.classifications.first.theatreFee, 250);
+    });
+
+    test('surgery packages carry a price per room and per surgeon', () async {
+      await fresh();
+      expect(Seed.surgeryPackages.length, greaterThan(100));
+      final birth =
+          Seed.surgeryPackages.firstWhere((p) => p.name.ar == 'ولادة طبيعية');
+      final triple = birth.rooms.indexOf('ثلاثي');
+      expect(birth.priceFor(SurgeryTier.hospital, triple), 3100);
+      expect(birth.priceFor(SurgeryTier.specialist, triple), 8800);
+      expect(birth.priceFor(SurgeryTier.consultant, triple), 9900);
+    });
+
+    test("the workbook's own typos never reach a patient", () async {
+      await fresh();
+      for (final p in Seed.surgeryPackages) {
+        for (final row in p.prices.values) {
+          for (final price in row) {
+            expect(price == null || price < 100000, isTrue,
+                reason: '${p.name.ar}: $price');
+          }
+        }
+      }
+    });
+
+    test('a department without data opens WhatsApp instead', () async {
+      await fresh();
+      final services = {for (final s in hospitalServices()) s.ar: s};
+      expect(services['بنك الدم']!.opensWhatsapp, isTrue);
+      expect(services['برنامج الخبراء الزائرين']!.opensWhatsapp, isTrue);
+      for (final name in [
+        'العيادات الخارجية', 'الأشعة', 'العلاج الطبيعي', 'التحاليل',
+        'القسم الداخلي', 'الطوارئ', 'الإسعاف', 'الرعاية المنزلية', 'العمليات',
+      ]) {
+        expect(services[name]!.opensWhatsapp, isFalse, reason: name);
+      }
+      expect(Seed.servicesWhatsapp, '01004438113');
+    });
+
+    test('radiology is booked like the lab, with the price frozen', () async {
+      final state = await fresh();
+      state.registerPatient(
+          fullName: 'سارة محمود عبد الرحمن حسين',
+          nationalId: womanId,
+          phone: '01012345678');
+      final section = Seed.sectionsFor(PriceService.radiology).first;
+      final study = section.items.first;
+      final booking = state.bookRadiology(
+        patientId: state.session.patient!.id,
+        visitAt: Seed.at(1, 10),
+        itemIds: [study.id],
+      );
+      expect(booking.isRadiology, isTrue);
+      expect(booking.total, study.price);
+      expect(booking.itemNames, [study.name.ar]);
+      expect(booking.reference, startsWith('RD-'));
+
+      state.signInAsAdmin();
+      state.upsertPriceItem(
+          sectionId: section.id,
+          id: study.id,
+          name: study.name.ar,
+          price: study.price + 500);
+      expect(Seed.priceItemById(study.id)!.price, study.price + 500);
+      expect(state.labBookings.single.total, study.price);
+    });
+
+    test('an admin edit to a surgery price is kept', () async {
+      final state = await fresh();
+      state.signInAsAdmin();
+      final p = Seed.surgeryPackages.first;
+      state.updateSurgeryPackagePrices(p.id, {
+        SurgeryTier.hospital: [for (final _ in p.rooms) 1234],
+      });
+      expect(Seed.surgeryPackages.first.priceFor(SurgeryTier.hospital, 0), 1234);
+      expect(Seed.surgeryPackages.first.prices.keys, [SurgeryTier.hospital]);
+    });
+  });
+
+  group('updating from the first release', () {
+    // The first release shipped no price list and numbered lab tests lab-NNN.
+    Map<String, dynamic> firstRelease() {
+      final doc = Map<String, dynamic>.from(
+          jsonDecode(jsonEncode(bundled)) as Map)
+        ..remove('priceSections')
+        ..remove('surgeryPackages')
+        ..remove('classifications')
+        ..['dataVersion'] = 1;
+      var n = 0;
+      for (final t in doc['labTests'] as List) {
+        (t as Map)['id'] = 'lab-${(++n).toString().padLeft(3, '0')}';
+      }
+      return doc;
+    }
+
+    test('old lab bookings keep what they booked', () async {
+      final storage = MemoryStorage();
+      final first = AppState(storage: storage);
+      await first.load(bundled: firstRelease());
+      first.registerPatient(
+          fullName: 'سارة محمود عبد الرحمن حسين',
+          nationalId: womanId,
+          phone: '01012345678');
+      final test = Seed.labTests.first;
+      first.bookLab(
+          patientId: first.session.patient!.id,
+          visitAt: Seed.at(1, 9),
+          testIds: [test.id]);
+      await Future<void>.delayed(Duration.zero);
+
+      final second = await fresh(storage);
+      expect(Seed.labTestById(test.id), isNull,
+          reason: 'the new price list replaced the old one');
+      expect(second.labBookings.single.itemNames, [test.name.ar]);
+      expect(Seed.hasPrices(PriceService.radiology), isTrue);
+    });
+
+    test('an edited catalogue still receives the new departments', () async {
+      final storage = MemoryStorage();
+      final first = AppState(storage: storage);
+      await first.load(bundled: firstRelease());
+      first.signInStaff(username: 'admin', password: 'admin123');
+      final test = Seed.labTests.first;
+      first.upsertLabTest(
+          id: test.id, name: test.name, category: test.category, price: 9999);
+      await Future<void>.delayed(Duration.zero);
+
+      await fresh(storage);
+      expect(Seed.labTestById(test.id)!.price, 9999);
+      expect(Seed.hasPrices(PriceService.radiology), isTrue);
+      expect(Seed.surgeryPackages, isNotEmpty);
     });
   });
 

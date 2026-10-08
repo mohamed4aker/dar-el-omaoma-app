@@ -125,8 +125,8 @@ class BookingCard extends StatelessWidget {
           context.tr('عيادة', 'Clinic');
       subtitle = Seed.doctorById(a.doctorId).name(s.localeName);
     } else {
-      title = context.tr('المعمل', 'Laboratory');
-      subtitle = labItemsSummary(context, lab!);
+      title = labDepartment(context, lab!);
+      subtitle = labItemsSummary(context, lab);
     }
 
     final canCancel = allowCancel &&
@@ -139,7 +139,12 @@ class BookingCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(a != null ? Icons.local_hospital_outlined : Icons.biotech_outlined,
+              Icon(
+                  a != null
+                      ? Icons.local_hospital_outlined
+                      : lab!.isRadiology
+                          ? Icons.monitor_heart_outlined
+                          : Icons.biotech_outlined,
                   color: AppColors.primary),
               const SizedBox(width: Gap.sm),
               Expanded(
@@ -214,13 +219,27 @@ class BookingCard extends StatelessWidget {
   }
 }
 
-String labItemsSummary(BuildContext context, LabBooking b) {
+/// What a lab or radiology booking booked, by name as it read when booked.
+List<String> labBookingItems(BuildContext context, LabBooking b) {
+  if (b.itemNames.isNotEmpty) return b.itemNames;
   final s = context.s;
-  final names = [
+  return [
     for (final id in b.packageIds)
       Seed.labPackageById(id)?.name(s.localeName) ?? id,
-    for (final id in b.testIds) Seed.labTestById(id)?.name(s.localeName) ?? id,
+    for (final id in b.testIds)
+      (b.isRadiology
+              ? Seed.priceItemById(id)?.name(s.localeName)
+              : Seed.labTestById(id)?.name(s.localeName)) ??
+          id,
   ];
+}
+
+String labDepartment(BuildContext context, LabBooking b) => b.isRadiology
+    ? context.tr('الأشعة', 'Radiology')
+    : context.tr('المعمل', 'Laboratory');
+
+String labItemsSummary(BuildContext context, LabBooking b) {
+  final names = labBookingItems(context, b);
   if (names.length <= 3) return names.join('، ');
   return '${names.take(3).join('، ')} ${context.tr('و${names.length - 3} أخرى', '+${names.length - 3} more')}';
 }

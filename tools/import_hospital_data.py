@@ -596,11 +596,20 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--doctors', required=True)
     ap.add_argument('--lab', required=True)
+    ap.add_argument('--prices', help='the master price workbook (all departments)')
     ap.add_argument('--out', required=True)
     ap.add_argument('--report')
     args = ap.parse_args()
 
     data, report = build(args.doctors, args.lab)
+    if args.prices:
+        from import_price_list import build_prices
+        old_codes = {norm(t['name']['ar']).lower(): t['code']
+                     for t in data['labTests'] if t.get('code')}
+        prices, price_report = build_prices(args.prices, old_codes)
+        data.update(prices)
+        data['dataVersion'] = 2
+        report = report + ['', '— لائحة الأسعار —'] + price_report
     with open(args.out, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
     if args.report:

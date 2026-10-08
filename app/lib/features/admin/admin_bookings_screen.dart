@@ -15,7 +15,7 @@ import '../../domain/models/content.dart';
 import '../../domain/models/enums.dart';
 import '../../domain/models/patient.dart';
 import '../bookings/my_bookings_screen.dart'
-    show bookingStatusChip, labItemsSummary;
+    show bookingStatusChip, labBookingItems, labDepartment, labItemsSummary;
 
 enum _Range { today, upcoming, all }
 
@@ -140,9 +140,9 @@ class _AdminBookingsScreenState extends State<AdminBookingsScreen> {
                   ),
                 const SizedBox(width: Gap.md),
                 for (final (k, label) in [
-                  (_Kind.all, context.tr('عيادات ومعمل', 'Clinics & lab')),
+                  (_Kind.all, context.tr('الكل', 'All')),
                   (_Kind.clinic, context.tr('عيادات', 'Clinics')),
-                  (_Kind.lab, context.tr('معمل', 'Lab')),
+                  (_Kind.lab, context.tr('معمل وأشعة', 'Lab & radiology')),
                 ])
                   Padding(
                     padding: const EdgeInsetsDirectional.only(end: Gap.sm),
@@ -221,7 +221,7 @@ class _AdminBookingCard extends StatelessWidget {
     final what = a != null
         ? '${Seed.doctorById(a.doctorId).name(s.localeName)} — '
             '${Seed.clinicById(a.clinicId)?.name(s.localeName) ?? ''}'
-        : '${context.tr('المعمل', 'Lab')}: ${labItemsSummary(context, row.lab!)}';
+        : '${labDepartment(context, row.lab!)}: ${labItemsSummary(context, row.lab!)}';
 
     return AppCard(
       onTap: () => showBookingDetail(context, row),
@@ -320,7 +320,9 @@ class _BookingDetailSheet extends StatelessWidget {
           _Group(title: context.tr('الحجز', 'Booking'), rows: [
             (context.tr('رقم الحجز', 'Booking no.'), current.reference),
             (context.tr('النوع', 'Type'),
-                a != null ? context.tr('كشف عيادة', 'Clinic visit') : context.tr('معمل', 'Laboratory')),
+                a != null
+                    ? context.tr('كشف عيادة', 'Clinic visit')
+                    : labDepartment(context, lab!)),
             if (a != null) ...[
               (context.tr('العيادة', 'Clinic'),
                   Seed.clinicById(a.clinicId)?.name(s.localeName) ?? '—'),
@@ -349,17 +351,19 @@ class _BookingDetailSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (final id in lab.packageIds)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: Gap.sm),
-                      child: Text(
-                        '• ${Seed.labPackageById(id)?.name(s.localeName) ?? id}'
-                        ' — ${Seed.labPackageById(id)?.tests.join(', ') ?? ''}',
-                        style: Theme.of(context).textTheme.bodySmall,
+                    if (Seed.labPackageById(id) case final p?)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: Gap.sm),
+                        child: Text(
+                          '• ${p.name(s.localeName)} — ${p.tests.join(', ')}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ),
-                    ),
-                  for (final id in lab.testIds)
-                    Text('• ${Seed.labTestById(id)?.name(s.localeName) ?? id}',
-                        textDirection: TextDirection.ltr,
+                  for (final name in labBookingItems(context, lab).skip(
+                      lab.packageIds
+                          .where((id) => Seed.labPackageById(id) != null)
+                          .length))
+                    Text('• $name',
                         style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),

@@ -14,8 +14,8 @@ import 'codec.dart';
 ///
 /// Nothing in here is invented: there are no sample doctors, patients or
 /// bookings. A catalogue the hospital has not supplied (theatres, procedures,
-/// specialty centres, radiology) starts empty, and the screens that depend on
-/// it stay hidden from patients until the administration adds something.
+/// specialty centres) starts empty; a service with nothing in it sends the
+/// patient to the hospital's WhatsApp instead of showing an empty screen.
 abstract final class Seed {
   static DateTime get today => _midnight(DateTime.now());
 
@@ -32,6 +32,10 @@ abstract final class Seed {
 
   /// The laboratory's booking line, from its printed offers.
   static const labPhone = '01004034910';
+
+  /// The hospital's WhatsApp line for enquiries about any service — and the
+  /// destination of every service the app has no data for yet.
+  static const servicesWhatsapp = '01004438113';
 
   // -------------------------------------------------------- classifications
 
@@ -113,13 +117,41 @@ abstract final class Seed {
   static final List<OperatingTheatre> theatres = [];
   static final List<Procedure> procedures = [];
   static final List<SpecialtyCentre> centres = [];
-  static final List<RadiologyStudy> radiology = [];
   static final List<LabTest> labTests = [];
   static final List<LabPackage> labPackages = [];
   static final List<HomeCareService> homeCareServices = [];
   static final List<MedicalTip> tips = [];
   static final List<Offer> offers = [];
   static final List<VisitingCampaign> campaigns = [];
+
+  /// The hospital's price list, one department per [PriceSection.service].
+  static final List<PriceSection> priceSections = [];
+  static final List<SurgeryPackage> surgeryPackages = [];
+
+  static List<PriceSection> sectionsFor(String service) => [
+        for (final s in priceSections)
+          if (s.service == service && s.items.any((i) => i.isActive)) s,
+      ];
+
+  static bool hasPrices(String service) => sectionsFor(service).isNotEmpty;
+
+  static PriceItem? priceItemById(String id) {
+    for (final s in priceSections) {
+      for (final i in s.items) {
+        if (i.id == id) return i;
+      }
+    }
+    return null;
+  }
+
+  /// The first clinic whose name contains [word] — used to link a price list
+  /// to the doctors who provide it (العلاج الطبيعي، الأشعة).
+  static Clinic? clinicNamed(String word) {
+    for (final c in clinics) {
+      if (c.name.ar.contains(word) && c.doctorIds.isNotEmpty) return c;
+    }
+    return null;
+  }
 
   /// A doctor removed after a booking was made still has to render on that
   /// booking, so lookups never throw.
@@ -185,6 +217,8 @@ abstract final class Seed {
     fill(procedures, 'procedures', Codec.toProcedure);
     fill(tips, 'tips', Codec.toTip);
     fill(offers, 'offers', Codec.toOffer);
+    fill(priceSections, 'priceSections', Codec.toPriceSection);
+    fill(surgeryPackages, 'surgeryPackages', Codec.toSurgeryPackage);
     if (doc['classifications'] is List &&
         (doc['classifications'] as List).isNotEmpty) {
       fill(classifications, 'classifications', Codec.toClassification);
@@ -200,14 +234,17 @@ abstract final class Seed {
         'procedures': procedures.map(Codec.procedure).toList(),
         'tips': tips.map(Codec.tip).toList(),
         'offers': offers.map(Codec.offer).toList(),
+        'priceSections': priceSections.map(Codec.priceSection).toList(),
+        'surgeryPackages': surgeryPackages.map(Codec.surgeryPackage).toList(),
         'classifications': classifications.map(Codec.classification).toList(),
       };
 
   /// Empties every catalogue. Used before loading, and by tests.
   static void clear() {
     for (final list in <List<Object>>[
-      doctors, clinics, theatres, procedures, centres, radiology, labTests,
-      labPackages, homeCareServices, tips, offers, campaigns,
+      doctors, clinics, theatres, procedures, centres, labTests,
+      labPackages, homeCareServices, tips, offers, campaigns, priceSections,
+      surgeryPackages,
     ]) {
       list.clear();
     }

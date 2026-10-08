@@ -109,8 +109,30 @@ class AppState extends ChangeNotifier {
       _ensureAdminAccount();
     } else {
       _restore(saved);
+      final catalogue = saved['catalogue'] is Map
+          ? Map<String, dynamic>.from(saved['catalogue'] as Map)
+          : null;
+      if (catalogue != null) {
+        // Name what earlier bookings booked while their catalogue is loaded,
+        // so replacing the catalogue below cannot orphan them.
+        Seed.loadFrom(catalogue);
+        _snapshotLabBookingNames();
+        Seed.clear();
+      }
       final upgrade = !_catalogueEdited && bundledVersion > _dataVersion;
-      Seed.loadFrom(upgrade ? bundled : saved['catalogue'] as Map<String, dynamic>? ?? bundled);
+      // The bundled catalogue first, then the saved one over it: a list this
+      // device has never saved (a department added in an update) still
+      // arrives, while everything the administration has edited is kept.
+      Seed.loadFrom(bundled);
+      if (!upgrade && catalogue != null) {
+        // A department saved empty is one this device never had data for.
+        catalogue.removeWhere((key, value) =>
+            value is List &&
+            value.isEmpty &&
+            bundled[key] is List &&
+            (bundled[key] as List).isNotEmpty);
+        Seed.loadFrom(catalogue);
+      }
       if (upgrade) _dataVersion = bundledVersion;
       _ensureAdminAccount();
       _resumeSession(saved['session']);
@@ -1446,7 +1468,8 @@ class AppState extends ChangeNotifier {
 
   static const _catalogueEntities = {
     'classification', 'procedure', 'doctor', 'clinic', 'theatre',
-    'lab_test', 'lab_package', 'offer', 'tip',
+    'lab_test', 'lab_package', 'offer', 'tip', 'price_item',
+    'surgery_package',
   };
 
   void _audit(String action, String entity, String? entityId,
@@ -1573,6 +1596,8 @@ class AppState extends ChangeNotifier {
     required int requiredSeniority,
     required Label defaultAnaesthesia,
     required int defaultBloodUnits,
+    int theatreFee = 0,
+    int overtimeFee = 0,
     bool isActive = true,
   }) {
     final index =
@@ -1593,6 +1618,8 @@ class AppState extends ChangeNotifier {
       requiredSeniority: requiredSeniority,
       defaultAnaesthesia: defaultAnaesthesia,
       defaultBloodUnits: defaultBloodUnits,
+      theatreFee: theatreFee,
+      overtimeFee: overtimeFee,
       isActive: isActive,
     );
     if (index >= 0) {
@@ -1880,6 +1907,26 @@ class AppState extends ChangeNotifier {
     return total;
   }
 
+  void _snapshotLabBookingNames() {
+    for (var i = 0; i < _labBookings.length; i++) {
+      final b = _labBookings[i];
+      if (b.itemNames.isNotEmpty) continue;
+      _labBookings[i] = b.copyWith(itemNames: _labItemNames(b));
+    }
+  }
+
+  List<String> _labItemNames(LabBooking b) => [
+        for (final id in b.packageIds)
+          if (Seed.labPackageById(id) case final p?) p.name.ar,
+        for (final id in b.testIds)
+          if (b.isRadiology)
+            if (Seed.priceItemById(id) case final i?) i.name.ar else id
+          else if (Seed.labTestById(id) case final t?)
+            t.name.ar
+          else
+            id,
+      ];
+
   /// Books a laboratory visit. The total is frozen at today's prices.
   LabBooking bookLab({
     required String patientId,
@@ -1891,7 +1938,7 @@ class AppState extends ChangeNotifier {
       throw ArgumentError('A lab booking needs at least one test or package');
     }
     final now = DateTime.now();
-    final booking = LabBooking(
+    final draft = LabBooking(
       id: _newId('lab'),
       reference: 'LB-${(now.millisecondsSinceEpoch % 1000000).toString().padLeft(6, '0')}',
       patientId: patientId,
@@ -1901,6 +1948,7 @@ class AppState extends ChangeNotifier {
       total: labTotal(testIds: testIds, packageIds: packageIds),
       createdAt: now,
     );
+    final booking = draft.copyWith(itemNames: _labItemNames(draft));
     _labBookings.insert(0, booking);
     final items = testIds.length + packageIds.length;
     _alertApprovers(
@@ -1915,6 +1963,59 @@ class AppState extends ChangeNotifier {
       patientId: patientId,
       templateCode: 'lab_booking_confirmed',
       title: 'تم تأكيد حجز المعمل',
+      body: '${booking.reference} · ${_stamp(visitAt)}',
+      entityId: booking.id,
+    );
+    _audit('created', 'lab_booking', booking.id, detail: booking.reference);
+    notifyListeners();
+    return booking;
+  }
+
+  /// Prices radiology studies (price-list item ids) at today's prices.
+  int radiologyTotal(List<String> itemIds) {
+    var total = 0;
+    for (final id in itemIds) {
+      total += Seed.priceItemById(id)?.price ?? 0;
+    }
+    return total;
+  }
+
+  /// Books a radiology visit. Like the lab, the department takes patients in
+  /// arrival order, so the time orders the queue; the total is frozen.
+  LabBooking bookRadiology({
+    required String patientId,
+    required DateTime visitAt,
+    required List<String> itemIds,
+  }) {
+    if (itemIds.isEmpty) {
+      throw ArgumentError('A radiology booking needs at least one study');
+    }
+    final now = DateTime.now();
+    final draft = LabBooking(
+      id: _newId('rad'),
+      reference: 'RD-${(now.millisecondsSinceEpoch % 1000000).toString().padLeft(6, '0')}',
+      patientId: patientId,
+      visitAt: visitAt,
+      testIds: List.unmodifiable(itemIds),
+      packageIds: const [],
+      total: radiologyTotal(itemIds),
+      createdAt: now,
+      service: LabBooking.radiologyService,
+    );
+    final booking = draft.copyWith(itemNames: _labItemNames(draft));
+    _labBookings.insert(0, booking);
+    _alertApprovers(
+      templateCode: 'radiology_booked',
+      title: 'حجز أشعة جديد',
+      reference: booking.reference,
+      context: '${booking.itemNames.join('، ')} · ${_stamp(visitAt)}',
+      entityId: booking.id,
+      deepLink: '/admin/bookings',
+    );
+    _notifyPatient(
+      patientId: patientId,
+      templateCode: 'radiology_booking_confirmed',
+      title: 'تم تأكيد حجز الأشعة',
       body: '${booking.reference} · ${_stamp(visitAt)}',
       entityId: booking.id,
     );
@@ -2001,6 +2102,56 @@ class AppState extends ChangeNotifier {
         detail: '${name.ar} · $price');
     notifyListeners();
     return resolvedId;
+  }
+
+  // Price list ---------------------------------------------------------------
+
+  /// Adds or edits one line of a department's price list.
+  String upsertPriceItem({
+    required String sectionId,
+    String? id,
+    required String name,
+    required int price,
+    String? note,
+    bool isActive = true,
+  }) {
+    final si = Seed.priceSections.indexWhere((s) => s.id == sectionId);
+    if (si < 0) throw ArgumentError('Unknown price section $sectionId');
+    final section = Seed.priceSections[si];
+    final items = [...section.items];
+    final index = id == null ? -1 : items.indexWhere((i) => i.id == id);
+    final resolvedId = index >= 0 ? id! : _newId('itm');
+    final entry = PriceItem(
+      id: resolvedId,
+      name: Label(name),
+      price: price,
+      code: index >= 0 ? items[index].code : '',
+      note: (note == null || note.trim().isEmpty) ? null : note.trim(),
+      isActive: isActive,
+    );
+    if (index >= 0) {
+      items[index] = entry;
+    } else {
+      items.add(entry);
+    }
+    Seed.priceSections[si] = section.withItems(items);
+    _audit(index >= 0 ? 'updated' : 'created', 'price_item', resolvedId,
+        detail: '${section.title.ar} · $name · $price');
+    notifyListeners();
+    return resolvedId;
+  }
+
+  /// Replaces an operation's room prices. [prices] is [SurgeryTier] → one
+  /// price (or null) per room.
+  void updateSurgeryPackagePrices(
+      String id, Map<String, List<int?>> prices) {
+    final index = Seed.surgeryPackages.indexWhere((p) => p.id == id);
+    if (index < 0) return;
+    Seed.surgeryPackages[index] =
+        Seed.surgeryPackages[index].withPrices(prices);
+    _audit('updated', 'surgery_package', id,
+        detail: Seed.surgeryPackages[index].name.ar);
+    notifyListeners();
   }
 
   // Bookings, as reception sees them -------------------------------------------

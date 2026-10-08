@@ -11,10 +11,10 @@ import '../../core/widgets/common.dart';
 import '../../data/app_state.dart';
 import '../../data/seed_data.dart';
 import '../contact/emergency_action.dart';
+import '../services/hospital_services.dart';
 
-/// Deck slide 3, built around what the hospital actually offers in the app:
-/// clinic booking, the laboratory and its offers, and the patient's own
-/// bookings. Sections whose catalogue is empty do not appear.
+/// The first screen after signing in or registering: every department of the
+/// hospital at a glance, then the patient's next visit and the lab's offers.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -151,45 +151,28 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             }),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: Gap.md,
-            mainAxisSpacing: Gap.md,
-            childAspectRatio: 1.25,
+          SectionHeader(context.tr('خدمات المستشفى', 'Hospital services')),
+          const ServicesGrid(),
+          const SizedBox(height: Gap.md),
+          Row(
             children: [
-              FeatureTile(
-                label: context.tr('احجز في عيادة', 'Book a clinic'),
-                icon: Icons.local_hospital_outlined,
-                color: AppColors.primary,
-                onTap: () => context.push('/clinics'),
-              ),
-              FeatureTile(
-                label: context.tr('المعمل والتحاليل', 'Lab & tests'),
-                icon: Icons.biotech_outlined,
-                color: AppColors.accent,
-                onTap: () => context.push('/lab'),
-              ),
-              if (session.isStaff)
-                FeatureTile(
-                  label: context.tr('الحجوزات', 'Bookings'),
+              Expanded(
+                child: _QuickAction(
                   icon: Icons.event_note_outlined,
-                  color: AppColors.success,
-                  onTap: () => context.push('/admin/bookings'),
-                )
-              else
-                FeatureTile(
-                  label: s.bookingsTitle,
-                  icon: Icons.event_note_outlined,
-                  color: AppColors.success,
-                  onTap: () => context.push('/bookings'),
+                  label: session.isStaff
+                      ? context.tr('الحجوزات', 'Bookings')
+                      : s.bookingsTitle,
+                  onTap: () => context.push(
+                      session.isStaff ? '/admin/bookings' : '/bookings'),
                 ),
-              FeatureTile(
-                label: s.contactTitle,
-                icon: Icons.call_outlined,
-                color: AppColors.warning,
-                onTap: () => context.push('/contact'),
+              ),
+              const SizedBox(width: Gap.sm),
+              Expanded(
+                child: _QuickAction(
+                  icon: Icons.chat_outlined,
+                  label: context.tr('واتساب المستشفى', 'Hospital WhatsApp'),
+                  onTap: () => askOnWhatsapp(context, 'خدمات المستشفى'),
+                ),
               ),
             ],
           ),
@@ -260,18 +243,6 @@ class HomeScreen extends StatelessWidget {
   List<Widget> _otherServices(BuildContext context) {
     final s = context.s;
     return [
-      if (Seed.procedures.any((p) => p.patientRequestable))
-        _ServiceRow(
-          icon: Icons.healing_outlined,
-          label: s.serviceSurgery,
-          onTap: () => context.push('/surgery'),
-        ),
-      if (Seed.radiology.isNotEmpty)
-        _ServiceRow(
-          icon: Icons.monitor_heart_outlined,
-          label: s.serviceRadiology,
-          onTap: () => context.push('/radiology'),
-        ),
       if (Seed.tips.isNotEmpty)
         _ServiceRow(
           icon: Icons.lightbulb_outline,
@@ -285,11 +256,48 @@ class HomeScreen extends StatelessWidget {
           onTap: () => context.push('/offers'),
         ),
       _ServiceRow(
+        icon: Icons.call_outlined,
+        label: s.contactTitle,
+        onTap: () => context.push('/contact'),
+      ),
+      _ServiceRow(
         icon: Icons.feedback_outlined,
         label: s.homeComplaints,
         onTap: () => context.push('/complaints'),
       ),
     ];
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: Gap.md, vertical: Gap.md),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.primary, size: 22),
+          const SizedBox(width: Gap.sm),
+          Expanded(
+            child: Text(label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleSmall),
+          ),
+        ],
+      ),
+    );
   }
 }
 
